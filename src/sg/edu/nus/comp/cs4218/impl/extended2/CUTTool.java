@@ -90,6 +90,11 @@ public class CUTTool extends ATool implements ICutTool{
 							list = args[3];
 							if(args[4].equalsIgnoreCase("-"))
 								input = stdin;
+							else
+							{
+								File file = new File(args[4]);
+								
+							}
 						}
 					}
 			break;
