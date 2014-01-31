@@ -118,20 +118,30 @@ public class Shell extends Thread implements IShell{
 		{
 			if (argsList[argsList.length - 1].equalsIgnoreCase("-") && !command.equalsIgnoreCase("cd")) 
 			{
-				Scanner scanner = new Scanner(System.in);
-				stdin = scanner.nextLine();
+				while(!stdin.equalsIgnoreCase("Ctrl-Z"))
+				{
+					Scanner scanner = new Scanner(System.in);
+					stdin = scanner.nextLine();
+					
+					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
+					ExecutorService executorService = Executors.newFixedThreadPool(2);
+			        Future<?> threadT2 = executorService.submit(sThread);
+				}
 			}
 		}
-		
-		SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-        Future<?> threadT2 = executorService.submit(sThread);
-		
-		if(command.equalsIgnoreCase("Ctrl-Z"))
+		else
 		{
-			threadT2.cancel(true);
-			System.out.println("All commands stopped");
+				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
+				ExecutorService executorService = Executors.newFixedThreadPool(2);
+		        Future<?> threadT2 = executorService.submit(sThread);
+				
+				if(command.equalsIgnoreCase("Ctrl-Z"))
+				{
+					threadT2.cancel(true);
+					System.out.println("All commands stopped");
+				}
 		}
+			
 		return null;
 	
 	}
