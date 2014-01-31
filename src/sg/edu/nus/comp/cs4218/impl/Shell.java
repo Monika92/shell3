@@ -63,8 +63,8 @@ public class Shell extends Thread implements IShell{
 					return (ITool) new MOVETool(argsList);
 				// else if(command.equalsIgnoreCase("delete"))
 				// return new DELETETool(argsList);
-				// else if(command.equalsIgnoreCase("cat"))
-				// return new CATTool(argsList);
+				else if(command.equalsIgnoreCase("cat"))
+				 return new CATTool(argsList);
 				// else if(command.equalsIgnoreCase("echo"))
 				// return new ECHOTool(argsList);
 				
@@ -128,18 +128,18 @@ public class Shell extends Thread implements IShell{
 			        Future<?> threadT2 = executorService.submit(sThread);
 				}
 			}
-		}
-		else
-		{
-				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
-				ExecutorService executorService = Executors.newFixedThreadPool(2);
-		        Future<?> threadT2 = executorService.submit(sThread);
-				
-				if(command.equalsIgnoreCase("Ctrl-Z"))
-				{
-					threadT2.cancel(true);
-					System.out.println("All commands stopped");
-				}
+			else
+			{
+					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
+					ExecutorService executorService = Executors.newFixedThreadPool(2);
+			        Future<?> threadT2 = executorService.submit(sThread);
+					
+					if(command.equalsIgnoreCase("Ctrl-Z"))
+					{
+						threadT2.cancel(true);
+						System.out.println("All commands stopped");
+					}
+			}
 		}
 			
 		return null;
