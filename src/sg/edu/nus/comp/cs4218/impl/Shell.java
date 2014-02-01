@@ -58,13 +58,6 @@ public class Shell extends Thread implements IShell{
 			//commandVerifyFlag = verifier.verifyCommand(command, argsList,
 			//		optionsList);
 			
-			//Check for output file
-			args_length = argsList.length;
-			if(args_length>2 && argsList[args_length -2].equalsIgnoreCase(">")){
-				output_file = new File(argsList[args_length - 1]);
-				args_length -= 2;
-				argsList = Arrays.copyOfRange(argsList, 0, args_length);
-			}
 			
 			//if (commandVerifyFlag != 0) {
 				if (command.equalsIgnoreCase("pwd"))

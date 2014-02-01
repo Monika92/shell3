@@ -29,21 +29,5 @@ public class SimpleThread extends Thread {
 			Thread.currentThread().interrupt();
     	}
     }
-    
-    public void writeOutputToFile(String output){
-    	
-    	try{
-			if(!output_file.exists())
-				output_file.createNewFile();
-			FileWriter fw = new FileWriter(output_file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(output);
-			bw.close();
-		} catch (IOException e){
-			System.out.println(output_msg+"Unable to create output file");
-			setStatusCode(-1);
-			return output_msg+"Unable to create output file";
-		}
-		
-    }
+
   }

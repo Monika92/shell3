@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -65,6 +66,13 @@ public class CATTool extends ATool implements ICatTool {
 		int args_length = args.length;
 		String output = "", output_msg = "";
 		
+		//Check for output file
+		args_length = args.length;
+		if(args_length>2 && args[args_length -2].equalsIgnoreCase(">")){
+			output_file = new File(args[args_length - 1]);
+			args_length -= 2;
+		}
+		
 		for(int i = 0; i < args_length; i++){
 			try{
 				//file = new File(args[0]);
@@ -82,6 +90,26 @@ public class CATTool extends ATool implements ICatTool {
 			output += getStringForFile(file);
 		}
 		
+		try{
+			if(!output_file.exists())
+				output_file.createNewFile();
+			FileWriter fw = new FileWriter(output_file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			char[] temp = output.toCharArray(); int i = 0;
+			while(i!=output.length()){
+				while(temp[i]!='\n'){
+					bw.write(temp[i]);
+					i++;
+				}
+				bw.newLine(); i++;
+			}
+			bw.close();
+		} catch (IOException e){
+			System.out.println(output_msg+"Unable to create output file");
+			setStatusCode(-1);
+			return output_msg+"Unable to create output file";
+		}
+			    
 		setStatusCode(0);
 		return output_msg;
 	}
