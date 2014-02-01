@@ -1,14 +1,7 @@
-/*Testing*/
-
 package sg.edu.nus.comp.cs4218.impl;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,10 +34,7 @@ public class Shell extends Thread implements IShell{
 	public ITool parse(String commandline) {
 
 		command = null;
-		File output_file = null;
-		int args_length;
-		String output = "", output_msg = "";
-		
+
 		ArrayList<String> list = new ArrayList<String>();
 		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(commandline);
 		while (m.find())
@@ -62,12 +52,18 @@ public class Shell extends Thread implements IShell{
 			command = cmdWords[0];
 			for (int i = 1; i < cmdWords.length; i++)
 				argsList[i - 1] = cmdWords[i];
-
-			//commandVerifyFlag = verifier.verifyCommand(command, argsList,
-			//		optionsList);
 			
 			
-			//if (commandVerifyFlag != 0) {
+			// -1 incorrect
+			// 0 show help
+			// 1 execute normally						
+			commandVerifyFlag = verifier.verifyCommand(command, argsList);
+			if(commandVerifyFlag == 0){
+				argsList = new String[1];
+				argsList[0] = "-help";
+			}
+			
+			//if (commandVerifyFlag != -1) {
 
 			if (command.equalsIgnoreCase("pwd"))
 				return new PWDTool();
@@ -136,6 +132,7 @@ public class Shell extends Thread implements IShell{
 		{
 			if (argsList[argsList.length - 1].equalsIgnoreCase("-") && !command.equalsIgnoreCase("cd")) 
 			{
+				@SuppressWarnings("resource")
 				Scanner scanner = new Scanner(System.in);
 				stdin = scanner.nextLine();
 
@@ -143,6 +140,8 @@ public class Shell extends Thread implements IShell{
 				{
 					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
 					ExecutorService executorService = Executors.newFixedThreadPool(2);
+					
+					@SuppressWarnings("unused")
 					Future<?> threadT2 = executorService.submit(sThread);
 					
 					scanner = new Scanner(System.in);
@@ -196,11 +195,12 @@ public class Shell extends Thread implements IShell{
 
 	// Lets say this is threadT1
 	public static void main(String[] args) {
-		// TODO Implement
 
 		Shell shell = new Shell();
 		verifier = new CommandVerifier();
 		String input = null;
+		
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		input = scanner.nextLine();
 		ITool itool = shell.parse(input);
