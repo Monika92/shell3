@@ -152,11 +152,14 @@ public class Shell extends Thread implements IShell{
 					}
 			}
 		}
+<<<<<<< HEAD
 		else
 		{
 			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 	        Future<?> threadT2 = executorService.submit(sThread);
+=======
+>>>>>>> a5e23bdad2a259a11368276b0dd52c8b4f6fb8eb
 			
 			if(command.equalsIgnoreCase("Ctrl-Z"))
 			{
