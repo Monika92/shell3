@@ -1,29 +1,13 @@
-/.DS_Store/sg
-
-*target*
-*.jar
-*.war
-*.ear
+#java specific
 *.class
 
-# eclipse specific git ignore
-*.pydevproject
-#.project
-.metadata
-bin/**
-tmp/**
-tmp/**/*
-*.tmp
-*.bak
+#netbeans ignore personal stuff 
+nbproject/private/
+
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
 *.swp
-*~.nib
-.settings/
-.classpath
-local.properties
-.loadpath
-
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
+*.out
