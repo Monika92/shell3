@@ -62,15 +62,18 @@ public class CATTool extends ATool implements ICatTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-		File file, output_file = null;
+		File file;
 		int args_length = args.length;
 		String output = "", output_msg = "";
 		
-		//Check for output file
-		args_length = args.length;
 		if(args_length>2 && args[args_length -2].equalsIgnoreCase(">")){
-			output_file = new File(args[args_length - 1]);
 			args_length -= 2;
+		}
+		
+		//Check for stdin
+		if(stdin!=null){
+			setStatusCode(0);
+			return stdin;
 		}
 		
 		for(int i = 0; i < args_length; i++){
@@ -90,27 +93,8 @@ public class CATTool extends ATool implements ICatTool {
 			output += getStringForFile(file);
 		}
 		
-		try{
-			if(!output_file.exists())
-				output_file.createNewFile();
-			FileWriter fw = new FileWriter(output_file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			char[] temp = output.toCharArray(); int i = 0;
-			while(i!=output.length()){
-				while(temp[i]!='\n'){
-					bw.write(temp[i]);
-					i++;
-				}
-				bw.newLine(); i++;
-			}
-			bw.close();
-		} catch (IOException e){
-			System.out.println(output_msg+"Unable to create output file");
-			setStatusCode(-1);
-			return output_msg+"Unable to create output file";
-		}
-			    
+		
 		setStatusCode(0);
-		return output_msg;
+		return output;
 	}
 }
