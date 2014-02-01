@@ -113,6 +113,4 @@ public class CATTool extends ATool implements ICatTool {
 		setStatusCode(0);
 		return output_msg;
 	}
-	
-
 }
