@@ -71,7 +71,8 @@ public class CUTTool extends ATool implements ICutTool{
 					toNumber = Integer.parseInt(rangeNumbers[0]);
 				}
 			}
-
+			if(toNumber > input.length())
+				toNumber= input.length();
 			for(int i = fromNumber; i<= toNumber; i++)
 			{
 					if(i > 0)
