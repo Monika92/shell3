@@ -3,10 +3,14 @@
 package sg.edu.nus.comp.cs4218.impl;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
@@ -26,8 +30,6 @@ public class Shell extends Thread implements IShell{
 
 	String command;
 	String[] argsList;
-	// need to remove options list?
-	String[] optionsList;
 	int commandVerifyFlag;
 	static CommandVerifier verifier;
 
@@ -35,7 +37,13 @@ public class Shell extends Thread implements IShell{
 	public ITool parse(String commandline) {
 
 		command = null;
-		String[] cmdWords = commandline.split(" ");
+		ArrayList<String> list = new ArrayList<String>();
+		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(commandline);
+		while (m.find())
+		    list.add(m.group(1));
+		String[] cmdWords = new String[list.size()];
+		cmdWords = list.toArray(cmdWords) ;
+		
 		if(cmdWords.length!=1)
 			argsList = new String[cmdWords.length-1];
 		else
@@ -52,15 +60,15 @@ public class Shell extends Thread implements IShell{
 
 			//if (commandVerifyFlag != 0) {
 				if (command.equalsIgnoreCase("pwd"))
-					return (ITool) new PWDTool();
+					return new PWDTool();
 				else if (command.equalsIgnoreCase("cd"))
-					return (ITool) new CDTool(argsList);
+					return new CDTool(argsList);
 				else if (command.equalsIgnoreCase("ls"))
-					return (ITool) new LSTool(argsList);
+					return new LSTool(argsList);
 				else if (command.equalsIgnoreCase("copy"))
-					return (ITool) new COPYTool(argsList);
+					return new COPYTool(argsList);
 				else if (command.equalsIgnoreCase("move"))
-					return (ITool) new MOVETool(argsList);
+					return new MOVETool(argsList);
 				// else if(command.equalsIgnoreCase("delete"))
 				// return new DELETETool(argsList);
 				else if(command.equalsIgnoreCase("cat"))
@@ -70,17 +78,17 @@ public class Shell extends Thread implements IShell{
 				
 				//text utilities
 				else if (command.equalsIgnoreCase("cut"))
-					return (ITool) new CUTTool(argsList);
+					return new CUTTool(argsList);
 				else if (command.equalsIgnoreCase("comm"))
-					return (ITool) new COMMTool(argsList);
+					return new COMMTool(argsList);
 				else if (command.equalsIgnoreCase("paste"))
-					return (ITool) new PASTETool(argsList);
+					return new PASTETool(argsList);
 				else if (command.equalsIgnoreCase("sort"))
-					return (ITool) new SORTTool(argsList);
+					return new SORTTool(argsList);
 				else if (command.equalsIgnoreCase("uniq"))
-					return (ITool) new UNIQTool(argsList);
+					return new UNIQTool(argsList);
 				else if (command.equalsIgnoreCase("wc"))
-					return (ITool) new WCTool(argsList);
+					return new WCTool(argsList);
 				
 				else if (command.equalsIgnoreCase("Ctrl-Z"))
 					return new ITool() {
@@ -118,14 +126,17 @@ public class Shell extends Thread implements IShell{
 		{
 			if (argsList[argsList.length - 1].equalsIgnoreCase("-") && !command.equalsIgnoreCase("cd")) 
 			{
-				while(!stdin.equalsIgnoreCase("Ctrl-Z"))
+				Scanner scanner = new Scanner(System.in);
+				stdin = scanner.nextLine();
+				
+				while(stdin.equalsIgnoreCase("Ctrl-Z")!=true)
 				{
-					Scanner scanner = new Scanner(System.in);
-					stdin = scanner.nextLine();
-					
 					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
 					ExecutorService executorService = Executors.newFixedThreadPool(2);
 			        Future<?> threadT2 = executorService.submit(sThread);
+			        
+			        scanner = new Scanner(System.in);
+					stdin = scanner.nextLine();
 				}
 			}
 			else
@@ -141,9 +152,23 @@ public class Shell extends Thread implements IShell{
 					}
 			}
 		}
+<<<<<<< HEAD
+		else
+		{
+			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin);
+			ExecutorService executorService = Executors.newFixedThreadPool(2);
+	        Future<?> threadT2 = executorService.submit(sThread);
+=======
+>>>>>>> a5e23bdad2a259a11368276b0dd52c8b4f6fb8eb
 			
-		return null;
+			if(command.equalsIgnoreCase("Ctrl-Z"))
+			{
+				threadT2.cancel(true);
+				System.out.println("All commands stopped");
+			}
+		}
 	
+		return null;
 	}
 
 	@Override

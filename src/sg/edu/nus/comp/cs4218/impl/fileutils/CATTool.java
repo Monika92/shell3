@@ -105,4 +105,8 @@ public class CATTool extends ATool implements ICatTool {
 	}
 	
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a5e23bdad2a259a11368276b0dd52c8b4f6fb8eb
