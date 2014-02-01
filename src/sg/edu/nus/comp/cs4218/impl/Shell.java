@@ -2,7 +2,11 @@
 
 package sg.edu.nus.comp.cs4218.impl;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,6 +39,10 @@ public class Shell extends Thread implements IShell{
 	public ITool parse(String commandline) {
 
 		command = null;
+		File output_file = null;
+		int args_length;
+		String output = "", output_msg = "";
+		
 		String[] cmdWords = commandline.split(" ");
 		if(cmdWords.length!=1)
 			argsList = new String[cmdWords.length-1];
@@ -49,7 +57,15 @@ public class Shell extends Thread implements IShell{
 
 			//commandVerifyFlag = verifier.verifyCommand(command, argsList,
 			//		optionsList);
-
+			
+			//Check for output file
+			args_length = argsList.length;
+			if(args_length>2 && argsList[args_length -2].equalsIgnoreCase(">")){
+				output_file = new File(argsList[args_length - 1]);
+				args_length -= 2;
+				argsList = Arrays.copyOfRange(argsList, 0, args_length);
+			}
+			
 			//if (commandVerifyFlag != 0) {
 				if (command.equalsIgnoreCase("pwd"))
 					return (ITool) new PWDTool();
@@ -97,6 +113,11 @@ public class Shell extends Thread implements IShell{
 							return null;
 						}
 					};
+				
+				//Writing to output file if exists
+				if(output_file != null){
+					
+				}
 			} 
 		System.err.println("Command Syntax InCorrect!" + commandline);
 		return null;
