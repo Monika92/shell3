@@ -9,16 +9,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
 
-public class PWDToolTest {
+public class CUTToolTest {
 	//TODO Always test against the interface! 
-	private IPwdTool pwdtool; 
+	private ICutTool cuttool; 
 	
 	@Before
 	public void before(){
-		pwdtool = new PWDTool();
+		cuttool = new CUTTool();
 	}
 
     @After

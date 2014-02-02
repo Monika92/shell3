@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -35,8 +36,11 @@ public class CATTool extends ATool implements ICatTool {
 			String line = br.readLine();
 			while(line != null){
 				System.out.println(line);
+				if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
+					output+="\n";
+				else
+					output += line + "\n";
 				line = br.readLine();
-				output += line;
 			}
 		} catch(IOException e){
 			e.printStackTrace();
@@ -58,14 +62,18 @@ public class CATTool extends ATool implements ICatTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-		File file, output_file = null;
+		File file;
 		int args_length = args.length;
 		String output = "", output_msg = "";
 		
-		
 		if(args_length>2 && args[args_length -2].equalsIgnoreCase(">")){
-			output_file = new File(args[args_length - 1]);
 			args_length -= 2;
+		}
+		
+		//Check for stdin
+		if(stdin!=null){
+			setStatusCode(0);
+			return stdin;
 		}
 		
 		for(int i = 0; i < args_length; i++){
@@ -85,28 +93,8 @@ public class CATTool extends ATool implements ICatTool {
 			output += getStringForFile(file);
 		}
 		
-		if(output_file != null){
-			try{
-				if(!output_file.exists())
-					output_file.createNewFile();
-				FileWriter fw = new FileWriter(output_file.getAbsoluteFile());
-				BufferedWriter bw = new BufferedWriter(fw);
-				bw.write(output);
-				bw.close();
-			} catch (IOException e){
-				System.out.println(output_msg+"Unable to create output file");
-				setStatusCode(-1);
-				return output_msg+"Unable to create output file";
-			}
-			
-		}
+		
 		setStatusCode(0);
-		return output_msg;
+		return output;
 	}
-	
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> a5e23bdad2a259a11368276b0dd52c8b4f6fb8eb
