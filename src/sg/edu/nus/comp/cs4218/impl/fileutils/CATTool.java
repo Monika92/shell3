@@ -66,10 +66,6 @@ public class CATTool extends ATool implements ICatTool {
 		int args_length = args.length;
 		String output = "", output_msg = "";
 		
-		if(args_length>2 && args[args_length -2].equalsIgnoreCase(">")){
-			args_length -= 2;
-		}
-		
 		//Check for stdin
 		if(stdin!=null){
 			setStatusCode(0);
@@ -78,17 +74,16 @@ public class CATTool extends ATool implements ICatTool {
 		
 		for(int i = 0; i < args_length; i++){
 			try{
-				//file = new File(args[0]);
 				file = new File(args[i]);
 			} catch(Exception e){
 				System.out.println(output_msg+"Invalid file name");
 				setStatusCode(-1);
-				return output_msg+"Invalid file name";
+				return output_msg+"\nInvalid file name";
 			}
 			if (!file.exists()){
 				setStatusCode(-1);
-				System.out.println("Unable to read file");
-				return output_msg+"Unable to read file";
+				System.out.println("No such file");
+				return output_msg+"\nNo such file";
 			}
 			output += getStringForFile(file);
 		}

@@ -28,10 +28,12 @@ public class SimpleThread extends Thread {
     		stdout = itool.execute(workingDirectory, stdin);
     		
     		File output_file = null;
+    		if(args!=null){
         	int args_length = args.length;
-    		if(args_length>=2 && args[args_length -2].equalsIgnoreCase(">")){
-    			output_file = new File(args[args_length - 1]);
-    			writeOutputToFile(output_file);
+				if(args_length>=2 && args[args_length -2].equalsIgnoreCase(">")){
+					output_file = new File(args[args_length - 1]);
+					writeOutputToFile(output_file);
+				}
     		}
     		
 			System.out.println(stdout);

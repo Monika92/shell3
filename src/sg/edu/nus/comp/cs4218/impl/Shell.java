@@ -33,7 +33,7 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 public class Shell extends Thread implements IShell{
 
 	String command;
-	String[] argsList;
+	String[] argsList, raw_args;
 	int commandVerifyFlag;
 	static CommandVerifier verifier;
 
@@ -53,19 +53,28 @@ public class Shell extends Thread implements IShell{
 		cmdWords = list.toArray(cmdWords) ;
 
 		if(cmdWords.length!=1)
-			argsList = new String[cmdWords.length-1];
+			raw_args = new String[cmdWords.length-1];
 		else
-			argsList = null;
+			raw_args = null;
 
 		if (cmdWords != null) {
 
 			command = cmdWords[0];
 			for (int i = 1; i < cmdWords.length; i++)
-				argsList[i - 1] = cmdWords[i];
+				raw_args[i - 1] = cmdWords[i];
 
 			//commandVerifyFlag = verifier.verifyCommand(command, argsList,
 			//		optionsList);
 			
+			//Check for redirection
+			if (raw_args!=null){
+				args_length = raw_args.length;
+				if(args_length>2 && raw_args[args_length -2].equalsIgnoreCase(">"))
+					args_length -= 2;
+				argsList = Arrays.copyOfRange(raw_args, 0, args_length);
+			}
+			else
+				argsList = null;
 			
 			//if (commandVerifyFlag != 0) {
 
@@ -79,12 +88,12 @@ public class Shell extends Thread implements IShell{
 				return new COPYTool(argsList);
 			else if (command.equalsIgnoreCase("move"))
 				return new MOVETool(argsList);
-			// else if(command.equalsIgnoreCase("delete"))
-			// return new DELETETool(argsList);
+			else if(command.equalsIgnoreCase("delete"))
+				return new DELETETool(argsList);
 			else if(command.equalsIgnoreCase("cat"))
 				return new CATTool(argsList);
-			// else if(command.equalsIgnoreCase("echo"))
-			// return new ECHOTool(argsList);
+			else if(command.equalsIgnoreCase("echo"))
+				return new ECHOTool(argsList);
 
 			//text utilities
 			else if (command.equalsIgnoreCase("cut"))
@@ -141,7 +150,7 @@ public class Shell extends Thread implements IShell{
 
 				while(stdin.equalsIgnoreCase("Ctrl-Z")!=true)
 				{
-					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
+					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, raw_args);
 					ExecutorService executorService = Executors.newFixedThreadPool(2);
 					Future<?> threadT2 = executorService.submit(sThread);
 					
@@ -151,7 +160,7 @@ public class Shell extends Thread implements IShell{
 			}
 			else
 			{
-				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
+				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, raw_args);
 				ExecutorService executorService = Executors.newFixedThreadPool(2);
 				Future<?> threadT2 = executorService.submit(sThread);
 
