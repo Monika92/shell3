@@ -30,8 +30,7 @@ public class PASTETool extends ATool implements IPasteTool{
 	
 	public PASTETool(String[] arguments) {
 		super(arguments);
-		fileNameError = false;
-		
+		fileNameError = false;	
 	}
 
 	@Override
@@ -63,11 +62,13 @@ public class PASTETool extends ATool implements IPasteTool{
 		
 		for ( int j = 0; j<maxLength; j++){
 			for(int i = 0; i < fileContent.size(); i++){
-				pasteLines += fileContent.get(i) + delim;
+				pasteLines += fileContent.get(i).get(j) + delim;
 			}
 			
 			finalResult += pasteLines + "\n";
 		}
+		
+		System.out.println("final result: " + finalResult);
 		
 		return finalResult;
 	}
@@ -93,9 +94,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		} catch (IOException e) {
 			
 			e.printStackTrace();
-		}
-		
-		
+		}		
 		return lines;
 	}
 	
@@ -164,10 +163,12 @@ public class PASTETool extends ATool implements IPasteTool{
 	}
 	
 	private String[] createFileNames(File workingDir, String[] argsList){
+				
 		String[] names = new String[argsList.length];		
 		String rootPath = workingDir.getAbsolutePath();
 		
 		for( int i = 0; i<argsList.length; i++){
+
 			String completePath = "";
 			completePath = rootPath + File.separator + argsList[i];
 			
