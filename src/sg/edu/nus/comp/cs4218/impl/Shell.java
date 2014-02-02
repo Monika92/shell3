@@ -40,7 +40,7 @@ public class Shell extends Thread implements IShell {
 				commandline);
 		while (m.find())
 			list.add(m.group(1));
-<<<<<<< HEAD
+
 		if (list.size() >= 1) 
 		{
 			String[] cmdWords = new String[list.size()];
@@ -57,10 +57,18 @@ public class Shell extends Thread implements IShell {
 				for (int i = 1; i < cmdWords.length; i++)
 					argsList[i - 1] = cmdWords[i];
 
-				// commandVerifyFlag = verifier.verifyCommand(command, argsList,
-				// optionsList);
 
-				// if (commandVerifyFlag != 0) {
+				// -1 incorrect
+				// 0 show help
+				// 1 execute normally						
+//				commandVerifyFlag = verifier.verifyCommand(command, argsList);
+//				if(commandVerifyFlag == 0){
+//					argsList = new String[1];
+//					argsList[0] = "-help";
+//				}
+				
+				//if (commandVerifyFlag != -1) {
+				
 				if (command.equalsIgnoreCase("pwd"))
 					return new PWDTool();
 				else if (command.equalsIgnoreCase("cd"))
@@ -110,82 +118,6 @@ public class Shell extends Thread implements IShell {
 			}
 		}
 		System.err.println("Command Syntax InCorrect!");
-=======
-		String[] cmdWords = new String[list.size()];
-		cmdWords = list.toArray(cmdWords) ;
-
-		if(cmdWords.length!=1)
-			argsList = new String[cmdWords.length-1];
-		else
-			argsList = null;
-
-		if (cmdWords != null) {
-
-			command = cmdWords[0];
-			for (int i = 1; i < cmdWords.length; i++)
-				argsList[i - 1] = cmdWords[i];
-			
-			
-			// -1 incorrect
-			// 0 show help
-			// 1 execute normally						
-			commandVerifyFlag = verifier.verifyCommand(command, argsList);
-			if(commandVerifyFlag == 0){
-				argsList = new String[1];
-				argsList[0] = "-help";
-			}
-			
-			//if (commandVerifyFlag != -1) {
-
-			if (command.equalsIgnoreCase("pwd"))
-				return new PWDTool();
-			else if (command.equalsIgnoreCase("cd"))
-				return new CDTool(argsList);
-			else if (command.equalsIgnoreCase("ls"))
-				return new LSTool(argsList);
-			else if (command.equalsIgnoreCase("copy"))
-				return new COPYTool(argsList);
-			else if (command.equalsIgnoreCase("move"))
-				return new MOVETool(argsList);
-			// else if(command.equalsIgnoreCase("delete"))
-			// return new DELETETool(argsList);
-			else if(command.equalsIgnoreCase("cat"))
-				return new CATTool(argsList);
-			// else if(command.equalsIgnoreCase("echo"))
-			// return new ECHOTool(argsList);
-
-			//text utilities
-			else if (command.equalsIgnoreCase("cut"))
-				return new CUTTool(argsList);
-			else if (command.equalsIgnoreCase("comm"))
-				return new COMMTool(argsList);
-			else if (command.equalsIgnoreCase("paste"))
-				return new PASTETool(argsList);
-			else if (command.equalsIgnoreCase("sort"))
-				return new SORTTool(argsList);
-			else if (command.equalsIgnoreCase("uniq"))
-				return new UNIQTool(argsList);
-			else if (command.equalsIgnoreCase("wc"))
-				return new WCTool(argsList);
-
-			else if (command.equalsIgnoreCase("Ctrl-Z"))
-				return new ITool() {
-
-				@Override
-				public int getStatusCode() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-
-				@Override
-				public String execute(File workingDir, String stdin) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-			};
-		} 
-		System.err.println("Command Syntax InCorrect!" + commandline);
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
 		return null;
 	}
 
@@ -203,7 +135,6 @@ public class Shell extends Thread implements IShell {
 		String userDirectory = System.getProperty("user.dir");
 		File workingDirectory = new File(userDirectory);
 
-<<<<<<< HEAD
 		if (argsList != null) {
 			if (argsList[argsList.length - 1].equalsIgnoreCase("-")
 					&& !command.equalsIgnoreCase("cd")) {
@@ -226,58 +157,17 @@ public class Shell extends Thread implements IShell {
 				Future<?> threadT2 = executorService.submit(sThread);
 
 				if (command.equalsIgnoreCase("Ctrl-Z")) {
-=======
-		if(argsList!=null)
-		{
-			if (argsList[argsList.length - 1].equalsIgnoreCase("-") && !command.equalsIgnoreCase("cd")) 
-			{
-				@SuppressWarnings("resource")
-				Scanner scanner = new Scanner(System.in);
-				stdin = scanner.nextLine();
-
-				while(stdin.equalsIgnoreCase("Ctrl-Z")!=true)
-				{
-					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
-					ExecutorService executorService = Executors.newFixedThreadPool(2);
-					
-					@SuppressWarnings("unused")
-					Future<?> threadT2 = executorService.submit(sThread);
-					
-					scanner = new Scanner(System.in);
-					stdin = scanner.nextLine();
-				}
-			}
-			else
-			{
-				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
-				ExecutorService executorService = Executors.newFixedThreadPool(2);
-				Future<?> threadT2 = executorService.submit(sThread);
-
-				if(command.equalsIgnoreCase("Ctrl-Z"))
-				{
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
 					threadT2.cancel(true);
 					System.out.println("All commands stopped");
 				}
 			}
 		}
-<<<<<<< HEAD
-
 		else {
-=======
-		else
-		{
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
 			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 			Future<?> threadT2 = executorService.submit(sThread);
 
-<<<<<<< HEAD
 			if (command.equalsIgnoreCase("Ctrl-Z")) {
-=======
-			if(command.equalsIgnoreCase("Ctrl-Z"))
-			{
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
 				threadT2.cancel(true);
 				System.out.println("All commands stopped");
 			}
@@ -292,10 +182,6 @@ public class Shell extends Thread implements IShell {
 
 	}
 
-<<<<<<< HEAD
-=======
-
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
 	/**
 	 * Do Forever 1. Wait for a user input 2. Parse the user input. Separate the
 	 * command and its arguments 3. Create a new thread to execute the command
@@ -316,20 +202,11 @@ public class Shell extends Thread implements IShell {
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		input = scanner.nextLine();
-<<<<<<< HEAD
 		if (!input.trim().isEmpty())
 			itool = shell.parse(input);
 
 		while (true) {
 			if (itool != null) {
-=======
-		ITool itool = shell.parse(input);
-
-		while (true) 
-		{
-			if (itool != null ) 
-			{
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
 				shell.execute(itool);
 			}
 

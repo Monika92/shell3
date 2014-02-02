@@ -28,7 +28,7 @@ public class SimpleThread extends Thread {
     		stdout = itool.execute(workingDirectory, stdin);
     		
     		File output_file = null;
-<<<<<<< HEAD
+
     		
     		if(args!=null)
         	{
@@ -39,20 +39,13 @@ public class SimpleThread extends Thread {
     				writeOutputToFile(output_file);
     			}
         	}
-=======
-        	int args_length = args.length;
-    		if(args_length>=2 && args[args_length -2].equalsIgnoreCase(">")){
-    			output_file = new File(args[args_length - 1]);
-    			writeOutputToFile(output_file);
-    		}
-    		
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
+
 			System.out.println(stdout);
 			System.out.println("Status code is " + itool.getStatusCode());
 			Thread.currentThread().interrupt();
     	}
     }
-    
+
     public boolean writeOutputToFile(File output_file){
     	//Check for output file
     	String output_msg="";
@@ -79,8 +72,5 @@ public class SimpleThread extends Thread {
 		return true;	    
     }
 
-<<<<<<< HEAD
   }
-=======
-  }
->>>>>>> fa9967317fcde85125375d370cf4267a36755ab3
+

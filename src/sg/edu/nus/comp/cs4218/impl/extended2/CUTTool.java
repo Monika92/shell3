@@ -52,6 +52,11 @@ public class CUTTool extends ATool implements ICutTool{
 	@Override
 	public String cutSpecfiedCharacters(String list, String input) {
 		// TODO Auto-generated method stub
+		
+		if(list.equals(null) || list.isEmpty() || input.equals(null) || input.isEmpty())
+			return input;
+		else 
+		{
 		int fromNumber = 0,toNumber=0;
 		StringBuilder  stringBuilder = new StringBuilder();
 		String[] listNumbers = list.split(",");
@@ -90,6 +95,7 @@ public class CUTTool extends ATool implements ICutTool{
 			}
 		}
 		return stringBuilder.toString();
+		}
 	}
 
 	@Override
@@ -131,6 +137,9 @@ public class CUTTool extends ATool implements ICutTool{
 					toNumber = Integer.parseInt(rangeNumbers[0]);
 				}
 			}
+			
+			if(toNumber > words.length)
+				toNumber= words.length;
 			
 			for(int i = fromNumber; i<= toNumber; i++)
 			{
@@ -175,6 +184,7 @@ public class CUTTool extends ATool implements ICutTool{
 						input += readFile(file) + "\n";
 					} catch (Exception e) {
 						output = "File not found";
+						setStatusCode(-1);
 						return output;
 					} 
 				}

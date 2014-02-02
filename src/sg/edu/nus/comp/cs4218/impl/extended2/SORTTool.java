@@ -108,9 +108,17 @@ public class SORTTool extends ATool implements ISortTool{
 						output = checkIfSorted(input);
 					} catch (Exception e) {
 						output = "File not found";
+						setStatusCode(-1);
 						return output;
 					} 
+					input = "";
 				}					
+			}
+			else
+			{
+				output = "Invalid option";
+				setStatusCode(-1);
+				return output;
 			}
 			}
 		}
@@ -128,6 +136,7 @@ public class SORTTool extends ATool implements ISortTool{
 					output = "sorted";
 				} catch (Exception e) {
 					output = "File not found";
+					setStatusCode(-1);
 					return output;
 				} 
 			}
