@@ -28,19 +28,26 @@ import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
  */
 
 public class PASTETool extends ATool implements IPasteTool{
-	
+
 	private boolean fileError = false;
-	
+	private static boolean areArgsFiles, executed;
+	private static String result;
+	private static int toggleBit; 
+
 	public PASTETool(String[] arguments) {		
 		super(arguments);
 		fileError = false;
+		toggleBit = 0;
+		executed = false;
+		areArgsFiles = false;
+		result = "";
 	}
 
 	@Override
 	public String pasteSerial(String[] input) {
-		
+
 		String result = "";
-		
+
 		for(int i=0; i<input.length; i++){
 			ArrayList<String> fileLines = loadLinesFromFile(input[i]);
 			for(String e : fileLines){
@@ -53,22 +60,22 @@ public class PASTETool extends ATool implements IPasteTool{
 
 	@Override
 	public String pasteUseDelimiter(String delim, String[] input) {
-		
+
 		char[] delimiters = delim.toCharArray();
-		
+
 		ArrayList<ArrayList<String>> allFileContents = new ArrayList<ArrayList<String>>();
 		int maxFileSize = 0;
 		for( int i=0; i<input.length; i++){
 			allFileContents.add(loadLinesFromFile(input[i]));
-			
+
 			if(allFileContents.get(i).size() > maxFileSize){
 				maxFileSize = allFileContents.get(i).size();
 			}
 		}
-		
+
 		String result = "";
 		int delimCount = 0, numDelim = delimiters.length;
-		
+
 		for(int i=0; i<maxFileSize; i++){
 			delimCount = 0;
 			for(int j=0; j<input.length; j++){
@@ -80,35 +87,35 @@ public class PASTETool extends ATool implements IPasteTool{
 			}
 			result += "\n";
 		}
-		
+
 		return result;
 	}
-	
+
 	private ArrayList<String> loadLinesFromFile(String fname){
 		ArrayList<String> lines = new ArrayList<String>();
-		
+
 		String line;
 		File f = new File(fname);
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			line = br.readLine();
-			
+
 			while(line!=null){
 				lines.add(line);
 				line = br.readLine();
 			}
-			
+
 			br.close();
 		} catch (FileNotFoundException e) {
-		
+
 			e.printStackTrace();
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}		
 		return lines;
 	}
-	
+
 	@Override
 	public String getHelp() {
 
@@ -121,7 +128,7 @@ public class PASTETool extends ATool implements IPasteTool{
 				+ "\n -s : paste one file at a time instead of in parallel"
 				+ "\n -d DELIM: Use characters from the DELIM instead of TAB character"
 				+ "\n -help : Brief information about supported options";
-		
+
 		return helpText;
 	}
 
@@ -130,17 +137,17 @@ public class PASTETool extends ATool implements IPasteTool{
 		ArrayList<String> names = new ArrayList<String>();
 
 		for(int i=0; i<fNames.size(); i++){
-			
+
 			String[] nameSplit = fNames.get(i).split(File.separator);
 			String fileName = nameSplit[nameSplit.length -1];
-			
+
 			if(fNames.get(i).startsWith("//")){
 				name = fNames.get(i);
 			}
 			else{
 				name = workingDir.getAbsolutePath() + File.separator + fNames.get(i);
 			}
-			
+
 			if((new File(name)).exists()){
 				names.add(name);
 			}
@@ -151,45 +158,76 @@ public class PASTETool extends ATool implements IPasteTool{
 		}
 		return names;
 	}
-	
+
+	private String[] removeStdinFromArg(String[] args){
+		
+		String[] newArgs = new String[args.length -1];
+		
+		for(int i=0 ;i<args.length-1; i++){
+			newArgs[i] = args[i];
+		}
+		
+		return newArgs;
+	}
+
 	@Override
 	public String execute(File workingDir, String stdin, IShell shell) {
+
+		String[] args = super.args;
+		if(stdin != null && toggleBit == 0){
+			args = removeStdinFromArg(super.args);
+			toggleBit = 1;
+		}
 		
-		String result= "";
+		result = "";
 		
 		ArgumentObjectParser aop = new ArgumentObjectParser();
-		ArgumentObject ao = aop.parse(super.args, "paste");
-		
+		ArgumentObject ao = aop.parse(args, "paste");
+
 		ArrayList<String> fileNames = ao.getFileList();
 		fileNames = getCorrectFileNames(workingDir,fileNames);
-		
+
 		if(fileError == true){
 			return fileNames.get(0);
 		}
-				
-		//priority to -help option
-		if(ao.getOptions().contains("-help")){
-			result = getHelp();
-		}
-		
-		String[] fNames = new String[fileNames.size()];
-		for(int i=0; i<fileNames.size();i++){
-			fNames[i] = fileNames.get(i);
-		}
-		
-		//priority to -s
-		if(ao.getOptions().contains("-s")){
-			result = pasteSerial(fNames);
-		}
+
+		if(fileNames.size() != 0 && executed == false){
+
+			//priority to -help option
+			if(ao.getOptions().contains("-help")){
+				result = getHelp();
+			}
+
+			String[] fNames = new String[fileNames.size()];
+			for(int i=0; i<fileNames.size();i++){
+				fNames[i] = fileNames.get(i);
+			}
+
+			//priority to -s
+			if(ao.getOptions().contains("-s")){
+				result = pasteSerial(fNames);
+			}
+
+			int delimIdx = ao.getOptions().indexOf("-d");
+			String delim = ao.getOptionArguments().get(delimIdx);
+
+			if(ao.getOptions().contains("-d")){
+				result = pasteUseDelimiter(delim, fNames);
+			}
 			
-		int delimIdx = ao.getOptions().indexOf("-d");
-		String delim = ao.getOptionArguments().get(delimIdx);
+			executed = true;
+		}
 		
-		if(ao.getOptions().contains("-d")){
-			result = pasteUseDelimiter(delim, fNames);
+		if(stdin != null && executed == true){
+			if(result != ""){
+				result = result + "\n" + stdin;
+			}
+			else{
+				result = stdin;
+			}
 		}
 		
 		return result;
 	}
-	
+
 }
