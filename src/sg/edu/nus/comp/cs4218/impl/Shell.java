@@ -137,7 +137,13 @@ public class Shell extends Thread implements IShell {
 
 		if (argsList != null) {
 			if (argsList[argsList.length - 1].equalsIgnoreCase("-")
-					&& !command.equalsIgnoreCase("cd")) {
+					&& !command.equalsIgnoreCase("cd") 
+					&& !command.equalsIgnoreCase("echo") 
+					&& !command.equalsIgnoreCase("ls") 
+					&& !command.equalsIgnoreCase("pwd") 
+					&& !command.equalsIgnoreCase("move")
+					&& !command.equalsIgnoreCase("copy")
+					&& !command.equalsIgnoreCase("delete")) {
 				Scanner scanner = new Scanner(System.in);
 				stdin = scanner.nextLine();
 

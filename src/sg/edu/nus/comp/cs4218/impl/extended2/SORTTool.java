@@ -46,8 +46,6 @@ public class SORTTool extends ATool implements ISortTool{
 				"-help : Brief information about supported options" ;
 		
 		command = "sort";
-		input = "";
-		output = "";
 		// TODO Auto-generated constructor stub
 	}
 
@@ -86,7 +84,8 @@ public class SORTTool extends ATool implements ISortTool{
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
-		
+		input = "";
+		output = "";
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);
 		ArrayList<String> fileList = argumentObject.getFileList();
@@ -97,7 +96,10 @@ public class SORTTool extends ATool implements ISortTool{
 			for( int i = 0; i< options.size() ; i++)
 			{
 			if(options.get(i).equalsIgnoreCase("-help"))
+			{
 				output = getHelp();
+				return output;
+			}
 			else if(options.get(i).equalsIgnoreCase("-c"))
 			{
 				for (String fileName : fileList)
@@ -124,8 +126,6 @@ public class SORTTool extends ATool implements ISortTool{
 		}
 		else	
 		{
-			if(fileList!=null)
-			{
 			for (String fileName : fileList)
 			{
 				File file = new File(fileName);
@@ -139,7 +139,6 @@ public class SORTTool extends ATool implements ISortTool{
 					setStatusCode(-1);
 					return output;
 				} 
-			}
 			}
 		}
 			

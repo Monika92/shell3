@@ -51,7 +51,6 @@ public class ArgumentObjectParser {
 				{
 					argumentObject.options.add(argument[i]);
 					argumentObject.optionArguments.add(null);
-					argumentObject.fileList.add(null);
 					i+=1;
 				}
 				else if(argument[i].equalsIgnoreCase("-c") )
