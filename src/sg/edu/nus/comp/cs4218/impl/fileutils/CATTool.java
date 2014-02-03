@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
@@ -59,7 +60,7 @@ public class CATTool extends ATool implements ICatTool {
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin, IShell shell) {
 		// TODO Auto-generated method stub
 		
 		File file;

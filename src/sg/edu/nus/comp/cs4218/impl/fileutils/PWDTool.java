@@ -2,6 +2,7 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 
@@ -23,7 +24,7 @@ public class PWDTool extends ATool implements IPwdTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin, IShell shell) {
 		return getStringForDirectory(workingDir);
 	}
 

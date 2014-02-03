@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
@@ -65,7 +66,7 @@ public class COPYTool extends ATool implements ICopyTool{
 	}
 	
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin,IShell shell) {
 		// TODO Auto-generated method stub
 		int numArgs;
 		if(args!=null)

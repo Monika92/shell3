@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 /**
@@ -115,7 +116,7 @@ public class PASTETool extends ATool implements IPasteTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin, IShell shell) {
 		
 		ArrayList<String> args = new ArrayList<String>();
 		String result = "";

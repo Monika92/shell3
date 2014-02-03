@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.IWcTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
@@ -79,7 +80,7 @@ public class WCTool extends ATool implements IWcTool{
 		
 	
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin, IShell shell) {
 		
 		File filePath = new File( args[0] );
 		if(filePath.isFile())
