@@ -28,6 +28,7 @@ public class SimpleThread extends Thread {
     		stdout = itool.execute(workingDirectory, stdin);
     		
     		File output_file = null;
+
     		if(args!=null){
         	int args_length = args.length;
 				if(args_length>=2 && args[args_length -2].equalsIgnoreCase(">")){
@@ -41,7 +42,7 @@ public class SimpleThread extends Thread {
 			Thread.currentThread().interrupt();
     	}
     }
-    
+
     public boolean writeOutputToFile(File output_file){
     	//Check for output file
     	String output_msg="";
@@ -69,3 +70,4 @@ public class SimpleThread extends Thread {
     }
 
   }
+
