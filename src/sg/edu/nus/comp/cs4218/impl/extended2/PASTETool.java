@@ -30,7 +30,7 @@ import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
 public class PASTETool extends ATool implements IPasteTool{
 
 	private boolean fileError = false;
-	private static boolean areArgsFiles, executed;
+	private static boolean executed;
 	private static String result;
 	private static int toggleBit; 
 
@@ -39,7 +39,6 @@ public class PASTETool extends ATool implements IPasteTool{
 		fileError = false;
 		toggleBit = 0;
 		executed = false;
-		areArgsFiles = false;
 		result = "";
 	}
 
