@@ -2,6 +2,7 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,26 +27,33 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 public class Shell extends Thread implements IShell {
 
 	String command;
-	String[] argsList;
+	String[] argsList, raw_args;
 	int commandVerifyFlag;
 	static CommandVerifier verifier;
+	
+	static File workingDirectory ;
 
 	@Override
 	public ITool parse(String commandline) {
 
 		command = null;
-
+		int args_length;
 		ArrayList<String> list = new ArrayList<String>();
 		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
 				commandline);
 		while (m.find())
 			list.add(m.group(1));
-
+		
 		if (list.size() >= 1) 
 		{
 			String[] cmdWords = new String[list.size()];
 			cmdWords = list.toArray(cmdWords);
 
+			if(cmdWords.length > 1)
+				raw_args = new String[cmdWords.length-1];
+			else
+				raw_args = null;
+			
 			if (cmdWords.length > 1)
 				argsList = new String[cmdWords.length - 1];
 			else
@@ -55,7 +63,7 @@ public class Shell extends Thread implements IShell {
 
 				command = cmdWords[0];
 				for (int i = 1; i < cmdWords.length; i++)
-					argsList[i - 1] = cmdWords[i];
+					raw_args[i - 1] = cmdWords[i];
 
 
 				// -1 incorrect
@@ -66,6 +74,16 @@ public class Shell extends Thread implements IShell {
 //					argsList = new String[1];
 //					argsList[0] = "-help";
 //				}
+				
+				//Check for redirection
+				if (raw_args!=null){
+					args_length = raw_args.length;
+					if(args_length>2 && raw_args[args_length -2].equalsIgnoreCase(">"))
+						args_length -= 2;
+					argsList = Arrays.copyOfRange(raw_args, 0, args_length);
+				}
+				else
+					argsList = null;
 				
 				//if (commandVerifyFlag != -1) {
 				
@@ -79,12 +97,12 @@ public class Shell extends Thread implements IShell {
 					return new COPYTool(argsList);
 				else if (command.equalsIgnoreCase("move"))
 					return new MOVETool(argsList);
-				// else if(command.equalsIgnoreCase("delete"))
-				// return new DELETETool(argsList);
+				else if(command.equalsIgnoreCase("delete"))
+					return new DELETETool(argsList);
 				else if (command.equalsIgnoreCase("cat"))
 					return new CATTool(argsList);
-				// else if(command.equalsIgnoreCase("echo"))
-				// return new ECHOTool(argsList);
+				else if(command.equalsIgnoreCase("echo"))
+					return new ECHOTool(argsList);
 
 				// text utilities
 				else if (command.equalsIgnoreCase("cut"))
@@ -108,9 +126,9 @@ public class Shell extends Thread implements IShell {
 							// TODO Auto-generated method stub
 							return 0;
 						}
-
 						@Override
-						public String execute(File workingDir, String stdin) {
+						public String execute(File workingDir, String stdin,
+								IShell shell) {
 							// TODO Auto-generated method stub
 							return null;
 						}
@@ -132,8 +150,7 @@ public class Shell extends Thread implements IShell {
 		// TODO Implement
 
 		String stdin = null;
-		String userDirectory = System.getProperty("user.dir");
-		File workingDirectory = new File(userDirectory);
+
 
 		if (argsList != null) {
 			if (argsList[argsList.length - 1].equalsIgnoreCase("-")
@@ -148,7 +165,7 @@ public class Shell extends Thread implements IShell {
 				stdin = scanner.nextLine();
 
 				while (stdin.equalsIgnoreCase("Ctrl-Z") != true) {
-					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
+					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
 					ExecutorService executorService = Executors
 							.newFixedThreadPool(2);
 					Future<?> threadT2 = executorService.submit(sThread);
@@ -157,7 +174,7 @@ public class Shell extends Thread implements IShell {
 					stdin = scanner.nextLine();
 				}
 			} else {
-				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
+				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
 				ExecutorService executorService = Executors
 						.newFixedThreadPool(2);
 				Future<?> threadT2 = executorService.submit(sThread);
@@ -169,7 +186,7 @@ public class Shell extends Thread implements IShell {
 			}
 		}
 		else {
-			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList);
+			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 			Future<?> threadT2 = executorService.submit(sThread);
 
@@ -188,6 +205,11 @@ public class Shell extends Thread implements IShell {
 
 	}
 
+	@Override
+	public void changeWorkingDirectory(File newDirectory)
+	{
+		workingDirectory = newDirectory;
+	}
 	/**
 	 * Do Forever 1. Wait for a user input 2. Parse the user input. Separate the
 	 * command and its arguments 3. Create a new thread to execute the command
@@ -204,6 +226,8 @@ public class Shell extends Thread implements IShell {
 		ITool itool = null;
 		verifier = new CommandVerifier();
 		String input = null;
+		String userDirectory = System.getProperty("user.dir");
+		workingDirectory = new File(userDirectory);
 		
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.ITool;
 
 public class SimpleThread extends Thread {
@@ -13,33 +14,31 @@ public class SimpleThread extends Thread {
 	File workingDirectory;
 	String stdin, stdout;
 	String[] args;
-	
-	SimpleThread(ITool itoolinstance,File directory,String input,String[] argsList)
+	IShell shell;
+	SimpleThread(ITool itoolinstance,File directory,String input,String[] argsList,IShell shellinstance)
 	{
 		itool = itoolinstance;
 		workingDirectory = directory;
 		stdin = input;
 		args = argsList;
+		shell = shellinstance;
 	}
     public void run(){
     	while (!Thread.currentThread().isInterrupted())
     	{
     		//System.out.println("MyRunnable running");
-    		stdout = itool.execute(workingDirectory, stdin);
+    		stdout = itool.execute(workingDirectory, stdin, shell);
     		
     		File output_file = null;
 
+    		if(args!=null){
+        	int args_length = args.length;
+				if(args_length>=2 && args[args_length -2].equalsIgnoreCase(">")){
+					output_file = new File(args[args_length - 1]);
+					writeOutputToFile(output_file);
+				}
+    		}
     		
-    		if(args!=null)
-        	{
-    			int args_length = args.length;
-    			if(args_length>=2 && args[args_length -2].equalsIgnoreCase(">"))
-    			{
-    				output_file = new File(args[args_length - 1]);
-    				writeOutputToFile(output_file);
-    			}
-        	}
-
 			System.out.println(stdout);
 			System.out.println("Status code is " + itool.getStatusCode());
 			Thread.currentThread().interrupt();
