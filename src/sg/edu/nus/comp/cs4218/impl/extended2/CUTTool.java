@@ -5,9 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
 /**
  * Do not modify this file
  */
@@ -29,19 +33,30 @@ public class CUTTool extends ATool implements ICutTool{
 	File filename;
 	String options,list,helpOutput,input,delim,output;
 	int noOfArguments;
-
+	String command;
+	Boolean stdinFlag = false;
+	
 	public CUTTool(String[] arguments) {
 		super(arguments);
 
 		helpOutput = "usage: cut -b list [-n] [file ...] \n  "
 				+ "cut -c list [file ...] \n "
 				+ "cut -f list [-s] [-d delim] [file ...]";
+		
+		command = "cut";
+		output = "";
+		input = "";
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String cutSpecfiedCharacters(String list, String input) {
 		// TODO Auto-generated method stub
+		
+		if(list.equals(null) || list.isEmpty() || input.equals(null) || input.isEmpty())
+			return input;
+		else 
+		{
 		int fromNumber = 0,toNumber=0;
 		StringBuilder  stringBuilder = new StringBuilder();
 		String[] listNumbers = list.split(",");
@@ -80,6 +95,7 @@ public class CUTTool extends ATool implements ICutTool{
 			}
 		}
 		return stringBuilder.toString();
+		}
 	}
 
 	@Override
@@ -122,6 +138,9 @@ public class CUTTool extends ATool implements ICutTool{
 				}
 			}
 			
+			if(toNumber > words.length)
+				toNumber= words.length;
+			
 			for(int i = fromNumber; i<= toNumber; i++)
 			{
 				if(i>0 && i< toNumber)
@@ -143,122 +162,114 @@ public class CUTTool extends ATool implements ICutTool{
 	@Override
 	public String execute(File workingDir, String stdin) 
 	{
-		String output = helpOutput;
-		if(args!=null)
-		{
-			noOfArguments = args.length;
-		}
+		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
+		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);
+		ArrayList<String> fileList = argumentObject.getFileList();
+		ArrayList<String> options = argumentObject.getOptions();
+		ArrayList<String> optionArguments = argumentObject.getOptionArguments();
 		
-		for(int i=0 ; i< noOfArguments ;i++)
+		if(fileList.get(0)!=null)
 		{
-			
-			if(args[i].equalsIgnoreCase("-help"))
-			output = getHelp();
-
-			else if(args[i].equalsIgnoreCase("-c"))
+			if(fileList.get(0).equalsIgnoreCase("-"))
 			{
-				list = args[i+1];
-				if(args[i+2].equalsIgnoreCase("-"))
+				input = stdin;
+				stdinFlag = true;
+			}
+			else
+			{
+				for (String fileName : fileList)
 				{
-					input = stdin;
-					output = cutSpecfiedCharacters(list,input);
+					File file = new File(fileName);
+					try {
+						input += readFile(file) + "\n";
+					} catch (Exception e) {
+						output = "File not found";
+						setStatusCode(-1);
+						return output;
+					} 
+				}
+			}			
+		}
+		for( int i = 0; i< options.size() ; i++)
+		{
+			if(options.get(i).equalsIgnoreCase("-help"))
+				output = getHelp();
+			else if(options.get(i).equalsIgnoreCase("-c"))
+			{
+				list = optionArguments.get(i);
+				if(stdinFlag)
+				{
+					output += cutSpecfiedCharacters(list, input);
 				}
 				else
 				{
-					File file = new File(args[i+2]);
-					try 
+					StringBuilder  stringBuilder = new StringBuilder();
+					String         ls = System.getProperty("line.separator");
+					String[] inputLines = input.split(System.getProperty("line.separator"));
+					for(String inputLine : inputLines)
 					{
-							input = readFile(file);
-							StringBuilder  stringBuilder = new StringBuilder();
-							String         ls = System.getProperty("line.separator");
-							String[] inputLines = input.split(System.getProperty("line.separator"));
-							for(String inputLine : inputLines)
-							{
-								stringBuilder.append( cutSpecfiedCharacters(list, inputLine) );
-						        stringBuilder.append( ls );									
-							}
-							output = stringBuilder.toString();
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						output = "File not found";
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						output = "Invalid file";
-					}							
+						stringBuilder.append( cutSpecfiedCharacters(list, inputLine) );
+				        stringBuilder.append( ls );	
+					}
+					output += stringBuilder.toString();
 				}
-				i+=2;
+				
 			}
-			else if(args[i].equalsIgnoreCase("-d"))
+			else if(options.get(i).equalsIgnoreCase("-d"))
 			{
-				delim = args[i+1].replace("\"","");
-				if(args[i+2].equalsIgnoreCase("-f"))
+				if(options.get(i+1).equalsIgnoreCase("-f"))
 				{
-					list = args[i+3];
-					if(args[i+4].equalsIgnoreCase("-"))
+					list = optionArguments.get(i+1);
+					delim = optionArguments.get(i).replace("\"","");
+					if(stdinFlag)
 					{
-						input = stdin;
-						output = cutSpecifiedCharactersUseDelimiter(list, delim, input);
+						output += cutSpecifiedCharactersUseDelimiter(list, delim, input);
 					}
 					else
 					{
-						File file = new File(args[i+4]);
-						try {
-							input = readFile(file);
-							StringBuilder  stringBuilder = new StringBuilder();
-							String         ls = System.getProperty("line.separator");
-							String[] inputLines = input.split(System.getProperty("line.separator"));
-							for(String inputLine : inputLines)
-							{
-								stringBuilder.append( cutSpecifiedCharactersUseDelimiter(list, delim, inputLine) );
-						        stringBuilder.append( ls );									
-							}
-							output = stringBuilder.toString();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							output = "Invalid file";
+						StringBuilder  stringBuilder = new StringBuilder();
+						String         ls = System.getProperty("line.separator");
+						String[] inputLines = input.split(System.getProperty("line.separator"));
+						for(String inputLine : inputLines)
+						{
+							stringBuilder.append( cutSpecifiedCharactersUseDelimiter(list, delim, inputLine) );
+					        stringBuilder.append( ls );	
 						}
+						output += stringBuilder.toString();						
 					}
+					i++;
 				}
-				i+=4;
 			}
-			else if(args[i].equalsIgnoreCase("-f"))
+			else if(options.get(i).equalsIgnoreCase("-f"))
 			{
-				list = args[i+1];
-				if(args[i+2].equalsIgnoreCase("-d"))
+				if(options.get(i+1).equalsIgnoreCase("-d"))
 				{
-					delim = args[i+3];
-					if(args[i+4].equalsIgnoreCase("-"))
+					list = optionArguments.get(i);
+					delim = optionArguments.get(i+1).replace("\"","");
+					if(stdinFlag)
 					{
-						input = stdin;
-						output = cutSpecifiedCharactersUseDelimiter(list, delim, input);
+						output += cutSpecifiedCharactersUseDelimiter(list, delim, input);
 					}
 					else
 					{
-						File file = new File(args[i+4]);
-						try {
-							input = readFile(file);
-							StringBuilder  stringBuilder = new StringBuilder();
-							String         ls = System.getProperty("line.separator");
-							String[] inputLines = input.split(System.getProperty("line.separator"));
-							for(String inputLine : inputLines)
-							{
-								stringBuilder.append( cutSpecifiedCharactersUseDelimiter(list, delim, inputLine) );
-						        stringBuilder.append( ls );									
-							}
-							output = stringBuilder.toString();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							output = "Invalid file";
+						StringBuilder  stringBuilder = new StringBuilder();
+						String         ls = System.getProperty("line.separator");
+						String[] inputLines = input.split(System.getProperty("line.separator"));
+						for(String inputLine : inputLines)
+						{
+							stringBuilder.append( cutSpecifiedCharactersUseDelimiter(list, delim, inputLine) );
+					        stringBuilder.append( ls );	
 						}
+						output += stringBuilder.toString();						
 					}
+					i++;
 				}
-				i+=4;
 			}
 		}
 		return output;
 	}
 
-	private String readFile(File file) throws IOException {
+	private String readFile(File file) throws Exception {
 		// TODO Auto-generated method stub
 		String         line = null;
 		BufferedReader reader = new BufferedReader( new FileReader (file));
