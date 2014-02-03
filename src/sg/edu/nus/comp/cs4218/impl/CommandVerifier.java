@@ -262,7 +262,16 @@ public class CommandVerifier {
 		for(int i = 0; i<args.length; i++){
 			argList.add(args[i]);
 		}
-
+		
+		if(argList.contains(">")){
+			if (argList.indexOf(">") == argList.size()-2){
+				argList.subList(0,argList.indexOf(">")); //removing > filename from check
+			}
+			else{
+				return 0; // case where ">" not followed by fileName
+			}
+		}
+		
 		if(basCmds.contains(cmd)){
 			resultCode = verifyBasic(cmd, argList);
 			return resultCode;
