@@ -30,7 +30,7 @@ public class Shell extends Thread implements IShell {
 	String[] argsList, raw_args;
 	int commandVerifyFlag;
 	static CommandVerifier verifier;
-	
+
 	static File workingDirectory ;
 
 	@Override
@@ -43,7 +43,7 @@ public class Shell extends Thread implements IShell {
 				commandline);
 		while (m.find())
 			list.add(m.group(1));
-		
+
 		if (list.size() >= 1) 
 		{
 			String[] cmdWords = new String[list.size()];
@@ -53,7 +53,7 @@ public class Shell extends Thread implements IShell {
 				raw_args = new String[cmdWords.length-1];
 			else
 				raw_args = null;
-			
+
 			if (cmdWords.length > 1)
 				argsList = new String[cmdWords.length - 1];
 			else
@@ -62,19 +62,21 @@ public class Shell extends Thread implements IShell {
 			if (cmdWords != null) {
 
 				command = cmdWords[0];
-				for (int i = 1; i < cmdWords.length; i++)
+				for (int i = 1; i < cmdWords.length; i++){
+					argsList[i - 1] = cmdWords[i];
 					raw_args[i - 1] = cmdWords[i];
+				}
 
 
 				// -1 incorrect
 				// 0 show help
 				// 1 execute normally						
-//				commandVerifyFlag = verifier.verifyCommand(command, argsList);
-//				if(commandVerifyFlag == 0){
-//					argsList = new String[1];
-//					argsList[0] = "-help";
-//				}
-				
+				commandVerifyFlag = verifier.verifyCommand(command, argsList);
+				if(commandVerifyFlag == 0){
+					argsList = new String[1];
+					argsList[0] = "-help";
+				}
+
 				//Check for redirection
 				if (raw_args!=null){
 					args_length = raw_args.length;
@@ -84,55 +86,57 @@ public class Shell extends Thread implements IShell {
 				}
 				else
 					argsList = null;
-				
-				//if (commandVerifyFlag != -1) {
-				
-				if (command.equalsIgnoreCase("pwd"))
-					return new PWDTool();
-				else if (command.equalsIgnoreCase("cd"))
-					return new CDTool(argsList);
-				else if (command.equalsIgnoreCase("ls"))
-					return new LSTool(argsList);
-				else if (command.equalsIgnoreCase("copy"))
-					return new COPYTool(argsList);
-				else if (command.equalsIgnoreCase("move"))
-					return new MOVETool(argsList);
-				else if(command.equalsIgnoreCase("delete"))
-					return new DELETETool(argsList);
-				else if (command.equalsIgnoreCase("cat"))
-					return new CATTool(argsList);
-				else if(command.equalsIgnoreCase("echo"))
-					return new ECHOTool(argsList);
 
-				// text utilities
-				else if (command.equalsIgnoreCase("cut"))
-					return new CUTTool(argsList);
-				else if (command.equalsIgnoreCase("comm"))
-					return new COMMTool(argsList);
-				else if (command.equalsIgnoreCase("paste"))
-					return new PASTETool(argsList);
-				else if (command.equalsIgnoreCase("sort"))
-					return new SORTTool(argsList);
-				else if (command.equalsIgnoreCase("uniq"))
-					return new UNIQTool(argsList);
-				else if (command.equalsIgnoreCase("wc"))
-					return new WCTool(argsList);
+				if (commandVerifyFlag != -1) {
 
-				else if (command.equalsIgnoreCase("Ctrl-Z"))
-					return new ITool() {
+					if (command.equalsIgnoreCase("pwd"))
+						return new PWDTool();
+					else if (command.equalsIgnoreCase("cd"))
+						return new CDTool(argsList);
+					else if (command.equalsIgnoreCase("ls"))
+						return new LSTool(argsList);
+					else if (command.equalsIgnoreCase("copy"))
+						return new COPYTool(argsList);
+					else if (command.equalsIgnoreCase("move"))
+						return new MOVETool(argsList);
+					else if(command.equalsIgnoreCase("delete"))
+						return new DELETETool(argsList);
+					else if (command.equalsIgnoreCase("cat"))
+						return new CATTool(argsList);
+					else if(command.equalsIgnoreCase("echo"))
+						return new ECHOTool(argsList);
 
-						@Override
-						public int getStatusCode() {
-							// TODO Auto-generated method stub
-							return 0;
-						}
-						@Override
-						public String execute(File workingDir, String stdin,
-								IShell shell) {
-							// TODO Auto-generated method stub
-							return null;
-						}
-					};
+					// text utilities
+					else if (command.equalsIgnoreCase("cut"))
+						return new CUTTool(argsList);
+					else if (command.equalsIgnoreCase("comm"))
+						return new COMMTool(argsList);
+					else if (command.equalsIgnoreCase("paste"))
+						return new PASTETool(argsList);
+					else if (command.equalsIgnoreCase("sort"))
+						return new SORTTool(argsList);
+					else if (command.equalsIgnoreCase("uniq"))
+						return new UNIQTool(argsList);
+					else if (command.equalsIgnoreCase("wc"))
+						return new WCTool(argsList);
+
+					else if (command.equalsIgnoreCase("Ctrl-Z")){
+						return new ITool() {
+
+							@Override
+							public int getStatusCode() {
+								// TODO Auto-generated method stub
+								return 0;
+							}
+							@Override
+							public String execute(File workingDir, String stdin,
+									IShell shell) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+						};
+					}
+				}
 			}
 		}
 		System.err.println("Command Syntax InCorrect!");
@@ -228,7 +232,7 @@ public class Shell extends Thread implements IShell {
 		String input = null;
 		String userDirectory = System.getProperty("user.dir");
 		workingDirectory = new File(userDirectory);
-		
+
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		input = scanner.nextLine();
