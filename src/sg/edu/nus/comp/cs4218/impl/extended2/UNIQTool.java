@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
 import sun.misc.Regexp;
 /**
  * Do not modify this file
@@ -134,10 +136,16 @@ public class UNIQTool extends ATool implements IUniqTool{
 					words.add(temp_words[i]);
 				}
 			}
-			lines.set(j, words.toString());
+			String word = "";
+			for(String s : words)
+				word += s;
+			lines.set(j, word);
 		}
 		
-		result = getUnique(checkCase, lines.toString()); 
+		String str = "";
+		for(String s : lines)
+			str += s;
+		result = getUnique(checkCase, str); 
 		return result;
 	}
 
@@ -195,19 +203,11 @@ public class UNIQTool extends ATool implements IUniqTool{
 	public String execute(File workingDir, String stdin, IShell shell) {
 		// TODO Auto-generated method stub
 		
-		/*ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
-		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);
+		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
+		ArgumentObject argumentObject = argumentObjectParser.parse(args, "uniq");
 		ArrayList<String> fileList = argumentObject.getFileList();
 		ArrayList<String> options = argumentObject.getOptions();
-		ArrayList<String> optionArguments = argumentObject.getOptionArguments();*/
-		
-		ArrayList<String> fileList = new ArrayList<String>();
-		ArrayList<String> options = new ArrayList<String>();
-		ArrayList<String> optionArguments = new ArrayList<String>();
-		
-		fileList.add(args[0]);//fileList.add(args[1]);
-		//options.add("-i"); optionArguments.add("");
-		//options.add("-f"); optionArguments.add("1");
+		ArrayList<String> optionArguments = argumentObject.getOptionArguments();
 		
 		String result = "", input = "";
 		boolean checkCase = true;
