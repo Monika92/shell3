@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
@@ -199,7 +200,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin, IShell shell) {
 		// TODO Auto-generated method stub
 		
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();

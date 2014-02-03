@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
 
@@ -44,7 +45,7 @@ public class LSTool extends ATool implements ILsTool
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin, IShell shell) {
 		// TODO Auto-generated method stub
 		int numArgs;
 		if(args!=null)
@@ -57,6 +58,7 @@ public class LSTool extends ATool implements ILsTool
 		if(numArgs == 0)
 		{
 			//No arguments
+			System.out.println(workingDir);
 			childFilesList = getFiles(workingDir);
 			outputString = getStringForFiles(childFilesList);
 		}

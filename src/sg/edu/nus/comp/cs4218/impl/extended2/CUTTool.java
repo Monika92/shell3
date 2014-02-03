@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
@@ -160,7 +161,7 @@ public class CUTTool extends ATool implements ICutTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin) 
+	public String execute(File workingDir, String stdin, IShell shell) 
 	{
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);

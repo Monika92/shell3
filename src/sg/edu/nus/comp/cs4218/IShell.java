@@ -1,5 +1,7 @@
 package sg.edu.nus.comp.cs4218;
 
+import java.io.File;
+
 /**
  * Do not modify this file
  */
@@ -24,4 +26,10 @@ public interface IShell {
 	 * @param toolExecution
 	 */
 	public void stop(Runnable toolExecution);
+	
+	/**
+	 * Called by cdtool to change shell's current working directory
+	 * @param newDirectory
+	 */
+	public void changeWorkingDirectory(File newDirectory);
 }

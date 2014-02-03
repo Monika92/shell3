@@ -7,6 +7,6 @@ import java.io.File;
  */
 public interface ITool {
 	//this function returns stdout
-	String execute(File workingDir, String stdin);
+	String execute(File workingDir, String stdin ,IShell shell);
 	int getStatusCode();
 }

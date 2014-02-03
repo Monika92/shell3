@@ -41,7 +41,7 @@ public class SORTToolTest {
     {
     	String[] arguments = new String[]{"-c", "-c" ,"test.txt"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, null);
+		actualOutput = sorttool.execute(workingDirectory, null, null);
 		expectedOutput = "Already sorted";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
@@ -52,7 +52,7 @@ public class SORTToolTest {
     {
     	String[] arguments = new String[]{"-c", "-c" ,"file.txt"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, null);
+		actualOutput = sorttool.execute(workingDirectory, null, null);
 		expectedOutput = "File Not Found";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), -1);
@@ -63,7 +63,7 @@ public class SORTToolTest {
     {
     	String[] arguments = new String[]{"-help"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, null);
+		actualOutput = sorttool.execute(workingDirectory, null, null);
 		expectedOutput = helpOutput;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
