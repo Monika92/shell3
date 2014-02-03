@@ -3,6 +3,7 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import java.io.File;
 import java.io.IOException;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
@@ -21,7 +22,7 @@ public class DELETETool extends ATool implements IDeleteTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin) {
+	public String execute(File workingDir, String stdin, IShell shell) {
 		// TODO Auto-generated method stub
 		
 		File file;
