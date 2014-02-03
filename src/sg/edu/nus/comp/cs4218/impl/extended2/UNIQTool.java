@@ -32,6 +32,8 @@ import sun.misc.Regexp;
  */
 public class UNIQTool extends ATool implements IUniqTool{
 
+	static String cachedline = "";
+	
 	public UNIQTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
@@ -202,6 +204,8 @@ public class UNIQTool extends ATool implements IUniqTool{
 	@Override
 	public String execute(File workingDir, String stdin, IShell shell) {
 		// TODO Auto-generated method stub
+		
+		//Check for stdin
 		
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, "uniq");
