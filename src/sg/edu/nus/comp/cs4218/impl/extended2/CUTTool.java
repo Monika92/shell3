@@ -40,13 +40,18 @@ public class CUTTool extends ATool implements ICutTool{
 	public CUTTool(String[] arguments) {
 		super(arguments);
 
-		helpOutput = "usage: cut -b list [-n] [file ...] \n  "
-				+ "cut -c list [file ...] \n "
-				+ "cut -f list [-s] [-d delim] [file ...]";
+		helpOutput = "usage: cut [OPTIONS] [FILE]" + "\n"
+				+ "FILE : Name of the file, when no file is present" + "\n"
+				+ "OPTIONS : -c LIST : Use LIST as the list of characters to cut out. Items within "
+				+ "the list may be separated by commas, "
+				+ "and ranges of characters can be separated with dashes. "
+				+ "For example, list Ô1-5,10,12,18-30Õ specifies characters "
+				+ "1 through 5, 10,12 and 18 through 30" + "\n"
+				+ "-d DELIM: Use DELIM as the field-separator character instead of"
+				+ "the TAB character" + "\n" 
+				+ "-help : Brief information about supported options";
 		
 		command = "cut";
-		output = "";
-		input = "";
 		// TODO Auto-generated constructor stub
 	}
 
@@ -163,6 +168,8 @@ public class CUTTool extends ATool implements ICutTool{
 	@Override
 	public String execute(File workingDir, String stdin, IShell shell) 
 	{
+		input = "";
+		output= "";
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);
 		ArrayList<String> fileList = argumentObject.getFileList();

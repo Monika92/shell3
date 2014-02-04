@@ -24,9 +24,16 @@ public class CUTToolTest {
 		
 		workingDirectory = new File(System.getProperty("user.dir"));
 		
-		helpOutput = "usage: cut -b list [-n] [file ...] \n  "
-				+ "cut -c list [file ...] \n "
-				+ "cut -f list [-s] [-d delim] [file ...]";
+		helpOutput = "usage: cut [OPTIONS] [FILE]" + "\n"
+				+ "FILE : Name of the file, when no file is present" + "\n"
+				+ "OPTIONS : -c LIST : Use LIST as the list of characters to cut out. Items within "
+				+ "the list may be separated by commas, "
+				+ "and ranges of characters can be separated with dashes. "
+				+ "For example, list Ô1-5,10,12,18-30Õ specifies characters "
+				+ "1 through 5, 10,12 and 18 through 30" + "\n"
+				+ "-d DELIM: Use DELIM as the field-separator character instead of"
+				+ "the TAB character" + "\n" 
+				+ "-help : Brief information about supported options";
 	}
 
     @After

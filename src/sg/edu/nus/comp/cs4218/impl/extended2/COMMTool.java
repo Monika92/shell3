@@ -6,13 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.ICommTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
 
 /**
  * Do not modify this file
@@ -33,25 +32,61 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class COMMTool extends ATool implements ICommTool{
 
-
+	private int checkOrderFlag = 0;
 
 	public COMMTool(String[] arguments) {
 		super(arguments);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin, IShell shell) {
-
+		
 		String fileName1 = "", fileName2 = "";
+		ArgumentObjectParser aop = new ArgumentObjectParser();
+		ArgumentObject ao = aop.parse(super.args, "paste");
+		
+		fileName1 = ao.getFileList().get(0);
+		fileName2 = ao.getFileList().get(1);
+		
+		//priority to -help option
+		if(ao.getOptions().contains("-help")){
+			return getHelp();
+		}
+		
+		//priority to "-d" option
+		if(ao.getOptions().contains("-d")){
+			return compareFilesDoNotCheckSortStatus(fileName1, fileName2);
+		}
+				
+		if(ao.getOptions().contains("-c")){
+			return compareFilesCheckSortStatus(fileName1,fileName2);
+		}
+		
+		String filePath1 = getCorrectPathFromArg(workingDir,fileName1);
+		String filePath2 = getCorrectPathFromArg(workingDir,fileName2);
 
-		String rootPath = workingDir.getAbsolutePath();
-		String filePath1 = rootPath + File.separator + fileName1;
-		String filePath2 = rootPath + File.separator + fileName2;
+		if(filePath1 == null || filePath2 == null){
+			return null;
+		}
 
 		String result = compareFiles(filePath1, filePath2);
 
 		return result;
+	}
+
+	private String getCorrectPathFromArg(File workingDir,String fName){
+		String name = null;
+		if(fName.startsWith("//")){
+			name = fName;
+		}
+		else{
+			name = workingDir.getAbsolutePath() + File.separator + fName;
+		}
+		
+		if((new File(name)).exists()){
+			return name;
+		}
+		return null;
 	}
 
 	@Override
@@ -59,89 +94,54 @@ public class COMMTool extends ATool implements ICommTool{
 
 		ArrayList<String> fileLines1 = loadFile(input1);
 		ArrayList<String> fileLines2 = loadFile(input2);
-		
-		//get unique
-		fileLines1 = getUniqueSet(fileLines1);
-		fileLines2 = getUniqueSet(fileLines2);
-		
-		
-		ArrayList<String> common = new ArrayList<String>();
-		
-		if(fileLines1 == null || fileLines2 == null){
-			return null;
-		}
 
-		for(int i = 0; i<fileLines1.size(); i++){
-			String line = fileLines1.get(i);
-			int idx = Collections.binarySearch(fileLines2,line);
+		String result = null;
+
+		int i=0,j=0;
+		for( i=0,j=0; i<fileLines1.size()&& j<fileLines2.size();){
 			
-			//if present, add to common list and remove from other lists
-			if(fileLines2.get(idx).equals(line)){
-				common.add(line);
-				fileLines1.set(i, null);
-				fileLines2.set(idx, null);
+			result = "";
+			
+			String val1 = fileLines1.get(i);
+			String val2 = fileLines2.get(j);
+			
+			//include check for option --check-order
+			if(checkOrderFlag != 0){
+				if((i+1) <fileLines1.size() && val1.compareTo(fileLines1.get(i+1))>0){
+					result += " File 1 not sorted!\n";
+				}
+				if((j+1) <fileLines2.size() && val2.compareTo(fileLines2.get(j+1))>0){
+					result += " File 2 not sorted!\n";
+				}
 			}
 			
+			if(val1.compareTo(val2) < 0){
+				i++;
+				result += val1 + "\t" + "-" + "\t" + "-" +"\n";				
+			}
+			else if(val1.compareTo(val2) > 0){
+				j++;
+				result += "-" + "\t" + val2 + "\t" + "-" +"\n";
+			}else if(val1.compareTo(val2) == 0){
+				i++;j++;
+				result += "-" + "\t" + "-" + "\t" + val1 +"\n";
+			}		
 		}
-		
-		String result = null;
-		result = createOutputString(fileLines1, fileLines2, common);
-		
+
+		while(i<fileLines1.size()){
+
+			i++;
+			result += fileLines1.get(i) + "\t" + "-" + "\t" + "-" +"\n";
+		}
+		while(j<fileLines2.size()){
+
+			j++;
+			result += "-" + "\t" + fileLines2.get(j) + "\t" + "-" +"\n";
+		}
+
 		return result;
 	}
 
-	private String createOutputString(ArrayList<String> l1, ArrayList<String> l2,ArrayList<String> l3 ){
-		int maxLength = 0;
-		maxLength = l1.size();
-		if(l2.size() > maxLength){
-			maxLength = l2.size();
-		}
-		if(l3.size() > maxLength){
-			maxLength = l3.size();
-		}
-		
-		if(l1.size() != maxLength){
-			l1 = addBuffer(l1, maxLength);
-		}
-		if(l2.size() != maxLength){
-			l2 = addBuffer(l2, maxLength);
-		}
-		if(l3.size() != maxLength){
-			l3 = addBuffer(l3, maxLength);
-		}
-		
-		String result = "";
-		for( int i = 0; i<maxLength; i++){
-			result = l1.get(i) + "\t" + l2.get(i) + "\t" + l3.get(i) + "\n";
-		}
-		return result;
-	}
-	
-	private ArrayList<String> addBuffer(ArrayList<String> list, int n){
-		
-		int bufferSize = n - list.size();
-		for(int i = 0; i<bufferSize; i++){
-			list.add("");
-		}
-		return list;
-	}
-	
-	private ArrayList<String> getUniqueSet(ArrayList<String> lines){
-		Set<String> set = new HashSet<String>();
-		
-		for( int i = 0; i<lines.size(); i++){
-			set.add(lines.get(i));
-		}
-		
-		ArrayList<String> uniq = new ArrayList<String>();
-		for(Object object : set) {
-		    String element = (String) object;
-		    uniq.add(element);
-		}
-		
-		return uniq;
-	}
-	
 	private ArrayList<String> loadFile(String fname){
 		ArrayList<String> lines = new ArrayList<String>();
 
@@ -169,19 +169,37 @@ public class COMMTool extends ATool implements ICommTool{
 
 	@Override
 	public String compareFilesCheckSortStatus(String input1, String input2) {
-		// TODO Auto-generated method stub
+		checkOrderFlag = 1;
+		compareFiles(input1, input2);
+		
 		return null;
 	}
 
 	@Override
 	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
-		// TODO Auto-generated method stub
+		checkOrderFlag = 0;
+		compareFiles(input1, input2);
+
 		return null;
 	}
 
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
+
+		String help =" /*\n" +
+				"\n*" +
+				"\n* comm : Compares two sorted files line by line. With no options, produce three-column output." +
+				"\n* 		 Column one contains lines unique to FILE1, column two contains lines unique to FILE2," +
+				"\n 		 and column three contains lines common to both files."+
+				"\n*" +	
+				"\n*	Command Format - comm [OPTIONS] FILE1 FILE2" +
+				"\n*	FILE1 - Name of the file 1" +
+				"\n*	FILE2 - Name of the file 2" +
+				"\n*		-c : check that the input is correctly sorted" +
+				"\n*      -d : do not check that the input is correctly sorted" +
+				"\n*      -help : Brief information about supported options" +
+				"\n*/";
+
+		return help;
 	}
 }
