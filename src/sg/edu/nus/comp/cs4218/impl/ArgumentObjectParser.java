@@ -68,6 +68,22 @@ public class ArgumentObjectParser {
 			}
 			
 		}
+		else if(command.equalsIgnoreCase("wc"))
+		{
+			int argumentSize = argument.length;
+			for(int i = 0 ; i < argumentSize ; i++)
+			{
+				argumentObject.optionArguments.add(null);
+				if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-m") || argument[i].equalsIgnoreCase("-w") || argument[i].equalsIgnoreCase("-l"))
+				{
+					argumentObject.options.add(argument[i]);
+				}
+				else 
+				{
+					argumentObject.fileList.add(argument[i]);
+				}
+			}
+		}
 		return argumentObject;		
 	}
 }
