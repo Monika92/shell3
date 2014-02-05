@@ -1,4 +1,4 @@
-package test.sg.edu.nus.comp.cs4218.impl.fileutils;
+package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.*;
 
@@ -39,7 +39,7 @@ public class SORTToolTest {
     {
     	String[] arguments = new String[]{"-c", "-c" ,"test.txt"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, null, null);
+		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = "Already sorted";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
@@ -50,7 +50,7 @@ public class SORTToolTest {
     {
     	String[] arguments = new String[]{"-c", "-c" ,"file.txt"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, null, null);
+		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = "File Not Found";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), -1);
@@ -61,7 +61,7 @@ public class SORTToolTest {
     {
     	String[] arguments = new String[]{"-help"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, null, null);
+		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);

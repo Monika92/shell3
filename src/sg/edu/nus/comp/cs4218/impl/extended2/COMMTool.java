@@ -39,7 +39,7 @@ public class COMMTool extends ATool implements ICommTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		
 		String fileName1 = "", fileName2 = "";
 		ArgumentObjectParser aop = new ArgumentObjectParser();

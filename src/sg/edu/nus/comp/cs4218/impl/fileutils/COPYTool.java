@@ -64,7 +64,7 @@ public class COPYTool extends ATool implements ICopyTool{
 	}
 	
 	@Override
-	public String execute(File workingDir, String stdin,IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		int numArgs;
 		if(args!=null)

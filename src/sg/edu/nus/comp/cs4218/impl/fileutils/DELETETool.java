@@ -20,7 +20,7 @@ public class DELETETool extends ATool implements IDeleteTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
 		File file;

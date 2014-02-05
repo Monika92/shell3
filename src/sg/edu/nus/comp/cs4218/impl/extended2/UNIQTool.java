@@ -206,7 +206,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
 		//Check for stdin

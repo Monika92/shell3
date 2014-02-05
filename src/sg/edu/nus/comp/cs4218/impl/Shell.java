@@ -31,8 +31,6 @@ public class Shell extends Thread implements IShell {
 	int commandVerifyFlag;
 	static CommandVerifier verifier;
 
-	static File workingDirectory ;
-
 	@Override
 	public ITool parse(String commandline) {
 
@@ -129,8 +127,7 @@ public class Shell extends Thread implements IShell {
 								return 0;
 							}
 							@Override
-							public String execute(File workingDir, String stdin,
-									IShell shell) {
+							public String execute(File workingDir, String stdin) {
 								// TODO Auto-generated method stub
 								return null;
 							}
@@ -169,7 +166,7 @@ public class Shell extends Thread implements IShell {
 				stdin = scanner.nextLine();
 
 				while (stdin.equalsIgnoreCase("Ctrl-Z") != true) {
-					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+					SimpleThread sThread = new SimpleThread(itool,stdin, argsList);
 					ExecutorService executorService = Executors
 							.newFixedThreadPool(2);
 					Future<?> threadT2 = executorService.submit(sThread);
@@ -178,7 +175,7 @@ public class Shell extends Thread implements IShell {
 					stdin = scanner.nextLine();
 				}
 			} else {
-				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+				SimpleThread sThread = new SimpleThread(itool,stdin, argsList);
 				ExecutorService executorService = Executors
 						.newFixedThreadPool(2);
 				Future<?> threadT2 = executorService.submit(sThread);
@@ -190,7 +187,7 @@ public class Shell extends Thread implements IShell {
 			}
 		}
 		else {
-			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+			SimpleThread sThread = new SimpleThread(itool,stdin, argsList);
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 			Future<?> threadT2 = executorService.submit(sThread);
 
@@ -209,11 +206,6 @@ public class Shell extends Thread implements IShell {
 
 	}
 
-	@Override
-	public void changeWorkingDirectory(File newDirectory)
-	{
-		workingDirectory = newDirectory;
-	}
 	/**
 	 * Do Forever 1. Wait for a user input 2. Parse the user input. Separate the
 	 * command and its arguments 3. Create a new thread to execute the command
@@ -231,7 +223,7 @@ public class Shell extends Thread implements IShell {
 		verifier = new CommandVerifier();
 		String input = null;
 		String userDirectory = System.getProperty("user.dir");
-		workingDirectory = new File(userDirectory);
+		WorkingDirectory.workingDirectory = new File(userDirectory);
 
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);

@@ -11,23 +11,20 @@ import sg.edu.nus.comp.cs4218.ITool;
 public class SimpleThread extends Thread {
 
 	ITool itool;
-	File workingDirectory;
 	String stdin, stdout;
 	String[] args;
 	IShell shell;
-	SimpleThread(ITool itoolinstance,File directory,String input,String[] argsList,IShell shellinstance)
+	SimpleThread(ITool itoolinstance,String input,String[] argsList)
 	{
 		itool = itoolinstance;
-		workingDirectory = directory;
 		stdin = input;
 		args = argsList;
-		shell = shellinstance;
 	}
     public void run(){
     	while (!Thread.currentThread().isInterrupted())
     	{
     		//System.out.println("MyRunnable running");
-    		stdout = itool.execute(workingDirectory, stdin, shell);
+    		stdout = itool.execute(WorkingDirectory.workingDirectory, stdin);
     		
     		File outputFile = null;
 

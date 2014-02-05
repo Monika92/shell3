@@ -166,7 +166,7 @@ public class CUTTool extends ATool implements ICutTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) 
+	public String execute(File workingDir, String stdin) 
 	{
 		input = "";
 		output= "";

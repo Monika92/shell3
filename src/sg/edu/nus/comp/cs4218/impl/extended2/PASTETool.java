@@ -170,7 +170,7 @@ public class PASTETool extends ATool implements IPasteTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 
 		String[] args = super.args;
 		if(stdin != null && toggleBit == 0){

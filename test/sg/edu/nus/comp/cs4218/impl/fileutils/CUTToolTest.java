@@ -1,4 +1,4 @@
-package test.sg.edu.nus.comp.cs4218.impl.fileutils;
+package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.*;
 
@@ -45,7 +45,7 @@ public class CUTToolTest {
     {
     	String[] arguments = new String[]{"-c", "1-2", "-c", "3-4", "-"} ;
 		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.execute(workingDirectory, "abcde",null);
+		actualOutput = cuttool.execute(workingDirectory, "abcde");
 		expectedOutput = "abcd";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
@@ -56,7 +56,7 @@ public class CUTToolTest {
     {
     	String[] arguments = new String[]{"-help"} ;
 		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.execute(workingDirectory, null,null);
+		actualOutput = cuttool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
@@ -67,7 +67,7 @@ public class CUTToolTest {
     {
     	String[] arguments = new String[]{"-c", "1-2" ,"file.txt"} ;
 		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.execute(workingDirectory, null,null);
+		actualOutput = cuttool.execute(workingDirectory, null);
 		expectedOutput = "File Not Found";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), -1);
