@@ -54,7 +54,7 @@ public class MOVETool extends ATool implements IMoveTool{
 			if((arg0.isFile()) && (arg1.isDirectory()==true))
 			{
 			
-				arg1 = new File(args[1] + "\\" + arg0.getName());
+				arg1 = new File(args[1] + File.separator + arg0.getName());
 				if(move(arg0,arg1))
 				{
 					outputString = args[0] + "'s move completed.";
@@ -99,7 +99,7 @@ public class MOVETool extends ATool implements IMoveTool{
 					File argI = new File(args[i]);
 					if(argI.isFile())
 					{	
-						File argDest = new File(argLast + "\\" + argI.getName());
+						File argDest = new File(argLast + File.separator + argI.getName());
 						if (move(argI,argDest))
 						{
 							outputString += args[i] + "'s move completed. \n"; 

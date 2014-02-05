@@ -62,7 +62,7 @@ public class COPYTool extends ATool implements ICopyTool{
 
 	}
 	
-	
+	/*
 	public File copyFileToDir( int fromIndex , int toIndex ) {
 		
 		String arg0 = "" , arg1 = "";
@@ -83,6 +83,7 @@ public class COPYTool extends ATool implements ICopyTool{
 		
 		return argFile;
 	}
+	*/
 	
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -104,7 +105,7 @@ public class COPYTool extends ATool implements ICopyTool{
 			{
 				//Copy a file to directory
 				//arg1 = copyFileToDir( 0 , 1);
-				arg1 = new File(args[1] + "\\" + arg0.getName());
+				arg1 = new File(args[1] + File.separator + arg0.getName());
 				if (copy(arg0,arg1))
 				{
 					outputString = "Copy completed.";
@@ -144,7 +145,7 @@ public class COPYTool extends ATool implements ICopyTool{
 					if(argI.isFile())
 					{				
 						//File argDest = copyFileToDir( i , numArgs-1);
-						File argDest = new File(argLast + "\\" + argI.getName());
+						File argDest = new File(argLast + File.separator + argI.getName());
 						if (copy(argI,argDest))
 						{
 							outputString += args[i] + "'s copy completed. \n"; 

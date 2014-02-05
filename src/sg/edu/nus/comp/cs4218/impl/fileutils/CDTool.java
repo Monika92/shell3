@@ -20,44 +20,6 @@ public class CDTool extends ATool implements ICdTool{
 		return null;	
 	}
 	
-	/*
-	private static boolean testPath(String path) {
-	    int prefixLen = (new File(path)).getPrefixLength();
-	    if (testPathWin(path, prefixLen) || testPathLinux(prefixLen))
-	        return true;
-	    else
-	        return false;
-	}
-
-	private static boolean testPathWin(String path, int prefixLen) {
-	    if (prefixLen == 3)
-	        return true;
-	    File f = new File(path);
-	    if ((prefixLen == 2) && (f.getPath().charAt(0) == '/'))
-	        return true;
-	    return false;
-	}
-
-	private static boolean testPathLinux(int prefixLen) {
-	    return (prefixLen != 0);
-	}
-	*/
-	public Boolean isAbsolutePath(String dir)
-	{
-		if (System.getProperty("os.name").startsWith("Windows")) 
-		{
-	        
-	    } 
-		else 
-	    {
-	        if(dir.indexOf('/')==0)
-	        	return true;
-	        else
-	        	return false;
-	    } 
-		return null;
-	}
-	
 	public File getDirectoryPath(String dirName , String workingDir)
 	{
 		
