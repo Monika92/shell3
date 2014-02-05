@@ -41,9 +41,12 @@ public class CDTool extends ATool implements ICdTool{
 		{
 			//absolute and relative paths
 			File dir = new File(dirName);
-			dirName = dir.getAbsolutePath();
-			return (new File(dirName));
-		}
+			if(dir.isAbsolute())
+		 		return dir;
+			else
+				dirName = workingDir + File.separator +  dirName;
+				return (new File(dirName));
+		 }
 		
 	}
 

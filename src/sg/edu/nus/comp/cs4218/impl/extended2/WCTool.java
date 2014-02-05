@@ -82,44 +82,42 @@ public class WCTool extends ATool implements IWcTool{
 			outputString += file +" : -m  "+  getCharacterCount(readFile(file, StandardCharsets.UTF_8))
 					        + " , -w  " +  getWordCount(readFile(file, StandardCharsets.UTF_8))
 					        + " , -l " +  getNewLineCount(readFile(file, StandardCharsets.UTF_8)) + "\n";
-			}
+		}
 		else
 		{
 			outputString += file + " : ";
-			for(String option: options)
-	        {
-				if(option.equalsIgnoreCase("-m"))
+			
+			if(options.contains("-help"))
+			{
+				outputString += "\n" + getHelp() + "\n";
+			}
+			else
+			{
+				if(options.contains("-m"))
 				{
 					outputString += " -m  "+  getCharacterCount(readFile(file, StandardCharsets.UTF_8));
 				}
-				else if(option.equalsIgnoreCase("-w"))
+				if(options.contains("-w"))
 				{
 					outputString += " -w  "+  getWordCount(readFile(file, StandardCharsets.UTF_8));
 				}
-				else if(option.equalsIgnoreCase("-l"))
+				else if(options.contains("-l"))
 				{
 					outputString += " -l  "+  getNewLineCount(readFile(file, StandardCharsets.UTF_8));
-				}
-				else if(option.equalsIgnoreCase("-help"))
-				{
-					outputString += "\n" + getHelp() + "\n";
-				}
-	        }	
+				}	
+			}
+					        
 			outputString += "\n";
 		}
 		return outputString;
 	}
 	
 	public String getFilePath(String fileName, File dir)
-	{
-		if(fileName.indexOf('\\') == 1)
-		{
-			return fileName;
-		}
+	{		
+		if((new File(fileName)).isAbsolute())
+	 		return fileName;
 		else
-		{
-			return dir.getAbsolutePath() + "\\" +  fileName;
-		}
+			return dir + File.separator +  fileName;
 	}
 	
 	
@@ -132,22 +130,21 @@ public class WCTool extends ATool implements IWcTool{
 		ArrayList<String> fileList = argumentObject.getFileList();
 		ArrayList<String> options = argumentObject.getOptions();
 		
-		
-		if(stdin == null)
+		for(int i=0; i<fileList.size(); i++)
 		{
-			for(int i=0; i<fileList.size(); i++)
+			File filePath = new File(getFilePath(fileList.get(i) , workingDir));
+			if(filePath.isFile())
 			{
-				File filePath = new File(getFilePath(fileList.get(i) , workingDir));
-				if(filePath.isFile())
-				{
-					outputString += implementWC(filePath.getAbsolutePath(),options);
-				}
-				else
-				{
-					outputString += "Error - Invalid Input.";
-				}
+				outputString += implementWC(filePath.getAbsolutePath(),options);
+			}
+			else
+			{
+				outputString += fileList.get(i) + " error - Invalid Input. \n";
 			}
 		}
+		
+		if(stdin == null)
+		{}
 		else
 		{
 			File filePath = new File(getFilePath(stdin , workingDir));
@@ -157,7 +154,7 @@ public class WCTool extends ATool implements IWcTool{
 			}
 			else
 			{
-				outputString += "Error - Invalid Input.";
+				outputString += stdin + "Error - Invalid Input. \n";
 			}
 		}
 		return outputString;
