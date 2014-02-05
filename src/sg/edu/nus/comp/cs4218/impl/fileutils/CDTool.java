@@ -1,9 +1,8 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
-
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
 
 
@@ -45,7 +44,7 @@ public class CDTool extends ATool implements ICdTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin,IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		int numArgs;
 		if(args!=null)
@@ -56,7 +55,7 @@ public class CDTool extends ATool implements ICdTool{
 		if(numArgs == 0)
 		{
 			//To go directly to your home directory: cd
-			shell.changeWorkingDirectory(new File(System.getProperty("user.home")));
+			WorkingDirectory.changeWorkingDirectory(new File(System.getProperty("user.home")));
 			return "The working directory is " + (System.getProperty("user.home"));
 		}
 		else
@@ -64,9 +63,9 @@ public class CDTool extends ATool implements ICdTool{
 			//To move to a directory using a full pathname: ex.   cd /home/physics/ercy04/ProjectX
 			//File dir = new File(args[0]);
 			File dir = getDirectoryPath(args[0] , workingDir.getAbsolutePath());
-			if(dir.isDirectory()==true) 
+			if(dir.isDirectory()) 
 	        {
-				shell.changeWorkingDirectory(dir);
+				WorkingDirectory.changeWorkingDirectory(dir);
 	        	return "Changed current working directory to " + dir.getAbsolutePath() ;  	
 	        } 
 	        else 

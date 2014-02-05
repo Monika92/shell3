@@ -24,7 +24,7 @@ public class PWDTool extends ATool implements IPwdTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		return getStringForDirectory(workingDir);
 	}
 

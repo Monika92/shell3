@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.SORTTool;
 
 public class CUTToolTest {
 
@@ -29,7 +28,7 @@ public class CUTToolTest {
 				+ "OPTIONS : -c LIST : Use LIST as the list of characters to cut out. Items within "
 				+ "the list may be separated by commas, "
 				+ "and ranges of characters can be separated with dashes. "
-				+ "For example, list �1-5,10,12,18-30� specifies characters "
+				+ "For example, list 1-5,10,12,18-30 specifies characters "
 				+ "1 through 5, 10,12 and 18 through 30" + "\n"
 				+ "-d DELIM: Use DELIM as the field-separator character instead of"
 				+ "the TAB character" + "\n" 
@@ -46,7 +45,7 @@ public class CUTToolTest {
     {
     	String[] arguments = new String[]{"-c", "1-2", "-c", "3-4", "-"} ;
 		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.execute(workingDirectory, "abcde",null);
+		actualOutput = cuttool.execute(workingDirectory, "abcde");
 		expectedOutput = "abcd";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
@@ -57,7 +56,7 @@ public class CUTToolTest {
     {
     	String[] arguments = new String[]{"-help"} ;
 		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.execute(workingDirectory, null,null);
+		actualOutput = cuttool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
@@ -68,7 +67,7 @@ public class CUTToolTest {
     {
     	String[] arguments = new String[]{"-c", "1-2" ,"file.txt"} ;
 		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.execute(workingDirectory, null,null);
+		actualOutput = cuttool.execute(workingDirectory, null);
 		expectedOutput = "File Not Found";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), -1);

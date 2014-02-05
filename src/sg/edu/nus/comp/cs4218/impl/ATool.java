@@ -22,7 +22,7 @@ public abstract class ATool {
 	 * @param stdin Input on stdin. NOT THE ARGUMENTS! Can be null.
 	 * @return Output on stdout
 	 */
-	public abstract String execute(File workingDir, String stdin,IShell shell);
+	public abstract String execute(File workingDir, String stdin);
 	
 	/**
 	 * After execution returns the status of the tool

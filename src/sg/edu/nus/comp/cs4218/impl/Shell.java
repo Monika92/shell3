@@ -27,17 +27,15 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 public class Shell extends Thread implements IShell {
 
 	String command;
-	String[] argsList, raw_args;
+	String[] argsList, rawArgs;
 	int commandVerifyFlag;
 	static CommandVerifier verifier;
-
-	static File workingDirectory ;
 
 	@Override
 	public ITool parse(String commandline) {
 
 		command = null;
-		int args_length;
+		int argsLength;
 		ArrayList<String> list = new ArrayList<String>();
 		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
 				commandline);
@@ -50,9 +48,9 @@ public class Shell extends Thread implements IShell {
 			cmdWords = list.toArray(cmdWords);
 
 			if(cmdWords.length > 1)
-				raw_args = new String[cmdWords.length-1];
+				rawArgs = new String[cmdWords.length-1];
 			else
-				raw_args = null;
+				rawArgs = null;
 
 			if (cmdWords.length > 1)
 				argsList = new String[cmdWords.length - 1];
@@ -64,7 +62,7 @@ public class Shell extends Thread implements IShell {
 				command = cmdWords[0];
 				for (int i = 1; i < cmdWords.length; i++){
 					argsList[i - 1] = cmdWords[i];
-					raw_args[i - 1] = cmdWords[i];
+					rawArgs[i - 1] = cmdWords[i];
 				}
 
 
@@ -78,11 +76,11 @@ public class Shell extends Thread implements IShell {
 				}
 
 				//Check for redirection
-				if (raw_args!=null){
-					args_length = raw_args.length;
-					if(args_length>2 && raw_args[args_length -2].equalsIgnoreCase(">"))
-						args_length -= 2;
-					argsList = Arrays.copyOfRange(raw_args, 0, args_length);
+				if (rawArgs!=null){
+					argsLength = rawArgs.length;
+					if(argsLength>2 && rawArgs[argsLength -2].equalsIgnoreCase(">"))
+						argsLength -= 2;
+					argsList = Arrays.copyOfRange(rawArgs, 0, argsLength);
 				}
 				else
 					argsList = null;
@@ -129,8 +127,7 @@ public class Shell extends Thread implements IShell {
 								return 0;
 							}
 							@Override
-							public String execute(File workingDir, String stdin,
-									IShell shell) {
+							public String execute(File workingDir, String stdin) {
 								// TODO Auto-generated method stub
 								return null;
 							}
@@ -169,7 +166,7 @@ public class Shell extends Thread implements IShell {
 				stdin = scanner.nextLine();
 
 				while (stdin.equalsIgnoreCase("Ctrl-Z") != true) {
-					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+					SimpleThread sThread = new SimpleThread(itool,stdin, argsList);
 					ExecutorService executorService = Executors
 							.newFixedThreadPool(2);
 					Future<?> threadT2 = executorService.submit(sThread);
@@ -178,7 +175,7 @@ public class Shell extends Thread implements IShell {
 					stdin = scanner.nextLine();
 				}
 			} else {
-				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+				SimpleThread sThread = new SimpleThread(itool,stdin, argsList);
 				ExecutorService executorService = Executors
 						.newFixedThreadPool(2);
 				Future<?> threadT2 = executorService.submit(sThread);
@@ -190,7 +187,7 @@ public class Shell extends Thread implements IShell {
 			}
 		}
 		else {
-			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+			SimpleThread sThread = new SimpleThread(itool,stdin, argsList);
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 			Future<?> threadT2 = executorService.submit(sThread);
 
@@ -209,11 +206,6 @@ public class Shell extends Thread implements IShell {
 
 	}
 
-	@Override
-	public void changeWorkingDirectory(File newDirectory)
-	{
-		workingDirectory = newDirectory;
-	}
 	/**
 	 * Do Forever 1. Wait for a user input 2. Parse the user input. Separate the
 	 * command and its arguments 3. Create a new thread to execute the command
@@ -231,7 +223,7 @@ public class Shell extends Thread implements IShell {
 		verifier = new CommandVerifier();
 		String input = null;
 		String userDirectory = System.getProperty("user.dir");
-		workingDirectory = new File(userDirectory);
+		WorkingDirectory.workingDirectory = new File(userDirectory);
 
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
