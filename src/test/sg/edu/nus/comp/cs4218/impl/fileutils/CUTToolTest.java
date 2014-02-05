@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.SORTTool;
 
 public class CUTToolTest {
 	//TODO Always test against the interface! 
@@ -29,7 +28,7 @@ public class CUTToolTest {
 				+ "OPTIONS : -c LIST : Use LIST as the list of characters to cut out. Items within "
 				+ "the list may be separated by commas, "
 				+ "and ranges of characters can be separated with dashes. "
-				+ "For example, list Ô1-5,10,12,18-30Õ specifies characters "
+				+ "For example, list 1-5,10,12,18-30 specifies characters "
 				+ "1 through 5, 10,12 and 18 through 30" + "\n"
 				+ "-d DELIM: Use DELIM as the field-separator character instead of"
 				+ "the TAB character" + "\n" 

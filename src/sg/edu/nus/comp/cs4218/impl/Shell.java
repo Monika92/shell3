@@ -27,7 +27,7 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 public class Shell extends Thread implements IShell {
 
 	String command;
-	String[] argsList, raw_args;
+	String[] argsList, rawArgs;
 	int commandVerifyFlag;
 	static CommandVerifier verifier;
 
@@ -37,7 +37,7 @@ public class Shell extends Thread implements IShell {
 	public ITool parse(String commandline) {
 
 		command = null;
-		int args_length;
+		int argsLength;
 		ArrayList<String> list = new ArrayList<String>();
 		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
 				commandline);
@@ -50,9 +50,9 @@ public class Shell extends Thread implements IShell {
 			cmdWords = list.toArray(cmdWords);
 
 			if(cmdWords.length > 1)
-				raw_args = new String[cmdWords.length-1];
+				rawArgs = new String[cmdWords.length-1];
 			else
-				raw_args = null;
+				rawArgs = null;
 
 			if (cmdWords.length > 1)
 				argsList = new String[cmdWords.length - 1];
@@ -64,7 +64,7 @@ public class Shell extends Thread implements IShell {
 				command = cmdWords[0];
 				for (int i = 1; i < cmdWords.length; i++){
 					argsList[i - 1] = cmdWords[i];
-					raw_args[i - 1] = cmdWords[i];
+					rawArgs[i - 1] = cmdWords[i];
 				}
 
 
@@ -78,11 +78,11 @@ public class Shell extends Thread implements IShell {
 				}
 
 				//Check for redirection
-				if (raw_args!=null){
-					args_length = raw_args.length;
-					if(args_length>2 && raw_args[args_length -2].equalsIgnoreCase(">"))
-						args_length -= 2;
-					argsList = Arrays.copyOfRange(raw_args, 0, args_length);
+				if (rawArgs!=null){
+					argsLength = rawArgs.length;
+					if(argsLength>2 && rawArgs[argsLength -2].equalsIgnoreCase(">"))
+						argsLength -= 2;
+					argsList = Arrays.copyOfRange(rawArgs, 0, argsLength);
 				}
 				else
 					argsList = null;

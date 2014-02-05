@@ -3,8 +3,6 @@ package test.sg.edu.nus.comp.cs4218.impl.fileutils;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

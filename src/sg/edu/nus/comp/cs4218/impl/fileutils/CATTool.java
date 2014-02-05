@@ -1,14 +1,10 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -64,8 +60,8 @@ public class CATTool extends ATool implements ICatTool {
 		// TODO Auto-generated method stub
 		
 		File file;
-		int args_length = args.length;
-		String output = "", output_msg = "";
+		int argsLength = args.length;
+		String output = "", outputMsg = "";
 		
 		//Check for stdin
 		if(stdin!=null){
@@ -73,18 +69,18 @@ public class CATTool extends ATool implements ICatTool {
 			return stdin;
 		}
 		
-		for(int i = 0; i < args_length; i++){
+		for(int i = 0; i < argsLength; i++){
 			try{
 				file = new File(args[i]);
 			} catch(Exception e){
-				System.out.println(output_msg+"Invalid file name");
+				System.out.println(outputMsg+"Invalid file name");
 				setStatusCode(-1);
-				return output_msg+"\nInvalid file name";
+				return outputMsg+"\nInvalid file name";
 			}
 			if (!file.exists()){
 				setStatusCode(-1);
 				System.out.println("No such file");
-				return output_msg+"\nNo such file";
+				return outputMsg+"\nNo such file";
 			}
 			output += getStringForFile(file);
 		}
