@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
@@ -21,7 +22,7 @@ public class COPYTool extends ATool implements ICopyTool{
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	/*
 	@Override
 	public boolean copy(File from, File to) {
 		// TODO Auto-generated method stub
@@ -41,6 +42,24 @@ public class COPYTool extends ATool implements ICopyTool{
 		{
 			return false;
 		}
+	}
+	*/
+	@Override
+	public boolean copy(File from, File to) {
+		// TODO Auto-generated method stub
+		
+			Path sourcePath = Paths.get(args[0]);
+			Path targetPath = Paths.get(args[1]);
+			Path basePath = Paths.get(System.getProperty("user.dir"));
+			try 
+			{
+				Files.copy(from.getAbsoluteFile().toPath(), to.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+				return true;
+			} catch (IOException e) 
+			{
+				return false;
+			}
+
 	}
 	
 	
@@ -84,7 +103,8 @@ public class COPYTool extends ATool implements ICopyTool{
 			if((arg0.isFile()) && (arg1.isDirectory()==true))
 			{
 				//Copy a file to directory
-				arg1 = copyFileToDir( 0 , 1);
+				//arg1 = copyFileToDir( 0 , 1);
+				arg1 = new File(args[1] + "\\" + arg0.getName());
 				if (copy(arg0,arg1))
 				{
 					outputString = "Copy completed.";
@@ -123,14 +143,14 @@ public class COPYTool extends ATool implements ICopyTool{
 					
 					if(argI.isFile())
 					{				
-						File argDest = copyFileToDir( i , numArgs-1);
+						//File argDest = copyFileToDir( i , numArgs-1);
+						File argDest = new File(argLast + "\\" + argI.getName());
 						if (copy(argI,argDest))
 						{
 							outputString += args[i] + "'s copy completed. \n"; 
 						}
 						else
 						{
-							System.out.println("1");
 							outputString += args[i] + " is invalid input.\n";
 						}
 					}

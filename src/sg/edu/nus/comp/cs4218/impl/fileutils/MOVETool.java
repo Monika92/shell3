@@ -22,19 +22,17 @@ public class MOVETool extends ATool implements IMoveTool{
 	@Override
 	public boolean move(File from, File to) {
 		// TODO Auto-generated method stub
-		
 			Path sourcePath = Paths.get(args[0]);
 			Path targetPath = Paths.get(args[1]);
 			Path basePath = Paths.get(System.getProperty("user.dir"));
 			try 
 			{
-				Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+				Path p = Files.move(from.getAbsoluteFile().toPath(), to.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
 				return true;
 			} catch (IOException e) 
 			{
 				return false;
 			}
-
 	}
 	
 	@Override
@@ -52,16 +50,28 @@ public class MOVETool extends ATool implements IMoveTool{
 		{
 			File arg0 = new File(args[0]);
 			File arg1 = new File(args[1]);
+			
 			if((arg0.isFile()) && (arg1.isDirectory()==true))
 			{
-				if (arg0.renameTo(new File(arg1, arg0.getName())) )
+			
+				arg1 = new File(args[1] + "\\" + arg0.getName());
+				if(move(arg0,arg1))
 				{
-					outputString = "Move completed.";
+					outputString = args[0] + "'s move completed.";
 				}
 				else
-				{
-					outputString = "Error - Invalid input.";
+				{	
+					outputString = "Error - Unable to move.";
 				}
+			}
+			else if((arg0.isDirectory()==true) && (arg1.isDirectory()==true))
+			{
+				arg0 = arg0;
+				arg1 = arg1;
+			//	File source = new File("c:\\old_directory");
+			//	File destination = new File("c:\\some_directory\\new_directory");
+				
+				arg0.renameTo(new File(arg1 , arg0.getName()));
 			}
 			else if((arg0.isDirectory()==true)||(arg0.isFile()))
 			{
@@ -89,7 +99,8 @@ public class MOVETool extends ATool implements IMoveTool{
 					File argI = new File(args[i]);
 					if(argI.isFile())
 					{	
-						if (argI.renameTo(new File(argLast, argI.getName())) )
+						File argDest = new File(argLast + "\\" + argI.getName());
+						if (move(argI,argDest))
 						{
 							outputString += args[i] + "'s move completed. \n"; 
 						}
