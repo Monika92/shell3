@@ -1,8 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
-import java.io.IOException;
-
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -22,25 +20,25 @@ public class DELETETool extends ATool implements IDeleteTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
 		File file;
-		int args_length = args.length;
-		String output = "", output_msg = "";
+		int argsLength = args.length;
+		String output = "", outputMsg = "";
 		
-		for(int i = 0; i < args_length; i++){
+		for(int i = 0; i < argsLength; i++){
 			try{
 				file = new File(args[i]);
 			} catch(Exception e){
-				System.out.println(output_msg+"Invalid file name");
+				System.out.println(outputMsg+"Invalid file name");
 				setStatusCode(-1);
-				return output_msg+"\nInvalid file name";
+				return outputMsg+"\nInvalid file name";
 			}
 			if (!file.exists()){
 				setStatusCode(-1);
 				System.out.println("No such file");
-				return output_msg+"\nNo such file";
+				return outputMsg+"\nNo such file";
 			}
 			
 			if (delete(file))
@@ -48,7 +46,7 @@ public class DELETETool extends ATool implements IDeleteTool{
 			else {
 				setStatusCode(-1);
 				System.out.println("Unable to delete file");
-				return output_msg + "\nUnable to delete file";
+				return outputMsg + "\nUnable to delete file";
 			}
 			
 		}

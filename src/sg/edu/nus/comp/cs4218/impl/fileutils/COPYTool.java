@@ -6,9 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
@@ -66,7 +64,7 @@ public class COPYTool extends ATool implements ICopyTool{
 	}
 	
 	@Override
-	public String execute(File workingDir, String stdin,IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		int numArgs;
 		if(args!=null)

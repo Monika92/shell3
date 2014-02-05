@@ -24,7 +24,7 @@ import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
  *		FILE - Name of the file, when no file is present (denoted by "-") use standard input OPTIONS
  *			-c LIST: Use LIST as the list of characters to cut out. Items within the list may be
  *					separated by commas, and ranges of characters can be separated with dashes.
- *					For example, list ‘1-5,10,12,18-30’ specifies characters 1 through 5, 10,12 and
+ *					For example, list ï¿½1-5,10,12,18-30ï¿½ specifies characters 1 through 5, 10,12 and
  *					18 through 30.
  *			-d DELIM: Use DELIM as the field-separator character instead of the TAB character
  *			-help : Brief information about supported options
@@ -45,7 +45,7 @@ public class CUTTool extends ATool implements ICutTool{
 				+ "OPTIONS : -c LIST : Use LIST as the list of characters to cut out. Items within "
 				+ "the list may be separated by commas, "
 				+ "and ranges of characters can be separated with dashes. "
-				+ "For example, list Ô1-5,10,12,18-30Õ specifies characters "
+				+ "For example, list 1-5,10,12,18-30 specifies characters "
 				+ "1 through 5, 10,12 and 18 through 30" + "\n"
 				+ "-d DELIM: Use DELIM as the field-separator character instead of"
 				+ "the TAB character" + "\n" 
@@ -59,7 +59,7 @@ public class CUTTool extends ATool implements ICutTool{
 	public String cutSpecfiedCharacters(String list, String input) {
 		// TODO Auto-generated method stub
 		
-		if(list.equals(null) || list.isEmpty() || input.equals(null) || input.isEmpty())
+		if(list.isEmpty() || input.isEmpty())
 			return input;
 		else 
 		{
@@ -166,7 +166,7 @@ public class CUTTool extends ATool implements ICutTool{
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) 
+	public String execute(File workingDir, String stdin) 
 	{
 		input = "";
 		output= "";
@@ -176,6 +176,7 @@ public class CUTTool extends ATool implements ICutTool{
 		ArrayList<String> options = argumentObject.getOptions();
 		ArrayList<String> optionArguments = argumentObject.getOptionArguments();
 		
+		//assign input value (std input or input from file)
 		if(fileList.get(0)!=null)
 		{
 			if(fileList.get(0).equalsIgnoreCase("-"))
@@ -187,6 +188,14 @@ public class CUTTool extends ATool implements ICutTool{
 			{
 				for (String fileName : fileList)
 				{
+					if(fileName.startsWith("//"))
+					{
+						//Do nothing
+					}
+					else
+					{
+						fileName = workingDir.toString()+"/"+fileName;
+					}
 					File file = new File(fileName);
 					try {
 						input += readFile(file) + "\n";
@@ -279,6 +288,7 @@ public class CUTTool extends ATool implements ICutTool{
 
 	private String readFile(File file) throws Exception {
 		// TODO Auto-generated method stub
+		
 		String         line = null;
 		BufferedReader reader = new BufferedReader( new FileReader (file));
 		StringBuilder  stringBuilder = new StringBuilder();

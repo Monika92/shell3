@@ -22,7 +22,7 @@ public class ECHOTool extends ATool implements IEchoTool {
 	}
 
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
 		StringBuilder sb = new StringBuilder();
