@@ -7,32 +7,29 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.IWcTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
+import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
 
-/**
- * Do not modify this file
- */
-/*
- * 
- * wc : Prints the number of bytes, words, and lines in given file
- *
- * Command Format - wc [OPTIONS] [FILE]
- * FILE - Name of the file, when no file is present (denoted by "-") use standard input
- * OPTIONS
- *		-m : Print only the character counts
- *      -w : Print only the word counts
- *      -l : Print only the newline counts
- *		-help : Brief information about supported options
-*/
 
 public class WCTool extends ATool implements IWcTool{
 
+	String helpOutput, command;
 	public WCTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
+		helpOutput = "wc [OPTIONS] [FILE]" + "\n" +
+				"FILE : Name of the file" + "\n" +
+				"OPTIONS : -m : Print only the number of characters \n" +
+				"          -w : Print only the number of words \n" +
+				"          -l : Print only the number of lines \n" +
+				"          -help : Brief information about supported options." ;
+		
+		command = "wc";
 	}
 
 	@Override
@@ -61,7 +58,7 @@ public class WCTool extends ATool implements IWcTool{
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
-		return null;
+		return helpOutput;
 	}
 
 	static String readFile(String path, Charset encoding)
@@ -79,14 +76,92 @@ public class WCTool extends ATool implements IWcTool{
 	}
 		
 	
+	public String implementWC(String file, ArrayList<String> options)
+	{
+		String outputString = "";
+		if(options.isEmpty())
+		{
+			outputString += file +" : -m  "+  getCharacterCount(readFile(file, StandardCharsets.UTF_8))
+					        + " , -w  " +  getWordCount(readFile(file, StandardCharsets.UTF_8))
+					        + " , -l " +  getNewLineCount(readFile(file, StandardCharsets.UTF_8)) + "\n";
+			}
+		else
+		{
+			outputString += file + " : ";
+			for(String option: options)
+	        {
+				if(option.equalsIgnoreCase("-m"))
+				{
+					outputString += " -m  "+  getCharacterCount(readFile(file, StandardCharsets.UTF_8));
+				}
+				else if(option.equalsIgnoreCase("-w"))
+				{
+					outputString += " -w  "+  getWordCount(readFile(file, StandardCharsets.UTF_8));
+				}
+				else if(option.equalsIgnoreCase("-l"))
+				{
+					outputString += " -l  "+  getNewLineCount(readFile(file, StandardCharsets.UTF_8));
+				}
+				else if(option.equalsIgnoreCase("-help"))
+				{
+					outputString += "\n" + getHelp() + "\n";
+				}
+	        }	
+			outputString += "\n";
+		}
+		return outputString;
+	}
+	
+	public String getFilePath(String fileName, File dir)
+	{
+		if(fileName.indexOf('\\') == 1)
+		{
+			return fileName;
+		}
+		else
+		{
+			return dir.getAbsolutePath() + "\\" +  fileName;
+		}
+	}
+	
+	
 	@Override
 	public String execute(File workingDir, String stdin, IShell shell) {
 		
-		File filePath = new File( args[0] );
-		if(filePath.isFile())
+		String outputString = "";
+		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
+		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);
+		ArrayList<String> fileList = argumentObject.getFileList();
+		ArrayList<String> options = argumentObject.getOptions();
+		
+		
+		if(stdin == null)
 		{
-		return getNewLineCount(readFile( args[0], StandardCharsets.UTF_8));
+			for(int i=0; i<fileList.size(); i++)
+			{
+				File filePath = new File(getFilePath(fileList.get(i) , workingDir));
+				if(filePath.isFile())
+				{
+					outputString += implementWC(filePath.getAbsolutePath(),options);
+				}
+				else
+				{
+					outputString += "Error - Invalid Input.";
+				}
+			}
 		}
-		return "Invalid input!";
+		else
+		{
+			File filePath = new File(getFilePath(stdin , workingDir));
+			if(filePath.isFile())
+			{
+			outputString += implementWC(filePath.getAbsolutePath(),options);
+			}
+			else
+			{
+				outputString += "Error - Invalid Input.";
+			}
+		}
+		return outputString;
 	}
 }

@@ -99,7 +99,8 @@ public class ArgumentObjectParser {
 				}
 			}
 			
-		}
+		}					
+
 		else if(command.equalsIgnoreCase("uniq"))
 		{
 			int argumentSize = argument.length;
@@ -128,23 +129,22 @@ public class ArgumentObjectParser {
 		else if(command.equalsIgnoreCase("wc"))
 		{
 			int argumentSize = argument.length;
-			for(int i = 0 ; i < argumentSize ; )
+			for(int i = 0 ; i < argumentSize ; i++)
 			{
 				
 				if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-m") || argument[i].equalsIgnoreCase("-w") || argument[i].equalsIgnoreCase("-l"))
 				{
 					argumentObject.options.add(argument[i]);
 					argumentObject.optionArguments.add(null);
-					i+=1;
+					
 				}
 				else 
 				{
 					argumentObject.fileList.add(argument[i]);
-					i+=1;
 				}
+		
 			}
 		}
-		
 		return argumentObject;		
 	}
 }
