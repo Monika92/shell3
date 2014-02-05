@@ -169,7 +169,7 @@ public class Shell extends Thread implements IShell {
 				stdin = scanner.nextLine();
 
 				while (stdin.equalsIgnoreCase("Ctrl-Z") != true) {
-					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+					SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, raw_args, this);
 					ExecutorService executorService = Executors
 							.newFixedThreadPool(2);
 					Future<?> threadT2 = executorService.submit(sThread);
@@ -178,7 +178,7 @@ public class Shell extends Thread implements IShell {
 					stdin = scanner.nextLine();
 				}
 			} else {
-				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+				SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, raw_args, this);
 				ExecutorService executorService = Executors
 						.newFixedThreadPool(2);
 				Future<?> threadT2 = executorService.submit(sThread);
@@ -190,7 +190,7 @@ public class Shell extends Thread implements IShell {
 			}
 		}
 		else {
-			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, argsList,this);
+			SimpleThread sThread = new SimpleThread(itool,workingDirectory,stdin, raw_args, this);
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 			Future<?> threadT2 = executorService.submit(sThread);
 
