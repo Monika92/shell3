@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
@@ -106,10 +107,11 @@ public class PASTETool extends ATool implements IPasteTool{
 
 			br.close();
 		} catch (FileNotFoundException e) {
-
+			
+			setStatusCode(-1);
 			e.printStackTrace();
 		} catch (IOException e) {
-
+			setStatusCode(-1);
 			e.printStackTrace();
 		}		
 		return lines;
@@ -160,6 +162,7 @@ public class PASTETool extends ATool implements IPasteTool{
 
 	private String[] removeStdinFromArg(String[] args){
 		
+		setStatusCode(0);
 		String[] newArgs = new String[args.length -1];
 		
 		for(int i=0 ;i<args.length-1; i++){
@@ -187,6 +190,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		fileNames = getCorrectFileNames(workingDir,fileNames);
 
 		if(fileError == true){
+			setStatusCode(-1);
 			return fileNames.get(0);
 		}
 
@@ -205,13 +209,15 @@ public class PASTETool extends ATool implements IPasteTool{
 			//priority to -s
 			if(ao.getOptions().contains("-s")){
 				result = pasteSerial(fNames);
-			}
-
-			int delimIdx = ao.getOptions().indexOf("-d");
-			String delim = ao.getOptionArguments().get(delimIdx);
-
-			if(ao.getOptions().contains("-d")){
+			}					
+			else if(ao.getOptions().contains("-d")){
+				int delimIdx = ao.getOptions().indexOf("-d");
+				String delim = ao.getOptionArguments().get(delimIdx);
 				result = pasteUseDelimiter(delim, fNames);
+			}
+			else {
+				//No options
+				result = pasteUseDelimiter("\t", fNames);				
 			}
 			
 			executed = true;
