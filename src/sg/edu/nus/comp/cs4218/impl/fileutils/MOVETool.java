@@ -36,7 +36,7 @@ public class MOVETool extends ATool implements IMoveTool{
 	}
 	
 	@Override
-	public String execute(File workingDir, String stdin, IShell shell) {
+	public String execute(File workingDir, String stdin) {
 		
 		int numArgs;
 		if(args!=null)

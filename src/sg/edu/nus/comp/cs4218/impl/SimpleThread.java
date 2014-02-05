@@ -11,31 +11,28 @@ import sg.edu.nus.comp.cs4218.ITool;
 public class SimpleThread extends Thread {
 
 	ITool itool;
-	File workingDirectory;
 	String stdin, stdout;
 	String[] args;
 	IShell shell;
-	SimpleThread(ITool itoolinstance,File directory,String input,String[] argsList,IShell shellinstance)
+	SimpleThread(ITool itoolinstance,String input,String[] argsList)
 	{
 		itool = itoolinstance;
-		workingDirectory = directory;
 		stdin = input;
 		args = argsList;
-		shell = shellinstance;
 	}
     public void run(){
     	while (!Thread.currentThread().isInterrupted())
     	{
     		//System.out.println("MyRunnable running");
-    		stdout = itool.execute(workingDirectory, stdin, shell);
+    		stdout = itool.execute(WorkingDirectory.workingDirectory, stdin);
     		
-    		File output_file = null;
+    		File outputFile = null;
 
     		if(args!=null){
-        	int args_length = args.length;
-				if(args_length>=2 && args[args_length -2].equalsIgnoreCase(">")){
-					output_file = new File(args[args_length - 1]);
-					writeOutputToFile(output_file);
+        	int argsLength = args.length;
+				if(argsLength>=2 && args[argsLength -2].equalsIgnoreCase(">")){
+					outputFile = new File(args[argsLength - 1]);
+					writeOutputToFile(outputFile);
 				}
     		}
     		
@@ -47,7 +44,7 @@ public class SimpleThread extends Thread {
 
     public boolean writeOutputToFile(File output_file){
     	//Check for output file
-    	String output_msg="";
+    	String outputMsg="";
 		
 		try{
 			if(!output_file.exists())
@@ -66,7 +63,7 @@ public class SimpleThread extends Thread {
 			}
 			bw.close();
 		} catch (IOException e){
-			System.out.println(output_msg+"Unable to create output file");
+			System.out.println(outputMsg+"Unable to create output file");
 		}
 		return true;	    
     }

@@ -27,9 +27,4 @@ public interface IShell {
 	 */
 	public void stop(Runnable toolExecution);
 	
-	/**
-	 * Called by cdtool to change shell's current working directory
-	 * @param newDirectory
-	 */
-	public void changeWorkingDirectory(File newDirectory);
 }

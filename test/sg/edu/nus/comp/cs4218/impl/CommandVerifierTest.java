@@ -1,7 +1,5 @@
 package sg.edu.nus.comp.cs4218.impl;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

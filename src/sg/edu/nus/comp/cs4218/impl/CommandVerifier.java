@@ -17,11 +17,11 @@ public class CommandVerifier {
 	LinkedHashMap<String, Integer> wcMap;
 	LinkedHashMap<String, Integer> uniqMap;
 
-	ArrayList<Integer> pwd_Map;
-	ArrayList<Integer> cd_ls_Map;
-	ArrayList<Integer> copy_move_Map;
-	ArrayList<Integer> echo_Map;
-	ArrayList<Integer> del_cat_Map;
+	ArrayList<Integer> pwdMap;
+	ArrayList<Integer> cdLsMap;
+	ArrayList<Integer> copyMoveMap;
+	ArrayList<Integer> echoMap;
+	ArrayList<Integer> delCatMap;
 
 	public CommandVerifier(){				
 		initializeCommandList();
@@ -50,20 +50,20 @@ public class CommandVerifier {
 	}
 
 	private void initializeBasic(){
-		pwd_Map = new ArrayList<Integer>();
-		pwd_Map.add(0);pwd_Map.add(0);
+		pwdMap = new ArrayList<Integer>();
+		pwdMap.add(0);pwdMap.add(0);
 
-		cd_ls_Map = new ArrayList<Integer>();
-		cd_ls_Map.add(0);cd_ls_Map.add(1);
+		cdLsMap = new ArrayList<Integer>();
+		cdLsMap.add(0);cdLsMap.add(1);
 
-		copy_move_Map = new ArrayList<Integer>();
-		copy_move_Map.add(2);copy_move_Map.add(INF);
+		copyMoveMap = new ArrayList<Integer>();
+		copyMoveMap.add(2);copyMoveMap.add(INF);
 
-		echo_Map = new ArrayList<Integer>();
-		echo_Map.add(0);echo_Map.add(INF);
+		echoMap = new ArrayList<Integer>();
+		echoMap.add(0);echoMap.add(INF);
 
-		del_cat_Map = new ArrayList<Integer>();
-		del_cat_Map.add(1);del_cat_Map.add(INF);
+		delCatMap = new ArrayList<Integer>();
+		delCatMap.add(1);delCatMap.add(INF);
 	}
 
 	private void initializeTextUtil(){
@@ -117,22 +117,22 @@ public class CommandVerifier {
 		int numArgs = args.size();
 
 		if(cmd.equals("pwd")){
-			return basicCheck(pwd_Map, numArgs);
+			return basicCheck(pwdMap, numArgs);
 		}
 		else if(cmd.equals("cd") || cmd.equals("ls") && args.contains("-") == false){
-			return basicCheck(cd_ls_Map, numArgs);
+			return basicCheck(cdLsMap, numArgs);
 		}
 		else if((cmd.equals("copy") || cmd.equals("move")) && args.contains("-") == false){
-			return basicCheck(copy_move_Map, numArgs);
+			return basicCheck(copyMoveMap, numArgs);
 		}
 		else if(cmd.equals("echo")){
-			return basicCheck(echo_Map, numArgs);
+			return basicCheck(echoMap, numArgs);
 		}
 		else if(cmd.equals("delete")&& args.contains("-") == false){
-			return basicCheck(del_cat_Map, numArgs);
+			return basicCheck(delCatMap, numArgs);
 		}
 		else if (cmd.equals("cat")){
-			return basicCheck(del_cat_Map, numArgs);
+			return basicCheck(delCatMap, numArgs);
 		}
 
 		return -1;
