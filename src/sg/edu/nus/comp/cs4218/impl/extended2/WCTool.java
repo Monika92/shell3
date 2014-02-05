@@ -89,7 +89,7 @@ public class WCTool extends ATool implements IWcTool{
 			
 			if(options.contains("-help"))
 			{
-				outputString += "\n" + getHelp() + "\n";
+				outputString += getHelp() + "\n";
 			}
 			else
 			{
@@ -101,7 +101,7 @@ public class WCTool extends ATool implements IWcTool{
 				{
 					outputString += " -w  "+  getWordCount(readFile(file, StandardCharsets.UTF_8));
 				}
-				else if(options.contains("-l"))
+				if(options.contains("-l"))
 				{
 					outputString += " -l  "+  getNewLineCount(readFile(file, StandardCharsets.UTF_8));
 				}	
@@ -130,31 +130,38 @@ public class WCTool extends ATool implements IWcTool{
 		ArrayList<String> fileList = argumentObject.getFileList();
 		ArrayList<String> options = argumentObject.getOptions();
 		
-		for(int i=0; i<fileList.size(); i++)
+		if(options.contains("-help"))
 		{
-			File filePath = new File(getFilePath(fileList.get(i) , workingDir));
-			if(filePath.isFile())
-			{
-				outputString += implementWC(filePath.getAbsolutePath(),options);
-			}
-			else
-			{
-				outputString += fileList.get(i) + " error - Invalid Input. \n";
-			}
+			outputString += getHelp();
 		}
-		
-		if(stdin == null)
-		{}
 		else
 		{
-			File filePath = new File(getFilePath(stdin , workingDir));
-			if(filePath.isFile())
+			for(int i=0; i<fileList.size(); i++)
 			{
-			outputString += implementWC(filePath.getAbsolutePath(),options);
+				File filePath = new File(getFilePath(fileList.get(i) , workingDir));
+				if(filePath.isFile())
+				{
+					outputString += implementWC(filePath.getAbsolutePath(),options);
+				}
+				else
+				{
+					outputString += fileList.get(i) + " : error - Invalid Input. \n";
+				}
 			}
+			
+			if(stdin == null)
+			{}
 			else
 			{
-				outputString += stdin + "Error - Invalid Input. \n";
+				File filePath = new File(getFilePath(stdin , workingDir));
+				if(filePath.isFile())
+				{
+				outputString += implementWC(filePath.getAbsolutePath(),options);
+				}
+				else
+				{
+					outputString += stdin + " : error - Invalid Input. \n";
+				}
 			}
 		}
 		return outputString;
