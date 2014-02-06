@@ -20,15 +20,18 @@ public class DELETEToolTest {
 	String actualOutput,expectedOutput;
 	File workingDirectory;
 	String stdin;
-	File input_file_1 = new File("Test_Output.txt"),  input_file_2 = new File("Test_Output_2.txt"),  input_file_3 = new File("Test_Output_3.txt") ;
+	File input_file_1, input_file_2, input_file_3;
 	File abs_file_1, abs_file_2, relative_file;
 	
 	@Before
 	public void before(){
 		workingDirectory = new File(System.getProperty("user.dir"));
 		stdin = null;
-		
 		String input = "This is \na test \nrun.";
+		
+		input_file_1 = new File("Test_Output.txt");
+		input_file_2 = new File("Test_Output_2.txt");
+		input_file_3 = new File("Test_Output_3.txt");
 		writeToFile(input_file_1, input);
 		writeToFile(input_file_2, input);
 		writeToFile(input_file_3, input);

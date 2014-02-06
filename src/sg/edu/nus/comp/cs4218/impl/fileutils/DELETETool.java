@@ -1,8 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
-import java.lang.Object;
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
@@ -19,11 +17,9 @@ public class DELETETool extends ATool implements IDeleteTool{
 	@Override
 	public boolean delete(File toDelete){
 		// TODO Auto-generated method stub
-		return toDelete.delete();
-		
+		return toDelete.delete();	
 	}
 
-	
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
@@ -41,7 +37,7 @@ public class DELETETool extends ATool implements IDeleteTool{
 				else{
 					fileName = workingDir.toString()+File.separator+fileName;
 				}
-				file = new File(args[i]);
+				file = new File(fileName);
 			} catch(Exception e){
 				System.out.println(outputMsg+"Invalid file name");
 				setStatusCode(-1);

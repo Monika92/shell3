@@ -10,6 +10,7 @@ import java.nio.file.FileSystem;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
 
 public class CATTool extends ATool implements ICatTool {
 
@@ -72,7 +73,7 @@ public class CATTool extends ATool implements ICatTool {
 			try{
 				
 				String fileName = args[i];
-				if(fileName.startsWith(File.separator)){
+				if(FilePathIdentifier.testPath(fileName)){
 					//Do nothing
 				}
 				else{
