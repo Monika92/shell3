@@ -1,6 +1,8 @@
 #java specific
 *.class
 bin/
+.DS_Store
+.pmd
 
 #netbeans ignore personal stuff 
 nbproject/private/

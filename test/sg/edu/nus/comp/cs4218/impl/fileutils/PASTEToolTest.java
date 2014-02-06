@@ -99,7 +99,37 @@ public class PASTEToolTest {
 		assertEquals(pasteTool.getStatusCode(), 0);			
 
 	}
-
+	
+	@Test
+	public void pasteNoOptionsInvalidFilesTest(){
+		fail("not yet implemented");
+	}
+	
+	@Test
+	public void pasteNoOptionsCheckFilenameWithSpecialChar(){
+		fail("not yet implemented");
+	}
+	
+	@Test
+	public void pasteNoOptionsCheckWithOneEmptyFileTest(){
+		fail("not yet implemented");
+	}
+	
+	@Test
+	public void pasteUseDelimWithOneEmptyInManyFilesTest(){
+		fail("not yet implemented");
+	}
+	
+	@Test
+	public void pasteUseDelimWithManyEmptyFilesTest(){
+		fail("not yet implemented");
+	}
+	
+	@Test
+	public void pasteUseSerialWithManyEmptyFilesTest(){
+		fail("not yet implemented");
+	}
+	
 	@Test
 	public void pasteNoOptionsOneFileTest(){
 		String[] arguments = new String[]{"b.txt"};
@@ -112,7 +142,7 @@ public class PASTEToolTest {
 
 	@Test
 	public void pasteNoOptionsStdinTest(){
-
+		fail("not yet implemented");
 	}
 
 	@Test
@@ -151,7 +181,7 @@ public class PASTEToolTest {
 
 	@Test
 	public void pasteUseDelimiterStdinTest(){
-
+		fail("not yet implemented");
 	}
 
 	@Test
@@ -216,7 +246,7 @@ public class PASTEToolTest {
 
 	@Test
 	public void pasteSerialStdinTest(){
-
+		fail("not yet implemented");
 	}
 
 	@Test
