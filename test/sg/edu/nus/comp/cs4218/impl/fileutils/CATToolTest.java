@@ -23,7 +23,7 @@ public class CATToolTest {
 	String actualOutput,expectedOutput;
 	File workingDirectory;
 	String stdin;
-	File input_file_1 = new File("Test_Output.txt"),  input_file_2 = new File("Test_Output_2.txt"),  input_file_3 = new File("Test_Output_3.txt") ;
+	File input_file_1, input_file_2, input_file_3, abs_file_1, abs_file_2, relative_file, empty_file;
 	
 	@Before
 	public void before(){
@@ -31,11 +31,44 @@ public class CATToolTest {
 		stdin = null;
 		
 		String input = "This is \na test \nrun.";
+		
+		input_file_1 = new File("Test_Output.txt");
+		input_file_2 = new File("Test_Output_2.txt");
+		input_file_3 = new File("Test_Output_3.txt");
 		writeToFile(input_file_1, input);
 		writeToFile(input_file_2, input);
 		writeToFile(input_file_3, input);
+		
+		abs_file_1 = new File(workingDirectory + "\\" + "Test_Output_4.txt");
+		abs_file_2 = new File("C:\\Users\\monika92\\Desktop\\" + "Test_Output_5.txt");
+		relative_file = new File("./../Test_Output_6.txt");
+		writeToFile(abs_file_1, input);
+		writeToFile(abs_file_2, input);
+		writeToFile(relative_file, input);
+		
+		empty_file = new File("Test_Output_7.txt");
+		writeToFile(empty_file, "");
 	}
 
+	@After
+	public void after(){
+		cattool = null;
+		if(input_file_1.exists())
+			input_file_1.delete();
+		if(input_file_2.exists())
+			input_file_2.delete();
+		if(input_file_3.exists())
+			input_file_3.delete();
+		if(abs_file_1.exists())
+			abs_file_1.delete();
+		if(abs_file_2.exists())
+			abs_file_2.delete();
+		if(relative_file.exists())
+			relative_file.delete();
+		if(empty_file.exists())
+			empty_file.delete();
+	}
+	
 	public void writeToFile(File file, String input){
 		try{
 			if(!file.exists())
@@ -91,16 +124,6 @@ public class CATToolTest {
 		return output;
 	}
 	
-    @After
-	public void after(){
-		cattool = null;
-		if(input_file_1.exists())
-			input_file_1.delete();
-		if(input_file_2.exists())
-			input_file_2.delete();
-		if(input_file_3.exists())
-			input_file_3.delete();
-	}
     
     @Test
     public void catSingleFileTest(){
@@ -108,7 +131,6 @@ public class CATToolTest {
 		cattool = new CATTool(arguments);
 		actualOutput = cattool.execute(workingDirectory, stdin);
 		expectedOutput = "This is \na test \nrun.";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cattool.getStatusCode(), 0);
     }
@@ -153,5 +175,66 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), -1);
     }
 
+    @Test
+    public void catAbsoluteFile1Test(){
+    	String[] arguments = new String[]{workingDirectory + "\\" + "Test_Output_4.txt"} ;
+		cattool = new CATTool(arguments);
+		actualOutput = cattool.execute(workingDirectory, stdin);
+		expectedOutput = "This is \na test \nrun.";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cattool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void catAbsoluteFile2Test(){
+    	String[] arguments = new String[]{"C:\\Users\\monika92\\Desktop\\" + "Test_Output_5.txt"} ;
+		cattool = new CATTool(arguments);
+		actualOutput = cattool.execute(workingDirectory, stdin);
+		expectedOutput = "This is \na test \nrun.";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cattool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void catRelativeFileTest(){
+    	String[] arguments = new String[]{"./../Test_Output_6.txt",} ;
+		cattool = new CATTool(arguments);
+		actualOutput = cattool.execute(workingDirectory, stdin);
+		expectedOutput = "This is \na test \nrun.";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cattool.getStatusCode(), 0);
+    }
 
+    @Test
+    public void catEmptyFileTest(){
+    	String[] arguments = new String[]{"Test_Output_7.txt",} ;
+		cattool = new CATTool(arguments);
+		actualOutput = cattool.execute(workingDirectory, stdin);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cattool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void catStdin1Test(){
+    	String[] arguments = new String[]{} ;
+		cattool = new CATTool(arguments);
+		stdin = "This is a test run.";
+		actualOutput = cattool.execute(workingDirectory, stdin);
+		expectedOutput = "This is a test run.";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cattool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void catStdin2Test(){
+    	String[] arguments = new String[]{} ;
+		cattool = new CATTool(arguments);
+		stdin = " ";
+		actualOutput = cattool.execute(workingDirectory, stdin);
+		expectedOutput = " ";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cattool.getStatusCode(), 0);
+    }
+    
 }
