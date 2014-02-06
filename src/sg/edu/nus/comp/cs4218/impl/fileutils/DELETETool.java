@@ -38,7 +38,10 @@ public class DELETETool extends ATool implements IDeleteTool{
 			if (!file.exists()){
 				setStatusCode(-1);
 				System.out.println("No such file");
-				return outputMsg+"\nNo such file";
+				if (outputMsg.equalsIgnoreCase(""))
+					return "No such file";
+				else
+					return outputMsg+"\nNo such file";
 			}
 			
 			if (delete(file))

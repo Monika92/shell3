@@ -17,7 +17,6 @@ public class ECHOTool extends ATool implements IEchoTool {
 	@Override
 	public String echo(String toEcho) {
 		// TODO Auto-generated method stub
-		System.out.println(toEcho);
 		return toEcho;
 	}
 
@@ -33,6 +32,7 @@ public class ECHOTool extends ATool implements IEchoTool {
 		String str = sb.toString();
 		str=str.replace("\"", "");
 		str=str.replace("\'", "");
+		str = str.trim();
 		
 		return echo(str);
 	}
