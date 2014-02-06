@@ -36,6 +36,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 	
 	public UNIQTool(String[] arguments) {
 		super(arguments);
+		cachedline = "";
 		// TODO Auto-generated constructor stub
 	}
 

@@ -21,6 +21,7 @@ public class DELETEToolTest {
 	File workingDirectory;
 	String stdin;
 	File input_file_1 = new File("Test_Output.txt"),  input_file_2 = new File("Test_Output_2.txt"),  input_file_3 = new File("Test_Output_3.txt") ;
+	File abs_file_1, abs_file_2, relative_file;
 	
 	@Before
 	public void before(){
@@ -31,6 +32,13 @@ public class DELETEToolTest {
 		writeToFile(input_file_1, input);
 		writeToFile(input_file_2, input);
 		writeToFile(input_file_3, input);
+		
+		abs_file_1 = new File(workingDirectory + "\\" + "Test_Output_4.txt");
+		abs_file_2 = new File("C:\\Users\\monika92\\Desktop\\" + "Test_Output_5.txt");
+		relative_file = new File("./../Test_Output_6.txt");
+		writeToFile(abs_file_1, input);
+		writeToFile(abs_file_2, input);
+		writeToFile(relative_file, input);
 	}
 
 	public void writeToFile(File file, String input){
@@ -64,6 +72,12 @@ public class DELETEToolTest {
 			input_file_2.delete();
 		if(input_file_3.exists())
 			input_file_3.delete();
+		if(abs_file_1.exists())
+			abs_file_1.delete();
+		if(abs_file_2.exists())
+			abs_file_2.delete();
+		if(relative_file.exists())
+			relative_file.delete();
 	}
     
     @Test
@@ -104,6 +118,7 @@ public class DELETEToolTest {
 		actualOutput = deletetool.execute(workingDirectory, stdin);
 		expectedOutput = "No such file";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertFalse(input_file_1.exists());
 		assertEquals(deletetool.getStatusCode(), -1);
     }
     
@@ -114,7 +129,35 @@ public class DELETEToolTest {
 		actualOutput = deletetool.execute(workingDirectory, stdin);
 		expectedOutput = "No such file";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertTrue(input_file_1.exists());
 		assertEquals(deletetool.getStatusCode(), -1);
+    }
+    
+    @Test
+    public void deleteAbsoluteFile1Test(){
+    	String[] arguments = new String[]{workingDirectory + "\\" + "Test_Output_4.txt"} ;
+		deletetool = new DELETETool(arguments);
+		actualOutput = deletetool.execute(workingDirectory, stdin);
+		assertFalse(abs_file_1.exists());
+		assertEquals(deletetool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void deleteAbsoluteFile2Test(){
+    	String[] arguments = new String[]{"C:\\Users\\monika92\\Desktop\\" + "Test_Output_5.txt"} ;
+		deletetool = new DELETETool(arguments);
+		actualOutput = deletetool.execute(workingDirectory, stdin);
+		assertFalse(abs_file_2.exists());
+		assertEquals(deletetool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void deleteRelativeFileTest(){
+    	String[] arguments = new String[]{"./../Test_Output_6.txt",} ;
+		deletetool = new DELETETool(arguments);
+		actualOutput = deletetool.execute(workingDirectory, stdin);
+		assertFalse(relative_file.exists());
+		assertEquals(deletetool.getStatusCode(), 0);
     }
 
 }

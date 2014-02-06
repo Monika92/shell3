@@ -81,11 +81,17 @@ public class CATTool extends ATool implements ICatTool {
 				file = new File(fileName);
 			} catch(Exception e){
 				setStatusCode(-1);
-				return outputMsg+"\nInvalid file name";
+				if (outputMsg.equalsIgnoreCase(""))
+					return "Invalid file name";
+				else
+					return outputMsg+"\nInvalid file name";
 			}
 			if (!file.exists()){
 				setStatusCode(-1);
-				return outputMsg+"\nNo such file";
+				if (outputMsg.equalsIgnoreCase(""))
+					return "No such file";
+				else
+					return outputMsg+"\nNo such file";
 			}
 			output += getStringForFile(file);
 		}
