@@ -59,9 +59,9 @@ public class CATTool extends ATool implements ICatTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-		File file;
+		File file, file_path;
 		int argsLength = args.length;
-		String output = "", outputMsg = "";
+		String output = "", outputMsg = "", fileName;
 		
 		//Check for stdin
 		if(stdin!=null){
@@ -71,15 +71,14 @@ public class CATTool extends ATool implements ICatTool {
 		
 		for(int i = 0; i < argsLength; i++){
 			try{
-				
-				String fileName = args[i];
-				if(FilePathIdentifier.testPath(fileName)){
-					//Do nothing
+				fileName = args[i];
+				file_path = new File(fileName);
+				if(file_path.isAbsolute()){
+					file = new File(file_path.getPath());
 				}
 				else{
-					fileName = workingDir.toString()+File.separator+fileName;
+					file = new File(workingDir.toString()+File.separator+fileName);
 				}
-				file = new File(fileName);
 			} catch(Exception e){
 				setStatusCode(-1);
 				if (outputMsg.equalsIgnoreCase(""))
