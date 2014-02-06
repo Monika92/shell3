@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
@@ -49,10 +51,20 @@ public class PASTETool extends ATool implements IPasteTool{
 
 		for(int i=0; i<input.length; i++){
 			ArrayList<String> fileLines = loadLinesFromFile(input[i]);
-			for(String e : fileLines){
-				result += e + "\t";
+			for(int j = 0; j<fileLines.size(); j++){
+				
+				if( j != fileLines.size() -1){
+					result += fileLines.get(j) + "\t";
+				}
+				else{
+					result += fileLines.get(j);
+				}
 			}
-			result += "\n";
+			
+			if( i != input.length -1){
+				result += "\n";
+			}
+			
 		}
 		return result;
 	}
@@ -64,6 +76,7 @@ public class PASTETool extends ATool implements IPasteTool{
 
 		ArrayList<ArrayList<String>> allFileContents = new ArrayList<ArrayList<String>>();
 		int maxFileSize = 0;
+		
 		for( int i=0; i<input.length; i++){
 			allFileContents.add(loadLinesFromFile(input[i]));
 
@@ -77,14 +90,28 @@ public class PASTETool extends ATool implements IPasteTool{
 
 		for(int i=0; i<maxFileSize; i++){
 			delimCount = 0;
-			for(int j=0; j<input.length; j++){
+			
+			for(int j=0; (j<input.length) && (input.length != 1); j++,delimCount++){
 				String term = "";
 				if(allFileContents.get(j).size() > i){
 					term = allFileContents.get(j).get(i);
 				}
-				result += term + delimiters[delimCount % numDelim];
+				if(j != input.length-1){
+					result += term + delimiters[delimCount % numDelim];
+					
+				}
+				else{
+					result += term;
+				}
 			}
-			result += "\n";
+			
+			if(input.length == 1){
+				result += allFileContents.get(0).get(i);
+			}
+			
+			if(i != maxFileSize-1){
+				result += "\n";
+			}
 		}
 
 		return result;
@@ -106,10 +133,11 @@ public class PASTETool extends ATool implements IPasteTool{
 
 			br.close();
 		} catch (FileNotFoundException e) {
-
+			
+			setStatusCode(-1);
 			e.printStackTrace();
 		} catch (IOException e) {
-
+			setStatusCode(-1);
 			e.printStackTrace();
 		}		
 		return lines;
@@ -120,7 +148,7 @@ public class PASTETool extends ATool implements IPasteTool{
 
 		String helpText = "paste : writes to standard output lines "
 				+ "\n* of sequentially corresponding lines of each given file,"
-				+ "\n* separated by a TAB character \n"
+				+ "\n* separated by a TAB character"
 				+ "\n* Command Format - paste [OPTIONS] [FILE]"
 				+ "\n* FILE - Name of the file, when no file is present (denoted by \"-\") "
 				+ "\n* use standard input OPTIONS"
@@ -131,14 +159,22 @@ public class PASTETool extends ATool implements IPasteTool{
 		return helpText;
 	}
 
-	private ArrayList<String> getCorrectFileNames(File workingDir,ArrayList<String> fNames){
+	private ArrayList<String> getCorrectFileNames(File workingDir, ArrayList<String> fNames){
 		String name = "";
 		ArrayList<String> names = new ArrayList<String>();
 
 		for(int i=0; i<fNames.size(); i++){
-
-			String[] nameSplit = fNames.get(i).split(File.separator);
-			String fileName = nameSplit[nameSplit.length -1];
+			
+			String arg = fNames.get(i);
+			String pattern = Pattern.quote(System.getProperty("file.separator"));
+			String[] nameSplit = arg.split(pattern);
+			String fileName = "";
+			if(nameSplit.length == 1){
+				fileName = nameSplit[0];
+			}
+			else{
+				fileName = nameSplit[nameSplit.length -1];
+			}
 
 			if(fNames.get(i).startsWith("//")){
 				name = fNames.get(i);
@@ -151,8 +187,10 @@ public class PASTETool extends ATool implements IPasteTool{
 				names.add(name);
 			}
 			else{
+				fileError = true;
 				names=new ArrayList<String>();
 				names.add(fileName + ": No such file or directory!");
+				return names;
 			}
 		}
 		return names;
@@ -160,6 +198,7 @@ public class PASTETool extends ATool implements IPasteTool{
 
 	private String[] removeStdinFromArg(String[] args){
 		
+		setStatusCode(0);
 		String[] newArgs = new String[args.length -1];
 		
 		for(int i=0 ;i<args.length-1; i++){
@@ -173,6 +212,7 @@ public class PASTETool extends ATool implements IPasteTool{
 	public String execute(File workingDir, String stdin) {
 
 		String[] args = super.args;
+		
 		if(stdin != null && toggleBit == 0){
 			args = removeStdinFromArg(super.args);
 			toggleBit = 1;
@@ -187,15 +227,15 @@ public class PASTETool extends ATool implements IPasteTool{
 		fileNames = getCorrectFileNames(workingDir,fileNames);
 
 		if(fileError == true){
+			setStatusCode(-1);
 			return fileNames.get(0);
+		}
+		
+		if(ao.getOptions().contains("-help")){
+			result = getHelp();
 		}
 
 		if(fileNames.size() != 0 && executed == false){
-
-			//priority to -help option
-			if(ao.getOptions().contains("-help")){
-				result = getHelp();
-			}
 
 			String[] fNames = new String[fileNames.size()];
 			for(int i=0; i<fileNames.size();i++){
@@ -205,13 +245,15 @@ public class PASTETool extends ATool implements IPasteTool{
 			//priority to -s
 			if(ao.getOptions().contains("-s")){
 				result = pasteSerial(fNames);
-			}
-
-			int delimIdx = ao.getOptions().indexOf("-d");
-			String delim = ao.getOptionArguments().get(delimIdx);
-
-			if(ao.getOptions().contains("-d")){
+			}					
+			else if(ao.getOptions().contains("-d")){
+				int delimIdx = ao.getOptions().lastIndexOf("-d");
+				String delim = ao.getOptionArguments().get(delimIdx);
 				result = pasteUseDelimiter(delim, fNames);
+			}
+			else {
+				//No options
+				result = pasteUseDelimiter("\t", fNames);				
 			}
 			
 			executed = true;

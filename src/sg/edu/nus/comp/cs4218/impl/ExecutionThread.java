@@ -28,7 +28,7 @@ public class ExecutionThread extends Thread {
     		
     		File outputFile = null;
 
-    		if(args!=null){
+    		if(args!=null && (itool.getStatusCode() != (-1))){
         	int argsLength = args.length;
 				if(argsLength>=2 && args[argsLength -2].equalsIgnoreCase(">")){
 					outputFile = new File(args[argsLength - 1]);

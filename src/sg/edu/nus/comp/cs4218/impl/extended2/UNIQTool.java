@@ -12,6 +12,7 @@ import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
 
 /**
  * Do not modify this file
@@ -36,6 +37,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 	
 	public UNIQTool(String[] arguments) {
 		super(arguments);
+		cachedline = "";
 		// TODO Auto-generated constructor stub
 	}
 
@@ -62,7 +64,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 		boolean succCheck = true;
 		
 		if(lines.size() == 1)
-			output.add(lines.get(0)); 
+			output.add(lines.get(0)+"\n"); 
 		else if(lines.size()>1){
 			while(ctr < lines.size()){
 				if(ctr == 0){
@@ -103,8 +105,8 @@ public class UNIQTool extends ATool implements IUniqTool{
 				//Both check false, then add.
 				//If only succ_check is true, then also add curr. 
 				//If only pred_check is true, dont add.
-				if(succCheck || (!predCheck && !succCheck)){
-					output.add(curr);
+				if((succCheck && !predCheck) || (!predCheck && !succCheck)){
+					output.add(curr+"\n");
 				}
 				
 				ctr++;
@@ -146,13 +148,17 @@ public class UNIQTool extends ATool implements IUniqTool{
 			}
 			String word = "";
 			for(String s : words)
-				word += s;
-			lines.set(j, word);
+				word += s + " ";
+			lines.set(j, word.trim());
 		}
 		
 		String str = "";
-		for(String s : lines)
-			str += s;
+		for(String s : lines){
+			if(s.equalsIgnoreCase(""))
+				str += "";
+			else
+				str += s+"\n";
+		}
 		result = getUnique(checkCase, str); 
 		return result;
 	}
@@ -177,14 +183,14 @@ public class UNIQTool extends ATool implements IUniqTool{
 			fr = new FileReader(toRead);
 		} catch(FileNotFoundException e){
 			e.printStackTrace();
-			System.out.println("File not found");
+			//System.out.println("File not found");
 			return "File not found";
 		}
 		BufferedReader br = new BufferedReader(fr);
 		try{
 			String line = br.readLine();
 			while(line != null){
-				System.out.println(line);
+				//System.out.println(line);
 				if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
 					output+="\n";
 				else
@@ -193,7 +199,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 			}
 		} catch(IOException e){
 			e.printStackTrace();
-			System.out.println("Unable to read file");
+			//System.out.println("Unable to read file");
 			return "Unable to read file";
 		} finally{
 			try {
@@ -207,6 +213,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 		return output;
 	}
 
+	
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
@@ -223,31 +230,46 @@ public class UNIQTool extends ATool implements IUniqTool{
 		String input = "";
 		boolean checkCase = true;
 	
-		//Check for --help first
-		if (options!=null){
-			if(options.contains("-help")){
-			result = getHelp();
-			return result;
+		//Getting input from stdin or file
+		if (stdin != null){
+			if(cachedline.equalsIgnoreCase(stdin))
+					return "";
+			else{
+					cachedline = stdin;
+					return cachedline;
 			}
 		}
-		
-		//Getting input from stdin or file
-		if (stdin != null)
-			input = stdin;
 		else{
-			int j = 0; File file;
+			int j = 0; File file, file_path; String fileName;
 			while(j < fileList.size()){
 				try{
-					file = new File(fileList.get(j));
+					fileName = fileList.get(j);
+					file_path = new File(fileName);
+					if(file_path.isAbsolute()){
+						file = new File(file_path.getPath());
+					}
+					else{
+						file = new File(workingDir.toString()+File.separator+fileName);
+					}
 				} catch(Exception e){
-					System.out.println("Invalid file name");
+					//System.out.println("Invalid file name");
 					setStatusCode(-1);
-					return result+"\nInvalid file name";
+					if (result.equalsIgnoreCase(""))
+						return "Invalid file name";
+					else if (result.endsWith("\n"))
+						return result + "Invalid file name";
+					else
+						return result+"\nInvalid file name";
 				}
 				if (!file.exists()){
 					setStatusCode(-1);
-					System.out.println("No such file");
-					return result+"\nNo such file";
+					//System.out.println("No such file");
+					if (result.equalsIgnoreCase(""))
+						return "No such file";
+					else if(result.endsWith("\n"))
+						return result + "No such file";
+					else
+						return result+"\nNo such file";
 				}
 				input = readFromFile(file);
 				
@@ -255,12 +277,38 @@ public class UNIQTool extends ATool implements IUniqTool{
 				if (options!=null){
 					
 					int i = 0; Integer numArg;
+					
+					//Check for --help first
+					if (options!=null){
+						if(options.contains("-help")){
+						result = getHelp();
+						return result;
+						}
+					}
+					
 					if(options.contains("-i"))
 						checkCase = false;
 					if(options.contains("-f")){
 						while(i < options.size()){
 								if(options.get(i).equalsIgnoreCase("-f")){
-									numArg = Integer.decode(optionArguments.get(i));
+									try{
+										numArg = Integer.decode(optionArguments.get(i));
+										if(numArg < 0){
+											if (result.equalsIgnoreCase(""))
+												return "Invalid argument for -f";
+											else if(result.endsWith("\n"))
+												return result + "Invalid argument for -f";
+											else
+												return result + "\nInvalid argument for -f";
+										}
+									}catch(NumberFormatException e){
+										if (result.equalsIgnoreCase(""))
+											return "Invalid argument for -f";
+										else if(result.endsWith("\n"))
+											return result + "Invalid argument for -f";
+										else
+											return result + "\nInvalid argument for -f";
+									}
 									result += getUniqueSkipNum(numArg, checkCase, input);
 								}
 								i++;
@@ -271,12 +319,12 @@ public class UNIQTool extends ATool implements IUniqTool{
 				}
 				else
 					result += getUnique(checkCase, input);
-				
+				result = result.trim(); result = result + "\n";
 				j++;
 			}
 		}
 		
-		return result;
+		return result.trim();
 	}
 
 }

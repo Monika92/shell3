@@ -164,10 +164,10 @@ public class Shell extends Thread implements IShell {
 				System.out.println("Enter stdin: ");
 				Scanner scanner = new Scanner(System.in);
 				stdin = scanner.nextLine();
-
 				while (stdin.equalsIgnoreCase("Ctrl-Z") != true) {
 					ExecutionThread sThread = new ExecutionThread(itool, stdin,
-							argsList);
+							rawArgs);
+
 					ExecutorService executorService = Executors
 							.newFixedThreadPool(2);
 					Future<?> threadT2 = executorService.submit(sThread);
@@ -177,7 +177,7 @@ public class Shell extends Thread implements IShell {
 					
 				}
 			} else {
-				ExecutionThread sThread = new ExecutionThread(itool, stdin, argsList);
+				ExecutionThread sThread = new ExecutionThread(itool, stdin, rawArgs);
 				ExecutorService executorService = Executors
 						.newFixedThreadPool(2);
 				Future<?> threadT2 = executorService.submit(sThread);
@@ -188,7 +188,8 @@ public class Shell extends Thread implements IShell {
 				}
 			}
 		} else {
-			ExecutionThread sThread = new ExecutionThread(itool, stdin, argsList);
+			ExecutionThread sThread = new ExecutionThread(itool, stdin, rawArgs);
+
 			ExecutorService executorService = Executors.newFixedThreadPool(2);
 			Future<?> threadT2 = executorService.submit(sThread);
 

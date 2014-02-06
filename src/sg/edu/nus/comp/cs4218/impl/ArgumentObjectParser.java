@@ -139,6 +139,10 @@ public class ArgumentObjectParser {
 					argumentObject.optionArguments.add(null);
 					
 				}
+				else if(argument[i].equalsIgnoreCase("-"))
+				{
+					
+				}
 				else 
 				{
 					argumentObject.fileList.add(argument[i]);

@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
+
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
@@ -21,25 +22,31 @@ public class CDTool extends ATool implements ICdTool{
 	
 	public File getDirectoryPath(String dirName , String workingDir)
 	{
-		if((dirName.indexOf('\\')==0) || (dirName.contentEquals(".")))
-		{
-			return (new File(dirName));
-		}
-		else if((dirName.indexOf('~')==0))
-		{
-			dirName = dirName.replaceFirst("~", workingDir + '\\');
-			return (new File(dirName));
-		}
-		else if(dirName.contentEquals(".."))
+		
+		if(dirName.contentEquals(".."))
 		{
 			File wd = new File(workingDir);
-			dirName = wd.getParentFile().getAbsolutePath();
+			if(wd.getParentFile()!=null)
+			dirName = wd.getParentFile().getAbsolutePath();	
+			return (new File(dirName));
+		}
+		else if(dirName.contentEquals("."))
+		{
+			//remain as it is
+			File wd = new File(workingDir);
+			dirName = wd.getAbsolutePath();
 			return (new File(dirName));
 		}
 		else
 		{
-			return (new File(workingDir + '\\' + dirName));
-		}
+			//absolute and relative paths
+			File dir = new File(dirName);
+			if(dir.isAbsolute())
+		 		return dir;
+			else
+				dirName = workingDir + File.separator +  dirName;
+				return (new File(dirName));
+		 }
 		
 	}
 
@@ -62,6 +69,12 @@ public class CDTool extends ATool implements ICdTool{
 		{
 			//To move to a directory using a full pathname: ex.   cd /home/physics/ercy04/ProjectX
 			//File dir = new File(args[0]);
+			if(args[0].contains("~"))
+			{			
+				String home = System.getProperty("user.home") + File.separator;
+				args[0] = args[0].replace("~", home);
+			}
+			
 			File dir = getDirectoryPath(args[0] , workingDir.getAbsolutePath());
 			if(dir.isDirectory()) 
 	        {

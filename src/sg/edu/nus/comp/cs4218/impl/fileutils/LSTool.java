@@ -43,6 +43,14 @@ public class LSTool extends ATool implements ILsTool
 		}
 		return outputString;
 	}
+	
+	public String getFilePath(String fileName, File dir)
+	{		
+		if((new File(fileName)).isAbsolute())
+	 		return fileName;
+		else
+			return dir + File.separator +  fileName;
+	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -52,19 +60,19 @@ public class LSTool extends ATool implements ILsTool
 		numArgs = args.length;
 		else
 		numArgs = 0;	
+		
 		List<File> childFilesList = new ArrayList();  
 		String outputString = "";
 		
 		if(numArgs == 0)
 		{
 			//No arguments
-			System.out.println(workingDir);
 			childFilesList = getFiles(workingDir);
 			outputString = getStringForFiles(childFilesList);
 		}
 		else
 		{
-			File dir = new File(args[0]);
+			File dir = new File(getFilePath(args[0],workingDir));
 			if(dir.isDirectory()==true)
 			{
 				//Displaying contents of directory
@@ -96,7 +104,7 @@ public class LSTool extends ATool implements ILsTool
 			else
 			{
 				//If all else fails
-				outputString = "Invalid! Doesn't exist.";
+				outputString = "Invalid. Doesn't exist";
 			}
 		}
 		return outputString;

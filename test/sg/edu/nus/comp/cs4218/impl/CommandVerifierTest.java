@@ -1,5 +1,10 @@
 package sg.edu.nus.comp.cs4218.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +12,7 @@ import org.junit.Test;
 public class CommandVerifierTest {
 	
 	private CommandVerifier verifier; 
+	int expectedResultCode,actualResultCode;
 	
 	@Before
 	public void before(){
@@ -17,31 +23,353 @@ public class CommandVerifierTest {
 	public void after(){
 		verifier = null;
 	}
-	
-    
+
     @Test
+    //Overall command test
     public void verifyCommandTest(){
     	
     }
     
     @Test
-    public void textUtilCheckTest(){
+    //Invalid command Test
+    public void verifyWrongCommandTest(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	args.add("a.txt");args.add("b.txt");args.add("ccc");
+    	String cmd = "cpy";
     	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = -1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    	
+    	args = new ArrayList<String>();    	
+    	args.add("-l");args.add("b.txt");
+    	cmd = "wci";
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+
+    @Test
+    //Verify Basic Command Test
+    //Command : move a.txt b.txt ccc
+    public void verifyBasicCorrectCommandTest(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	args.add("a.txt");args.add("b.txt");args.add("ccc");
+    	String cmd = "move";
+    	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
     }
     
     @Test
-    public void basicCheckTest(){
+    //Negative: Check that cmd is wrong when args are lesser than req
+    public void verifyBasicLesserArgsTest(){
+      	ArrayList<String> args = new ArrayList<String>();
+    	args.add("a.txt");
+    	String cmd = "move";
     	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = -1;  
+    	assertEquals(expectedResultCode, actualResultCode);	
     }
     
     @Test
-    public void verifyTextUtilTest(){
+    //Negative: If argument has more than allowed num of arguments
+    public void verifyBasicMoreArgsTest(){
+      	ArrayList<String> args = new ArrayList<String>();
+    	args.add("./a.txt");args.add("../b.txt");
+    	String cmd = "cd";
     	
-    }
-    
-    @Test
-    public void verifyBasicTest(){
-    	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = -1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
     }
    
+    
+    @Test
+    //Boundary case: Positive: Check if cmd such as "delete"/"cat" allow infinite args
+    public void verifyBasicInifiniteArgsTest(){
+      	ArrayList<String> args = new ArrayList<String>();
+      	for(int i = 0; i<1000; i++){
+      		args.add("a.txt");
+      	}
+      	
+    	String cmd = "delete";
+    	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Negative: No arguments - boundary case
+    public void verifyBasicNoArgsTest(){
+      	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "cat";
+    	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = -1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Combined: 1 positive and 1 negative case for stdin
+    public void verifyBasicCommandAllowsStdinTest(){
+      	ArrayList<String> args = new ArrayList<String>();
+      	args.add("-");
+    	String cmd = "cat";
+    	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    	
+    	args = new ArrayList<String>();
+      	args.add("a.txt");args.add("-");
+    	cmd = "copy";
+    	
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = -1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    
+    @Test
+    //Give invalid options for a command
+    //command: cut -p 1-2 file
+    public void verifyWrongOptionsTest(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	args.add("-p");args.add("1-2");args.add("file1");
+    	String cmd = "cut";
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+
+    }
+    
+    
+    @Test
+    //Boundary case
+    //Negative: No arguments for command
+    //command: wc
+    public void verifyTextutilNoArgsTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "wc";
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Negative case: command has no options but with wrong num default file args
+    //command: comm file1
+    public void verifyTextutilNoOptionsWrongArgumentsTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "comm";
+    	args.add("file1");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Positive case: command has no options but with correct num default file args
+    //command: uniq file1 file2
+    public void verifyTextutilNoOptionsRightArgumentsTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "uniq";
+    	args.add("file1"); args.add("file2");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Negative case: CUT tool requires -c option
+    //command: cut 1-2 file
+    public void verifyTextutilCutToolTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "cut";
+    	args.add("1-2"); args.add("file");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Positive case: CUT Tool with correct args
+    //command: cut -c 1-2 file1 file2
+    public void verifyTextUtilCutToolTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "cut";
+    	args.add("-c"); args.add("1-2"); args.add("file1"); args.add("file2");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Negative case: mark incorrect when options w/o args have args
+    //command: wc -l 0 -m file
+    public void verifyTextUtilOptionsWOArgsWrongcaseTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "wc"; 
+    	args.add("-l"); args.add("0"); args.add("-m"); args.add("file");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Positive case: mark correct when options w/o args have no args
+    //command: wc -l -m file1
+    public void verifyTextUtilOptionsWOArgsRightcaseTest(){
+     	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "wc"; 
+    	args.add("-l"); args.add("-m"); args.add("file1");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Negative case: mark incorrect when options with args have no args
+    //command: paste -d -s file1
+    public void verifyTextUtilOptionsWArgsWrongcaseTest(){
+     	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "paste"; 
+    	args.add("-d"); args.add("-s");args.add("file");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	
+       	
+    	System.out.println(actualResultCode);
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Positive case: mark correct when options with args have args
+    //command: paste -d : -s file
+    public void verifyTextUtilOptionsWArgsRightcaseTest(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "paste"; 
+    	args.add("-d"); args.add(":"); args.add("-s"); args.add("file");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Positive case: verify options come before filename args
+    //command: uniq file1 file2 -i
+    public void verifyTextUtilOptionsBeforeArgumentsTest(){
+    	ArrayList<String >args = new ArrayList<String>();
+    	String cmd = "uniq"; 
+    	args.add("file"); args.add("file2"); args.add("-i");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);
+    }
+    
+    @Test
+    //Positive: Combination of options for command - with only allowed options for cmd
+    //command: wc -m -l file1
+    public void verifyTextutilMultipleOptionsCorrectTest(){
+    	ArrayList<String >args = new ArrayList<String>();
+    	String cmd = "wc"; 
+    	args.add("-m"); args.add("-l"); args.add("file");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);
+    }
+    
+    @Test
+    //Negative: Combination of options for command - with wrong options for cmd
+    //command: wc -l -p file1
+    public void verifyTextutilMultipleOptionsWrongTest(){
+    	ArrayList<String >args = new ArrayList<String>();
+    	String cmd = "wc"; 
+    	args.add("-l"); args.add("-p"); args.add("file");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;   
+
+    	assertEquals(expectedResultCode, actualResultCode);
+    }
+    
+    @Test
+    //Paste -s -d a.txt
+    //No filenames present since a.txt is taken as delim string
+    public void verifyTextutilWrongArgumentsTest(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "paste"; 
+    	args.add("-s"); args.add("-d");args.add("file");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //uniq -f 0 i file1 file2
+    //uniq i -f 0 file1 file2
+    public void verifyTextutilOrderingofArgsTest(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "uniq"; 
+    	args.add("-f"); args.add("0"); args.add("i"); args.add("file1");args.add("file2");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);
+    	
+    	args = new ArrayList<String>();
+    	cmd = "uniq"; 
+    	args.add("-i"); args.add("-f"); args.add("0"); args.add("file1");args.add("file2");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);
+    }
+    
+    @Test
+    //wrong: cut -c 1-2 file1 >
+    //correct: cut -c 1-2 file1 > a.txt
+    public void verifyCommandWithRedirectionTest(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "cut"; 
+    	args.add("-c"); args.add("1-2"); args.add("file");args.add(">");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);
+    	
+    	args = new ArrayList<String>();
+    	cmd = "cut"; 
+    	args.add("-c"); args.add("1-2"); args.add("file");args.add(">");args.add("op");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);
+    	
+    }
+    
+    @Test
+    //To verify that -a.txt could be possible file name and
+    //not thrown as error as incorrect option
+    public void verifyTextutilFileNameWithSpecChars(){
+    	fail("not implemented yet!");
+    }
 }
