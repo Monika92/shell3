@@ -35,10 +35,20 @@ public class ECHOToolTest {
     
     @Test
     public void echoBasicTest(){
-    	String[] arguments = new String[]{"This is \na test \nrun."} ;
+    	String[] arguments = new String[]{"This is a test run."} ;
 		echotool = new ECHOTool(arguments);
 		actualOutput = echotool.execute(workingDirectory, stdin);
-		expectedOutput = "This is \na test \nrun.";
+		expectedOutput = "This is a test run.";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(echotool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void echoEmptyStringTest(){
+    	String[] arguments = new String[]{""} ;
+		echotool = new ECHOTool(arguments);
+		actualOutput = echotool.execute(workingDirectory, stdin);
+		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(echotool.getStatusCode(), 0);
     }

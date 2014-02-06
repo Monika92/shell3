@@ -10,6 +10,7 @@ import java.nio.file.FileSystem;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
 
 public class CATTool extends ATool implements ICatTool {
 
@@ -72,7 +73,7 @@ public class CATTool extends ATool implements ICatTool {
 			try{
 				
 				String fileName = args[i];
-				if(fileName.startsWith(File.separator)){
+				if(FilePathIdentifier.testPath(fileName)){
 					//Do nothing
 				}
 				else{
@@ -81,11 +82,17 @@ public class CATTool extends ATool implements ICatTool {
 				file = new File(fileName);
 			} catch(Exception e){
 				setStatusCode(-1);
-				return outputMsg+"\nInvalid file name";
+				if (outputMsg.equalsIgnoreCase(""))
+					return "Invalid file name";
+				else
+					return outputMsg+"\nInvalid file name";
 			}
 			if (!file.exists()){
 				setStatusCode(-1);
-				return outputMsg+"\nNo such file";
+				if (outputMsg.equalsIgnoreCase(""))
+					return "No such file";
+				else
+					return outputMsg+"\nNo such file";
 			}
 			output += getStringForFile(file);
 		}
