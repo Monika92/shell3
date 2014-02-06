@@ -112,7 +112,7 @@ public class CommandVerifier {
 
 	}
 
-	private int verifyBasic(String cmd, ArrayList<String> args){
+	public int verifyBasic(String cmd, ArrayList<String> args){
 
 		int numArgs = args.size();
 
@@ -153,7 +153,7 @@ public class CommandVerifier {
 		return -1;
 	}
 
-	private int verifyTextUtil(String cmd, ArrayList<String> args){
+	public int verifyTextUtil(String cmd, ArrayList<String> args){
 
 		if(cmd.equals("cut")){
 			//should contain "-c"
@@ -181,7 +181,8 @@ public class CommandVerifier {
 		return 0;
 	}
 
-	private int textUtilCheck(LinkedHashMap<String, Integer> map, ArrayList<String> args){
+	private int textUtilCheck(LinkedHashMap<String, Integer> map, 
+			ArrayList<String> args){
 
 		ArrayList<Integer> indexUsed = new ArrayList<Integer>();
 		int numOptions = map.size() - 2;
@@ -192,13 +193,23 @@ public class CommandVerifier {
 				return 0;
 			}
 		}
-
+		
+		//Check if arguments are valid options
+		for( int j=0; j<args.size(); j++){	
+			String argToCheck = args.get(j);
+			if(argToCheck.length() == 2 
+					&& argToCheck.charAt(0) == '-' 
+					&& !map.containsKey(args.get(j))){
+				return 0;
+			}
+		}
+		
 		//Iterate thro possible options for given command
 		for(int i = 0; i<numOptions; i++){
 
 			String value = (new ArrayList<String>(map.keySet())).get(i);
 			int numArgs = 0, idx = 0;
-
+					
 			//if option exists in args
 			if(args.contains(value)){
 
