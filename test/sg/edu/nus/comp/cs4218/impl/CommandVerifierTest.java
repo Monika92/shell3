@@ -372,4 +372,9 @@ public class CommandVerifierTest {
     public void verifyTextutilFileNameWithSpecChars(){
     	fail("not implemented yet!");
     }
+    
+    @Test
+    public void verifyGetHelpOptionPriority(){
+    	fail("not yet implemented yet!");
+    }
 }

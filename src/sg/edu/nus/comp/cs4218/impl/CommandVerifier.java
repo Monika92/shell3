@@ -188,10 +188,17 @@ public class CommandVerifier {
 		int numOptions = map.size() - 2;
 
 		//check if command has only -help
+		/*
 		if(args.size() == 1){
 			if(args.get(0).equals("-help")){
 				return 0;
 			}
+		}
+		*/
+		
+		//if options contain -help return only help
+		if(args.contains("-help")){
+			return 0;
 		}
 		
 		//Check if arguments are valid options

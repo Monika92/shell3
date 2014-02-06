@@ -76,14 +76,12 @@ public class Shell extends Thread implements IShell {
 				}
 
 				//Check for redirection
-				if (rawArgs!=null){
+				if (rawArgs!=null && commandVerifyFlag != 0){
 					argsLength = rawArgs.length;
 					if(argsLength>2 && rawArgs[argsLength -2].equalsIgnoreCase(">"))
 						argsLength -= 2;
 					argsList = Arrays.copyOfRange(rawArgs, 0, argsLength);
 				}
-				else
-					argsList = null;
 
 				if (commandVerifyFlag != -1) {
 

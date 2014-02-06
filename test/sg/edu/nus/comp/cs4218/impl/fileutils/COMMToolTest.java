@@ -152,7 +152,7 @@ public class COMMToolTest {
 	@Test
 	//Do not check -which is the default way
 	public void compareFilesDoNotCheckSortedStatusTest(){
-		
+		fail("Not yet implemented");
 	}
 	
 	@Test
