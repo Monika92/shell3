@@ -72,12 +72,10 @@ public class CATTool extends ATool implements ICatTool {
 			try{
 				
 				String fileName = args[i];
-				if(fileName.startsWith(File.separator))
-				{
+				if(fileName.startsWith(File.separator)){
 					//Do nothing
 				}
-				else
-				{
+				else{
 					fileName = workingDir.toString()+File.separator+fileName;
 				}
 				file = new File(fileName);
@@ -92,6 +90,6 @@ public class CATTool extends ATool implements ICatTool {
 			output += getStringForFile(file);
 		}
 		setStatusCode(0);
-		return output;
+		return output.trim();
 	}
 }
