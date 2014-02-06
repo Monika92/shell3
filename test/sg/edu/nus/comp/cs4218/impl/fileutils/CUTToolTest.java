@@ -41,12 +41,159 @@ public class CUTToolTest {
 	}
 	
     @Test
-    public void overallFunctionalityTest()
+    public void cOptionTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2","-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "abcde");
+		expectedOutput = "ab";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void cOptionInputInvalidRangeTest()
+    {
+    	String[] arguments = new String[]{"-c", "2-1","-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "abcde");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void dOptionFollowedByFOptionTest()
+    {
+    	String[] arguments = new String[]{"-d", ":","-f","1-2","-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "one:two:three:four:five:six:seven");
+		expectedOutput = "one:two";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void fOptionFollowedByDOptionTest()
+    {
+    	String[] arguments = new String[]{"-f", "1-2","-d",":","-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "one:two:three:four:five:six:seven");
+		expectedOutput = "one:two";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void dOptionWithFileTest()
+    {
+    	String[] arguments = new String[]{"-d", ":","-f","0","test1.txt"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, null);
+		expectedOutput = "apple\nball\ncat\ndog\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void cOptionWithFileTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2","test1.txt"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, null);
+		expectedOutput = "ap\nba\nca\ndo\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void cOptionWithEmptyFileTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2","test3.txt"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void cOptionWithMultipleFilesTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2","test1.txt","test2.txt"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, null);
+		expectedOutput = "ap\nba\nca\ndo\n\n"+ "he\nwo\nco\nis\nfu\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void cOptionWithFileMissingTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2","file.txt"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, null);
+		expectedOutput = "File not found";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), -1);
+    }
+    
+    @Test
+    public void cOptionRepeatedTest()
     {
     	String[] arguments = new String[]{"-c", "1-2", "-c", "3-4", "-"} ;
 		cuttool = new CUTTool(arguments);
 		actualOutput = cuttool.execute(workingDirectory, "abcde");
 		expectedOutput = "abcd";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    // in case of multiple d options, the latest delimiter is considered
+    @Test
+    public void dOptionRepeatedTest()
+    {
+    	String[] arguments = new String[]{"-d", " ", "-d", ":", "-f","1-3","-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "one:two:three:four:five:six:seven");
+		expectedOutput = "one:two:three";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+    //when c and d options are present, c option is taken as priority
+    @Test
+    public void cDOptionTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2", "-d", ":", "-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "one:two:three:four:five:six:seven");
+		expectedOutput = "on";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+   //when c and f options are present, c option is taken as priority
+    @Test
+    public void cFOptionTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2", "-f", "2", "-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "one:two:three:four:five:six:seven");
+		expectedOutput = "on";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
+    
+   //when c , d and f options are present, all options are executed
+    @Test
+    public void cDFOptionTest()
+    {
+    	String[] arguments = new String[]{"-c", "1-2", "-f", "2-4", "-d", ":","-"} ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.execute(workingDirectory, "one:two:three:four:five:six:seven");
+		expectedOutput = "ontwo:three:four";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
     }
@@ -58,19 +205,9 @@ public class CUTToolTest {
 		cuttool = new CUTTool(arguments);
 		actualOutput = cuttool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
+		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
-    }
-    
-    @Test
-    public void overallFunctionalityNonExistingFileTest()
-    {
-    	String[] arguments = new String[]{"-c", "1-2" ,"file.txt"} ;
-		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.execute(workingDirectory, null);
-		expectedOutput = "File Not Found";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(cuttool.getStatusCode(), -1);
     }
     
 	@Test
@@ -94,6 +231,18 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), 0);
     }
 	
+	@Test 
+	//LIST with negative values as -2-3 as  1 till 2
+	public void cutSpecfiedCharactersTest3() throws IOException {
+	
+		String[] arguments = null ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.cutSpecfiedCharacters("-2-3", "abc");
+		expectedOutput = "ab";
+		assertTrue(expectedOutput.equals(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+	}
+	
 	@Test
 	public void cutSpecfiedCharactersForEmptyStringTest() throws IOException {
 	
@@ -105,6 +254,7 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), 0);
     }
 
+	//5- as LIST is interpreted as 5 till end of string
 	@Test
 	public void cutSpecifiedCharactersUseDelimiterTest1() throws IOException {
 		
@@ -117,6 +267,7 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), 0);
 	}
 	
+	//-3 as LIST is interpreted as 1-3
 	@Test
 	public void cutSpecifiedCharactersUseDelimiterTest2() throws IOException {
 		
@@ -127,6 +278,7 @@ public class CUTToolTest {
 		assertTrue(expectedOutput.equals(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
 	}	
+	
 	//test 3
 	@Test
 	public void cutSpecifiedCharactersUseDelimiterTest3() throws IOException {

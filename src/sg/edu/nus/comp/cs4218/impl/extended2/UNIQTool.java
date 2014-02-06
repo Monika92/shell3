@@ -55,7 +55,9 @@ public class UNIQTool extends ATool implements IUniqTool{
 		}
 		
 		int ctr = 0; 
-		String pred, succ, curr; 
+		String pred;
+		String succ;
+		String curr; 
 		boolean predCheck = true; 
 		boolean succCheck = true;
 		

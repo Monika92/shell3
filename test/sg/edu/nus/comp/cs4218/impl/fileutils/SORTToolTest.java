@@ -10,7 +10,7 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.extended2.ISortTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.SORTTool;
 
-
+//Assumption : always sorts in ascending order
 public class SORTToolTest {
 	//TODO Always test against the interface! 
 	private ISortTool sorttool; 
@@ -35,15 +35,71 @@ public class SORTToolTest {
 	}
 	
     @Test
-    public void overallFunctionalityTest()
+    public void multipleOptionsTest1()
     {
-    	String[] arguments = new String[]{"-c", "-c" ,"test.txt"} ;
+    	String[] arguments = new String[]{"-c", "-c" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);
 		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = "Already sorted";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
     }
+    
+    @Test
+    public void sortMultipleFiles()
+    {
+    	String[] arguments = new String[]{"test1.txt","test2.txt"} ;
+		sorttool = new SORTTool(arguments);
+		sorttool.execute(workingDirectory, null);
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void MultipleOptionsTest2()
+    {
+    	String[] arguments = new String[]{"-c", "-help" ,"test1.txt"} ;
+		sorttool = new SORTTool(arguments);
+		actualOutput = sorttool.execute(workingDirectory, null);
+		expectedOutput = helpOutput;
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void MultipleOptionsTest3()
+    {
+    	String[] arguments = new String[]{"-help", "-c" ,"test1.txt"} ;
+		sorttool = new SORTTool(arguments);
+		actualOutput = sorttool.execute(workingDirectory, null);
+		expectedOutput = helpOutput;
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);
+    }
+    
+    //Options other than -c and -help are interpreted as file names
+    @Test
+    public void invalidOptionsTest()
+    {
+    	String[] arguments = new String[]{"-t"} ;
+		sorttool = new SORTTool(arguments);
+		actualOutput = sorttool.execute(workingDirectory, null);
+		expectedOutput = "File not found";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), -1);
+    }
+    //Stdin is considered as filename
+    @Test
+    public void overallFunctionalityWithStdinTest()
+    {
+    	String[] arguments = new String[]{"-"} ;
+		sorttool = new SORTTool(arguments);
+		actualOutput = sorttool.execute(workingDirectory, "abcd");
+		expectedOutput = "File not found";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), -1);
+    }
+    
     
     @Test
     public void overallFunctionalityNonExistingFileTest()
@@ -67,18 +123,31 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
+    
+    //help is always prioritized
+    @Test
+    public void helpWithStdinTest()
+    {
+    	String[] arguments = new String[]{"-help","-"} ;
+		sorttool = new SORTTool(arguments);
+		actualOutput = sorttool.execute(workingDirectory, "abcd");
+		expectedOutput = helpOutput;
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);
+    }
+    
 	@Test
 	public void sortFileTest() 
 	{
 
 		String[] arguments = null ;
-		sorttool = new SORTTool(arguments);
-		
+		sorttool = new SORTTool(arguments);		
 		actualOutput = sorttool.sortFile("apple\ncarrot\nbanana\n");
 		expectedOutput = "apple\nbanana\ncarrot\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
+	
 	
 	@Test
 	public void checkIfSortedUnsortedInputTest()
