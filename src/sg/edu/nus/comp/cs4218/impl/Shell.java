@@ -66,22 +66,22 @@ public class Shell extends Thread implements IShell {
 
 				// -1 incorrect
 				// 0 show help
-				// 1 execute normally
-//				commandVerifyFlag = verifier.verifyCommand(command, argsList);
-//				if (commandVerifyFlag == 0) {
-//					argsList = new String[1];
-//					argsList[0] = "-help";
-//				}
 
-				// Check for redirection
-				if (rawArgs != null) {
+				// 1 execute normally						
+				commandVerifyFlag = verifier.verifyCommand(command, argsList);
+				if(commandVerifyFlag == 0){
+					argsList = new String[1];
+					argsList[0] = "-help";
+				}
+
+				//Check for redirection
+				if (rawArgs!=null && commandVerifyFlag != 0){
 					argsLength = rawArgs.length;
 					if (argsLength > 2
 							&& rawArgs[argsLength - 2].equalsIgnoreCase(">"))
 						argsLength -= 2;
 					argsList = Arrays.copyOfRange(rawArgs, 0, argsLength);
-				} else
-					argsList = null;
+				}
 
 				//if (commandVerifyFlag != -1) {
 
