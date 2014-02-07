@@ -30,7 +30,6 @@ public class COPYTool extends ATool implements ICopyTool{
 		
 			Path sourcePath = Paths.get(args[0]);
 			Path targetPath = Paths.get(args[1]);
-			Path basePath = Paths.get(System.getProperty("user.dir"));
 			try 
 			{
 				Files.copy(from.getAbsoluteFile().toPath(), to.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -98,7 +97,7 @@ public class COPYTool extends ATool implements ICopyTool{
 					outputString = "Error - Invalid input.";
 				}
 			}
-			if((arg0.isDirectory() == true))
+			else if((arg0.isDirectory() == true))
 			{
 				if (copyDirectory(arg0,arg1))
 				{
