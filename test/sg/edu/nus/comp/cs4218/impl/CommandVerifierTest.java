@@ -271,8 +271,7 @@ public class CommandVerifierTest {
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
     	expectedResultCode = 0;    	
-    	     	
-    	System.out.println(actualResultCode);
+
     	assertEquals(expectedResultCode, actualResultCode);	
     }
     

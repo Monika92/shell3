@@ -159,7 +159,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		return helpText;
 	}
 
-	private ArrayList<String> getCorrectFileNames(File workingDir, ArrayList<String> fNames){
+	public ArrayList<String> getCorrectFileNames(File workingDir, ArrayList<String> fNames){
 		String name = "";
 		ArrayList<String> names = new ArrayList<String>();
 
@@ -169,20 +169,31 @@ public class PASTETool extends ATool implements IPasteTool{
 			String pattern = Pattern.quote(System.getProperty("file.separator"));
 			String[] nameSplit = arg.split(pattern);
 			String fileName = "";
+			
 			if(nameSplit.length == 1){
 				fileName = nameSplit[0];
 			}
 			else{
 				fileName = nameSplit[nameSplit.length -1];
 			}
-
-			if(fNames.get(i).startsWith("//")){
+			
+			
+			if(fNames.get(i).startsWith("//") || fNames.get(i).charAt(1) == ':'){
 				name = fNames.get(i);
 			}
 			else{
 				name = workingDir.getAbsolutePath() + File.separator + fNames.get(i);
 			}
-
+			
+			/*
+			File fTemp = new File(fNames.get(i));
+			if(fTemp.isAbsolute()){
+				name = fNames.get(i);
+			}
+			else{
+				name = workingDir.getAbsolutePath() + File.separator + fNames.get(i);
+			}
+			*/
 			if((new File(name)).exists()){
 				names.add(name);
 			}
@@ -212,10 +223,16 @@ public class PASTETool extends ATool implements IPasteTool{
 	public String execute(File workingDir, String stdin) {
 
 		String[] args = super.args;
+		setStatusCode(0);
 		
+		/*
 		if(stdin != null && toggleBit == 0){
 			args = removeStdinFromArg(super.args);
 			toggleBit = 1;
+		}
+		*/
+		if(stdin != null && executed == false){
+			args = removeStdinFromArg(super.args);
 		}
 		
 		result = "";
@@ -226,7 +243,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		ArrayList<String> fileNames = ao.getFileList();
 		fileNames = getCorrectFileNames(workingDir,fileNames);
 
-		if(fileError == true){
+		if(fileError){
 			setStatusCode(-1);
 			return fileNames.get(0);
 		}
@@ -235,7 +252,7 @@ public class PASTETool extends ATool implements IPasteTool{
 			result = getHelp();
 		}
 
-		if(fileNames.size() != 0 && executed == false){
+		if(!fileNames.isEmpty() && executed == false){
 
 			String[] fNames = new String[fileNames.size()];
 			for(int i=0; i<fileNames.size();i++){
@@ -257,15 +274,13 @@ public class PASTETool extends ATool implements IPasteTool{
 			}
 			
 			executed = true;
-		}
-		
-		if(stdin != null && executed == true){
-			if(result != ""){
-				result = result + "\n" + stdin;
+			
+			if(stdin != null){
+				result += "\n" + stdin;
 			}
-			else{
-				result = stdin;
-			}
+		}	
+		else if(stdin != null){
+			result = stdin;
 		}
 		
 		return result;

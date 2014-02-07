@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,8 +21,8 @@ public class PASTEToolTest {
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
 
-	File file_a,file_b,file_c,file_d;
-	String fileContent_a,fileContent_b,fileContent_c,fileContent_d;
+	File file_a,file_b,file_c,file_d,file_em1,file_em2;
+	String fileContent_a,fileContent_b,fileContent_c,fileContent_d,fileContent_e;
 
 	@Before
 	public void before() throws Exception {
@@ -40,17 +41,23 @@ public class PASTEToolTest {
 		file_b = new File("b.txt");
 		file_c = new File("c.txt");
 		file_d = new File("d.txt");
-
+		file_em1 = new File("em1.txt");
+		file_em2 = new File("em2.txt");
+		
+		file_em1.createNewFile();
+		file_em2.createNewFile();
+		
 		fileContent_a = "Table\nChair\nMan";
 		fileContent_b = "Wall\nFloor";
 		fileContent_c = "Superman\nSpiderman\nBatman";
 		fileContent_d = "Cat";
+		fileContent_e = "";
 		
 		writeToFile(file_a, fileContent_a);
 		writeToFile(file_b, fileContent_b);
 		writeToFile(file_c, fileContent_c);
 		writeToFile(file_d,fileContent_d);
-		
+
 	}
 
 	private void writeToFile(File f, String fContent){
@@ -77,9 +84,12 @@ public class PASTEToolTest {
 		file_b.delete();
 		file_c.delete();
 		file_d.delete();
+		file_em1.delete();
+		file_em2.delete();
 	}
 
 	@Test
+	//If only "-help", print help message
 	public void pasteGetHelpAsOnlyArgumentTest() {
 		String[] arguments = new String[]{"-help"};
 		pasteTool = new PASTETool(arguments);
@@ -90,6 +100,7 @@ public class PASTEToolTest {
 	}
 
 	@Test
+	//Test -help is given priority
 	public void pasteGetHelpWithOtherArgumentsTest() {
 		String[] arguments = new String[]{"-s","-help","-d",":"};
 		pasteTool = new PASTETool(arguments);
@@ -101,36 +112,61 @@ public class PASTEToolTest {
 	}
 	
 	@Test
+	//Check for invalid files
 	public void pasteNoOptionsInvalidFilesTest(){
+		String fileName1 = "C:\\Users\\Dale\\a.txt";
+		String fileName2 = "./b.txt";
+		ArrayList<String> fNames = new ArrayList<String>();
+		fNames.add(fileName1);fNames.add(fileName2);
+		
+		//pasteTool = new PASTETool(arguments);		
+		//actualOutput = "";
+		//TODO:
+		
+		expectedOutput = "a.txt : No such file or directory!";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));	
 		fail("not yet implemented");
 	}
-	
+
 	@Test
-	public void pasteNoOptionsCheckFilenameWithSpecialChar(){
-		fail("not yet implemented");
-	}
-	
-	@Test
+	//Check for empty file
 	public void pasteNoOptionsCheckWithOneEmptyFileTest(){
-		fail("not yet implemented");
+		String[] arguments = new String[]{"em1.txt"};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.pasteUseDelimiter("\t", arguments);
+		
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
+		
 	}
 	
 	@Test
+	//Check for empty file when between multiple non empty files
 	public void pasteUseDelimWithOneEmptyInManyFilesTest(){
-		fail("not yet implemented");
+		String[] arguments = new String[]{"b.txt","em1.txt","d.txt"};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.pasteUseDelimiter("*", arguments);
+		
+		expectedOutput = "Wall**Cat" + "\n" + "Floor**";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 	
 	@Test
-	public void pasteUseDelimWithManyEmptyFilesTest(){
-		fail("not yet implemented");
-	}
-	
-	@Test
+	//Serial output using empty files
 	public void pasteUseSerialWithManyEmptyFilesTest(){
-		fail("not yet implemented");
+		String[] arguments = new String[]{"em1.txt","em2.txt"};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.pasteSerial(arguments);
+		
+		expectedOutput = "\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 	
 	@Test
+	//Check paste o/p with 1 file, no options
 	public void pasteNoOptionsOneFileTest(){
 		String[] arguments = new String[]{"b.txt"};
 		pasteTool = new PASTETool(arguments);
@@ -141,11 +177,19 @@ public class PASTEToolTest {
 	}
 
 	@Test
+	//Testing paste with Stdin
 	public void pasteNoOptionsStdinTest(){
-		fail("not yet implemented");
+		String[] arguments = new String[]{"-"};
+		String stdin = "stdin input";
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, stdin);
+		expectedOutput = "stdin input";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 
 	@Test
+	//Paste: no options, many files
 	public void pasteNoOptionsManyFilesTest(){
 		String[] arguments = new String[]{"a.txt","b.txt","c.txt"};
 		pasteTool = new PASTETool(arguments);
@@ -157,8 +201,8 @@ public class PASTEToolTest {
 	}
 
 
-	//case where numDelim = 1 for 1 file
 	@Test
+	//case where numDelim = 1 for 1 file
 	public void pasteUseDelimiterOneFileTest1(){
 		String[] arguments = new String[]{"a.txt"};
 		pasteTool = new PASTETool(arguments);
@@ -168,8 +212,8 @@ public class PASTEToolTest {
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 
-	//case where numDelim > 1 for 1 file
 	@Test
+	//case where numDelim > 1 for 1 file
 	public void pasteUseDelimiterOneFileTest2(){
 		String[] arguments = new String[]{"a.txt"};
 		pasteTool = new PASTETool(arguments);
@@ -180,8 +224,15 @@ public class PASTEToolTest {
 	}
 
 	@Test
+	//Delimiter Test with Stdin
 	public void pasteUseDelimiterStdinTest(){
-		fail("not yet implemented");
+		String[] arguments = new String[]{"-d",":","-"};
+		String stdin = "Stdin input";
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, stdin);
+		expectedOutput = stdin;
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 
 	@Test
@@ -235,6 +286,7 @@ public class PASTEToolTest {
 	}
 
 	@Test
+	//Paste: Serial with 1 file
 	public void pasteSerialOneFileTest(){
 		String[] arguments = new String[]{"a.txt"};
 		pasteTool = new PASTETool(arguments);
@@ -245,11 +297,19 @@ public class PASTEToolTest {
 	}
 
 	@Test
+	//Paste serial with Stdin
 	public void pasteSerialStdinTest(){
-		fail("not yet implemented");
+		String[] arguments = new String[]{"-s","-"};
+		String stdin = "Stdin input";
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, stdin);
+		expectedOutput = stdin;
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 
 	@Test
+	//Serial many files
 	public void pasteSerialManyFilesTest(){
 		String[] arguments = new String[]{"a.txt","b.txt","d.txt"};
 		pasteTool = new PASTETool(arguments);
@@ -259,9 +319,8 @@ public class PASTEToolTest {
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}	
 	
-	
-	//if multiple delim, choose last option and args
 	@Test
+	//if multiple delim, choose last option and args
 	public void pasteUseDelimMultipleDelimsTest(){
 		String[] arguments = new String[]{"-d",":","-d","*","a.txt","b.txt"};
 		pasteTool = new PASTETool(arguments);
@@ -271,8 +330,8 @@ public class PASTEToolTest {
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 	
-	//should choose -s over -d
 	@Test
+	//should choose -s over -d
 	public void pasteOptionsPriorityCheckTest(){
 		String[] arguments = new String[]{"-s","-d",":","a.txt"};
 		pasteTool = new PASTETool(arguments);
