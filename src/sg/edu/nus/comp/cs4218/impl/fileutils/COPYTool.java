@@ -95,6 +95,7 @@ public class COPYTool extends ATool implements ICopyTool{
 				else
 				{
 					outputString = "Error - Invalid input.";
+					setStatusCode(-1);
 				}
 			}
 			else if((arg0.isDirectory() == true))
@@ -106,6 +107,7 @@ public class COPYTool extends ATool implements ICopyTool{
 				else
 				{
 					outputString = "Error - Invalid input.";
+					setStatusCode(-1);
 				}
 			}
 			else if(arg0.isFile())
@@ -118,11 +120,13 @@ public class COPYTool extends ATool implements ICopyTool{
 				else
 				{
 					outputString = "Error - Invalid input.";
+					setStatusCode(-1);
 				}
 			}
 			else
 			{
 				outputString = "Error - Invalid input.";
+				setStatusCode(-1);
 			}
 		}
 		else if(numArgs > 2)
@@ -146,17 +150,20 @@ public class COPYTool extends ATool implements ICopyTool{
 						else
 						{
 							outputString += args[i] + " is an invalid file.\n";
+							setStatusCode(-1);
 						}
 					}
 					else
 					{
 						outputString += args[i] + " is an invalid file.\n";
+						setStatusCode(-1);
 					}
 				 }
 			}
 			else
 			{
 				outputString = args[numArgs-1] + " is an invalid directory.";
+				setStatusCode(-1);
 			}
 			
 		}

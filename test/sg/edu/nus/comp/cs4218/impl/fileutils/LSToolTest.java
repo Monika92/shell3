@@ -31,18 +31,18 @@ public class LSToolTest {
 	List<File> childFilesList = new ArrayList();  
 	File argFolder = new File("argumentFolder1");
 	File argFolderEmpty = new File("argumentFolderEmpty");
-	File input_file_1;
+	File inputFile1;
 	
 @Before
 public void before(){
 	WorkingDirectory.changeWorkingDirectory(new File(System.getProperty("user.dir")));
 	stdin = null;
-	input_file_1 = new File(WorkingDirectory.workingDirectory+File.separator+"argumentFolder1"+ File.separator +"Test_Output.txt") ;
+	inputFile1 = new File(WorkingDirectory.workingDirectory+File.separator+"argumentFolder1"+ File.separator +"Test_Output.txt") ;
 	String input = "This is \na test \nrun.";
 	argFolder.mkdirs();
 	argFolderEmpty.mkdirs();
-	writeToFile(input_file_1, input);
-	input_file_1.mkdirs();	
+	writeToFile(inputFile1, input);
+	inputFile1.mkdirs();	
 }
 
 public void writeToFile(File file, String input){
@@ -63,14 +63,13 @@ public void writeToFile(File file, String input){
 		}
 		bw.close();
 	} catch (IOException e){
-		System.out.println("Unable to create output file");
 	}
 }
 
-public String readFromFile(File input_file){
+public String readFromFile(File inputFile){
 	String output = ""; FileReader fr = null;
 	try{
-		fr = new FileReader(input_file);
+		fr = new FileReader(inputFile);
 	} catch(FileNotFoundException e){
 		e.printStackTrace();
 		return "File not found";
@@ -104,8 +103,8 @@ public String readFromFile(File input_file){
 public void after(){
 	lstool = null;
 	ls = null;
-	if(input_file_1.exists())
-		input_file_1.delete();
+	if(inputFile1.exists())
+		inputFile1.delete();
 	if(argFolder.exists())
 		argFolder.delete();
 	if(argFolderEmpty.exists())
@@ -120,7 +119,6 @@ public void lsNoArgumentTest(){
 	String [] childFilesArray = WorkingDirectory.workingDirectory.list();
 	for(String child : childFilesArray) {expectedOutput += child + " ";}
 	if(expectedOutput == "") expectedOutput = "The folder is empty";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
@@ -131,7 +129,6 @@ public void lsRelativeDirectoryArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Test_Output.txt ";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
@@ -142,7 +139,6 @@ public void lsAbsoluteDirectoryArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Test_Output.txt ";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
@@ -153,7 +149,6 @@ public void lsEmptyDirectoryArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "The folder is empty";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
@@ -164,9 +159,8 @@ public void lsInvalidDirectoryArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Invalid. Doesn't exist";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(lstool.getStatusCode(), 0);
+	assertEquals(lstool.getStatusCode(), -1);
 }
 
 @Test
@@ -175,7 +169,6 @@ public void lsValidFileArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "File Exists";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
@@ -186,9 +179,8 @@ public void lsInvalidFileArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Invalid. Doesn't exist";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(lstool.getStatusCode(), 0);
+	assertEquals(lstool.getStatusCode(), -1);
 }
 
 @Test
@@ -197,7 +189,6 @@ public void lsValidFiletypeArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Test_Output.txt ";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
@@ -208,9 +199,8 @@ public void lsStarArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Invalid. Doesn't exist";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(lstool.getStatusCode(), 0);
+	assertEquals(lstool.getStatusCode(), -1);
 }
 
 @Test
@@ -219,8 +209,7 @@ public void lsNonExistentFiletypeArgumentTest(){
 	lstool = new LSTool(arguments);
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "No files of type .txz";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(lstool.getStatusCode(), 0);
+	assertEquals(lstool.getStatusCode(), -1);
 }
 }

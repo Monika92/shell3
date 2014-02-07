@@ -85,7 +85,6 @@ public class CUTToolTest {
 			}
 			bw.close();
 		} catch (IOException e){
-			System.out.println("Unable to create output file");
 		}
 	}
     

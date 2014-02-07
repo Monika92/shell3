@@ -21,9 +21,9 @@ public class COMMToolTest {
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
 
-	File file_a,file_b,file_c,file_d,file_em1,file_em2;
-	String fileContent_a,fileContent_b,fileContent_c,fileContent_d,fileContent_e;
-	String testTab, testNewline, testDash;
+	File fileA,fileB,fileC,fileD,fileEM1,fileEM2;
+	String fileContentA,fileContentB,fileContentC,fileContentD,fileContentE;
+	String testTab, testNewLine, testDash;
 	
 	@Before
 	public void before() throws Exception {
@@ -42,29 +42,30 @@ public class COMMToolTest {
 				"\n*      -help : Brief information about supported options" +
 				"\n*/";
 
-		file_a = new File("a.txt");
-		file_b = new File("b.txt");
-		file_c = new File("c.txt");
-		file_d = new File("d.txt");
-		file_em1 = new File("em1.txt");
-		file_em2 = new File("em2.txt");
-		file_em1.createNewFile();
-		file_em2.createNewFile();
+		fileA = new File("a.txt");
+		fileB = new File("b.txt");
+		fileC = new File("c.txt");
+		fileD = new File("d.txt");
+		fileEM1 = new File("em1.txt");
+		fileEM2 = new File("em2.txt");
+		fileEM1.createNewFile();
+		fileEM2.createNewFile();
 		
-		fileContent_a = "Apple\nMelon\nOrange";
-		fileContent_b = "Banana\nMelon\nOrange";
-		fileContent_c = "Batman\nSpiderman\nSuperman";
-		fileContent_d = "Cat\nBat";
-		fileContent_e = "";
+		fileContentA = "Apple\nMelon\nOrange";
+		fileContentB = "Banana\nMelon\nOrange";
+		fileContentC = "Batman\nSpiderman\nSuperman";
+		fileContentD = "Cat\nBat";
+		fileContentE = "";
 		
-		writeToFile(file_a, fileContent_a);
-		writeToFile(file_b, fileContent_b);
-		writeToFile(file_c, fileContent_c);
-		writeToFile(file_d,fileContent_d);
-
+		writeToFile(fileA, fileContentA);
+		writeToFile(fileB, fileContentB);
+		writeToFile(fileC, fileContentC);
+		writeToFile(fileD,fileContentD);
+		
 		testTab = "\t";
-		testNewline = "\n";
+		testNewLine = "\n";
 		testDash = " ";
+
 	}
 
 	private void writeToFile(File f, String fContent){
@@ -87,12 +88,13 @@ public class COMMToolTest {
 	@After
 	public void after() throws Exception {
 		commTool = null;
-		file_a.delete();
-		file_b.delete();
-		file_c.delete();
-		file_d.delete();
-		file_em1.delete();
-		file_em2.delete();
+
+		fileA.delete();
+		fileB.delete();
+		fileC.delete();
+		fileD.delete();
+		fileEM1.delete();
+		fileEM2.delete();
 	}
 
 	@Test
@@ -102,9 +104,9 @@ public class COMMToolTest {
 
 		commTool = new COMMTool(arguments);
 		actualOutput = commTool.execute(workingDirectory, null);
-		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewline +
-				testDash + testTab + "Banana" + testTab +testDash + testNewline +
-				testDash + testTab + testDash + testTab + "Melon" + testNewline +
+		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewLine +
+				testDash + testTab + "Banana" + testTab +testDash + testNewLine +
+				testDash + testTab + testDash + testTab + "Melon" + testNewLine +
 				testDash + testTab + testDash + testTab + "Orange";
 
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
@@ -159,11 +161,11 @@ public class COMMToolTest {
 		String input2 = "c.txt";
 		commTool = new COMMTool(arguments);
 		actualOutput = commTool.compareFiles(input1, input2);
-		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewline +
-				testDash + testTab + "Batman" + testTab +testDash + testNewline +
-				"Melon" + testTab + testDash + testTab + testDash + testNewline +
-				"Orange" + testTab + testDash + testTab + testDash + testNewline +
-				testDash + testTab + "Spiderman" + testTab +testDash + testNewline +
+		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewLine +
+				testDash + testTab + "Batman" + testTab +testDash + testNewLine +
+				"Melon" + testTab + testDash + testTab + testDash + testNewLine +
+				"Orange" + testTab + testDash + testTab + testDash + testNewLine +
+				testDash + testTab + "Spiderman" + testTab +testDash + testNewLine +
 				testDash + testTab + "Superman" + testTab +testDash;
 
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
@@ -179,9 +181,9 @@ public class COMMToolTest {
 		String input2 = "b.txt";
 		commTool = new COMMTool(arguments);
 		actualOutput = commTool.compareFiles(input1, input2);
-		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewline +
-				testDash + testTab + "Banana" + testTab +testDash + testNewline +
-				testDash + testTab + testDash + testTab + "Melon" + testNewline +
+		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewLine +
+				testDash + testTab + "Banana" + testTab +testDash + testNewLine +
+				testDash + testTab + testDash + testTab + "Melon" + testNewLine +
 				testDash + testTab + testDash + testTab + "Orange";
 
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
@@ -197,8 +199,8 @@ public class COMMToolTest {
 		commTool = new COMMTool(arguments);
 		actualOutput = commTool.compareFiles(input1, input2);
 		expectedOutput = 
-				 testDash + testTab + testDash + testTab + "Apple" + testNewline +
-				 testDash + testTab + testDash + testTab + "Melon" + testNewline +
+				 testDash + testTab + testDash + testTab + "Apple" + testNewLine +
+				 testDash + testTab + testDash + testTab + "Melon" + testNewLine +
 				 testDash + testTab + testDash + testTab + "Orange";
 
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
@@ -213,9 +215,9 @@ public class COMMToolTest {
 		String input2 = "b.txt";
 		commTool = new COMMTool(arguments);
 		actualOutput = commTool.compareFilesCheckSortStatus(input1, input2);
-		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewline +
-				testDash + testTab + "Banana" + testTab +testDash + testNewline +
-				testDash + testTab + testDash + testTab + "Melon" + testNewline +
+		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewLine +
+				testDash + testTab + "Banana" + testTab +testDash + testNewLine +
+				testDash + testTab + testDash + testTab + "Melon" + testNewLine +
 				testDash + testTab + testDash + testTab + "Orange";
 
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
