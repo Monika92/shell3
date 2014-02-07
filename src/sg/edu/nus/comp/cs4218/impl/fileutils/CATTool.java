@@ -56,7 +56,7 @@ public class CATTool extends ATool implements ICatTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-		File file, file_path;
+		File file, filePath;
 		int argsLength = args.length;
 		String output = "", outputMsg = "", fileName;
 		
@@ -69,9 +69,9 @@ public class CATTool extends ATool implements ICatTool {
 		for(int i = 0; i < argsLength; i++){
 			try{
 				fileName = args[i];
-				file_path = new File(fileName);
-				if(file_path.isAbsolute()){
-					file = new File(file_path.getPath());
+				filePath = new File(fileName);
+				if(filePath.isAbsolute()){
+					file = new File(filePath.getPath());
 				}
 				else{
 					file = new File(workingDir.toString()+File.separator+fileName);

@@ -24,7 +24,7 @@ public class UNIQToolTest {
 	String actualOutput,expectedOutput, helpOutput;
 	File workingDirectory;
 	String stdin;
-	File input_file_1, input_file_2, input_file_3, input_file_4, abs_file_1, abs_file_2, relative_file, empty_file;
+	File inputFile1, inputFile2, inputFile3, inputFile4, absFile1, absFile2, relativeFile, emptyFile;
 	
 	@Before
 	public void before(){
@@ -41,45 +41,45 @@ public class UNIQToolTest {
 		String input2 = "n hi\nf hi\nhi\nabc fgh hihi";
 		String input3 = "* abc hi\n(( hi hi\n[] l hi";
 		String input4 = "hi\nHi\nn Hi\nn hi\nf hi";
-		input_file_1 = new File("Test_Output.txt");
-		input_file_2 = new File("Test_Output_2.txt");
-		input_file_3 = new File("Test_Output_3.txt");
-		input_file_4 = new File("Test_Output_4.txt");
-		writeToFile(input_file_1, input1);
-		writeToFile(input_file_2, input2);
-		writeToFile(input_file_3, input3);
-		writeToFile(input_file_4, input4);
+		inputFile1 = new File("Test_Output.txt");
+		inputFile2 = new File("Test_Output_2.txt");
+		inputFile3 = new File("Test_Output_3.txt");
+		inputFile4 = new File("Test_Output_4.txt");
+		writeToFile(inputFile1, input1);
+		writeToFile(inputFile2, input2);
+		writeToFile(inputFile3, input3);
+		writeToFile(inputFile4, input4);
 		
-		abs_file_1 = new File(workingDirectory + "\\" + "Test_Output_4.txt");
-		abs_file_2 = new File("C:\\Users\\monika92\\Desktop\\" + "Test_Output_5.txt");
-		relative_file = new File("./../Test_Output_6.txt");
+		absFile1 = new File(workingDirectory + "\\" + "Test_Output_4.txt");
+		absFile2 = new File(System.getProperty("home.dir") + "Test_Output_5.txt");
+		relativeFile = new File("./../Test_Output_6.txt");
 		//writeToFile(abs_file_1, input);
 		//writeToFile(abs_file_2, input);
 		//writeToFile(relative_file, input);
 		
-		empty_file = new File("Test_Output_7.txt");
-		writeToFile(empty_file, "");
+		emptyFile = new File("Test_Output_7.txt");
+		writeToFile(emptyFile, "");
 	}
 
 	@After
 	public void after(){
 		uniqtool = null;
-		if(input_file_1.exists())
-			input_file_1.delete();
-		if(input_file_2.exists())
-			input_file_2.delete();
-		if(input_file_3.exists())
-			input_file_3.delete();
-		if(input_file_4.exists())
-			input_file_4.delete();
-		if(abs_file_1.exists())
-			abs_file_1.delete();
-		if(abs_file_2.exists())
-			abs_file_2.delete();
-		if(relative_file.exists())
-			relative_file.delete();
-		if(empty_file.exists())
-			empty_file.delete();
+		if(inputFile1.exists())
+			inputFile1.delete();
+		if(inputFile2.exists())
+			inputFile2.delete();
+		if(inputFile3.exists())
+			inputFile3.delete();
+		if(inputFile4.exists())
+			inputFile4.delete();
+		if(absFile1.exists())
+			absFile1.delete();
+		if(absFile2.exists())
+			absFile2.delete();
+		if(relativeFile.exists())
+			relativeFile.delete();
+		if(emptyFile.exists())
+			emptyFile.delete();
 	}
 	
 	public void writeToFile(File file, String input){
@@ -104,10 +104,10 @@ public class UNIQToolTest {
 		}
 	}
 	
-	public String readFromFile(File input_file){
+	public String readFromFile(File inputFile){
 		String output = ""; FileReader fr = null;
 		try{
-			fr = new FileReader(input_file);
+			fr = new FileReader(inputFile);
 		} catch(FileNotFoundException e){
 			e.printStackTrace();
 			return "File not found";
@@ -141,7 +141,7 @@ public class UNIQToolTest {
 	public void uniqSingleFileGetUniqTest(){
     	String[] arguments = new String[]{} ;
 		uniqtool = new UNIQTool(arguments);
-		actualOutput = uniqtool.getUnique(true, (readFromFile(input_file_1)));
+		actualOutput = uniqtool.getUnique(true, (readFromFile(inputFile1)));
 		expectedOutput = "hi\nhello\nhi\nabc\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(uniqtool.getStatusCode(), 0);
@@ -201,7 +201,7 @@ public class UNIQToolTest {
 	public void uniqMinusIGetUniqTest(){
     	String[] arguments = new String[]{"-i", "Test_Output_4.txt"} ;
 		uniqtool = new UNIQTool(arguments);
-		actualOutput = uniqtool.getUnique(false, (readFromFile(input_file_4)));
+		actualOutput = uniqtool.getUnique(false, (readFromFile(inputFile4)));
 		expectedOutput = "hi\nn Hi\nf hi\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(uniqtool.getStatusCode(), 0);
@@ -221,7 +221,7 @@ public class UNIQToolTest {
 	public void uniqMinusFGetUniqTest(){
     	String[] arguments = new String[]{"-f", "1", "Test_Output_4.txt"} ;
 		uniqtool = new UNIQTool(arguments);
-		actualOutput = uniqtool.getUniqueSkipNum(1, true, (readFromFile(input_file_4)));
+		actualOutput = uniqtool.getUniqueSkipNum(1, true, (readFromFile(inputFile4)));
 		expectedOutput = "Hi\nhi\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(uniqtool.getStatusCode(), 0);

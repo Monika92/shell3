@@ -23,50 +23,49 @@ public class CATToolTest {
 	String actualOutput,expectedOutput;
 	File workingDirectory;
 	String stdin;
-	File input_file_1, input_file_2, input_file_3, abs_file_1, abs_file_2, relative_file, empty_file;
+	File inputFile1, inputFile2, inputFile3, absFile1, absFile2, relativeFile, emptyFile;
 	
 	@Before
 	public void before(){
 		workingDirectory = new File(System.getProperty("user.dir"));
 		stdin = null;
-		
 		String input = "This is \na test \nrun.";
 		
-		input_file_1 = new File("Test_Output.txt");
-		input_file_2 = new File("Test_Output_2.txt");
-		input_file_3 = new File("Test_Output_3.txt");
-		writeToFile(input_file_1, input);
-		writeToFile(input_file_2, input);
-		writeToFile(input_file_3, input);
+		inputFile1 = new File("Test_Output.txt");
+		inputFile2 = new File("Test_Output_2.txt");
+		inputFile3 = new File("Test_Output_3.txt");
+		writeToFile(inputFile1, input);
+		writeToFile(inputFile2, input);
+		writeToFile(inputFile3, input);
 		
-		abs_file_1 = new File(workingDirectory + "\\" + "Test_Output_4.txt");
-		abs_file_2 = new File("C:\\Users\\monika92\\Desktop\\" + "Test_Output_5.txt");
-		relative_file = new File("./../Test_Output_6.txt");
-		writeToFile(abs_file_1, input);
-		writeToFile(abs_file_2, input);
-		writeToFile(relative_file, input);
+		absFile1 = new File(workingDirectory + "\\" + "Test_Output_4.txt");
+		absFile2 = new File(System.getProperty("home.dir")+"Test_Output_5.txt");
+		relativeFile = new File("./../Test_Output_6.txt");
+		writeToFile(absFile1, input);
+		writeToFile(absFile2, input);
+		writeToFile(relativeFile, input);
 		
-		empty_file = new File("Test_Output_7.txt");
-		writeToFile(empty_file, "");
+		emptyFile = new File("Test_Output_7.txt");
+		writeToFile(emptyFile, "");
 	}
 
 	@After
 	public void after(){
 		cattool = null;
-		if(input_file_1.exists())
-			input_file_1.delete();
-		if(input_file_2.exists())
-			input_file_2.delete();
-		if(input_file_3.exists())
-			input_file_3.delete();
-		if(abs_file_1.exists())
-			abs_file_1.delete();
-		if(abs_file_2.exists())
-			abs_file_2.delete();
-		if(relative_file.exists())
-			relative_file.delete();
-		if(empty_file.exists())
-			empty_file.delete();
+		if(inputFile1.exists())
+			inputFile1.delete();
+		if(inputFile2.exists())
+			inputFile2.delete();
+		if(inputFile3.exists())
+			inputFile3.delete();
+		if(absFile1.exists())
+			absFile1.delete();
+		if(absFile2.exists())
+			absFile2.delete();
+		if(relativeFile.exists())
+			relativeFile.delete();
+		if(emptyFile.exists())
+			emptyFile.delete();
 	}
 	
 	public void writeToFile(File file, String input){
@@ -91,10 +90,10 @@ public class CATToolTest {
 		}
 	}
 	
-	public String readFromFile(File input_file){
+	public String readFromFile(File inputFile){
 		String output = ""; FileReader fr = null;
 		try{
-			fr = new FileReader(input_file);
+			fr = new FileReader(inputFile);
 		} catch(FileNotFoundException e){
 			e.printStackTrace();
 			return "File not found";
@@ -187,7 +186,7 @@ public class CATToolTest {
     
     @Test
     public void catAbsoluteFile2Test(){
-    	String[] arguments = new String[]{"C:\\Users\\monika92\\Desktop\\" + "Test_Output_5.txt"} ;
+    	String[] arguments = new String[]{System.getProperty("home.dir")+ "Test_Output_5.txt"} ;
 		cattool = new CATTool(arguments);
 		actualOutput = cattool.execute(workingDirectory, stdin);
 		expectedOutput = "This is \na test \nrun.";
