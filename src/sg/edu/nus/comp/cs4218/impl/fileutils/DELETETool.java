@@ -3,7 +3,6 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import java.io.File;
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
 
 public class DELETETool extends ATool implements IDeleteTool{
 
@@ -24,16 +23,16 @@ public class DELETETool extends ATool implements IDeleteTool{
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-		File file, file_path;
+		File file, filePath;
 		int argsLength = args.length;
 		String output = "", outputMsg = "", fileName;
 		
 		for(int i = 0; i < argsLength; i++){
 			try{
 				fileName = args[i];
-				file_path = new File(fileName);
-				if(file_path.isAbsolute()){
-					file = new File(file_path.getPath());
+				filePath = new File(fileName);
+				if(filePath.isAbsolute()){
+					file = new File(filePath.getPath());
 				}
 				else{
 					file = new File(workingDir.toString()+File.separator+fileName);

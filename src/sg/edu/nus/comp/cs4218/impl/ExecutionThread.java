@@ -42,14 +42,14 @@ public class ExecutionThread extends Thread {
     	}
     }
 
-    public boolean writeOutputToFile(File output_file){
+    public boolean writeOutputToFile(File outputFile){
     	//Check for output file
     	String outputMsg="";
 		
 		try{
-			if(!output_file.exists())
-				output_file.createNewFile();
-			FileWriter fw = new FileWriter(output_file.getAbsoluteFile());
+			if(!outputFile.exists())
+				outputFile.createNewFile();
+			FileWriter fw = new FileWriter(outputFile.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 			char[] temp = stdout.toCharArray(); int i = 0;
 			while(i<temp.length){

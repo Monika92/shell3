@@ -30,8 +30,14 @@ public class ArgumentObjectParser {
 					argumentObject.fileList.add(null);
 					i+=1;
 				}
+				else if(argument[i].equalsIgnoreCase("-"))
+				{
+					//do nothing for stdin
+					i+=1;
+				}
 				else 
 				{
+					//the rest are considered as filenames
 					argumentObject.fileList.add(argument[i]);
 					i+=1;
 				}

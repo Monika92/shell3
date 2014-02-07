@@ -5,12 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.FileSystem;
-
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
+
 
 public class CATTool extends ATool implements ICatTool {
 

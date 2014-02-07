@@ -20,8 +20,8 @@ public class PASTEToolTest {
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
 
-	File file_a,file_b,file_c,file_d;
-	String fileContent_a,fileContent_b,fileContent_c,fileContent_d;
+	File fileA,fileB,fileC,fileD;
+	String fileContentA,fileContentB,fileContentC,fileContentD;
 
 	@Before
 	public void before() throws Exception {
@@ -36,20 +36,20 @@ public class PASTEToolTest {
 				+ "\n -d DELIM: Use characters from the DELIM instead of TAB character"
 				+ "\n -help : Brief information about supported options";
 
-		file_a = new File("a.txt");
-		file_b = new File("b.txt");
-		file_c = new File("c.txt");
-		file_d = new File("d.txt");
+		fileA = new File("a.txt");
+		fileB = new File("b.txt");
+		fileC = new File("c.txt");
+		fileD = new File("d.txt");
 
-		fileContent_a = "Table\nChair\nMan";
-		fileContent_b = "Wall\nFloor";
-		fileContent_c = "Superman\nSpiderman\nBatman";
-		fileContent_d = "Cat";
+		fileContentA = "Table\nChair\nMan";
+		fileContentB = "Wall\nFloor";
+		fileContentC = "Superman\nSpiderman\nBatman";
+		fileContentD = "Cat";
 		
-		writeToFile(file_a, fileContent_a);
-		writeToFile(file_b, fileContent_b);
-		writeToFile(file_c, fileContent_c);
-		writeToFile(file_d,fileContent_d);
+		writeToFile(fileA, fileContentA);
+		writeToFile(fileB, fileContentB);
+		writeToFile(fileC, fileContentC);
+		writeToFile(fileD,fileContentD);
 		
 	}
 
@@ -73,10 +73,10 @@ public class PASTEToolTest {
 	@After
 	public void after() throws Exception {
 		pasteTool = null;
-		file_a.delete();
-		file_b.delete();
-		file_c.delete();
-		file_d.delete();
+		fileA.delete();
+		fileB.delete();
+		fileC.delete();
+		fileD.delete();
 	}
 
 	@Test
@@ -135,7 +135,7 @@ public class PASTEToolTest {
 		String[] arguments = new String[]{"b.txt"};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.pasteUseDelimiter("\t", arguments);
-		expectedOutput = fileContent_b;
+		expectedOutput = fileContentB;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
