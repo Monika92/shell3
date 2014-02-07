@@ -47,6 +47,7 @@ public class SORTTool extends ATool implements ISortTool{
 		// TODO Auto-generated constructor stub
 	}
 
+	/*This method takes in the contents of a file and returns the sorted contents*/
 	@Override
 	public String sortFile(String input) {
 		// TODO Auto-generated method stub
@@ -60,6 +61,7 @@ public class SORTTool extends ATool implements ISortTool{
 		return builder.toString();
 	}
 
+	/*This method takes in the contents of a file and checks if the file lines are sorted*/
 	@Override
 	public String checkIfSorted(String input) {
 		String[] inputLines = input.split("\n");
@@ -159,6 +161,7 @@ public class SORTTool extends ATool implements ISortTool{
 		return output;
 	}
 	
+	/*This method writes sorted contents to a file specified*/
 	private void writeFile(File file, String sortedFile) throws Exception {
 		// TODO Auto-generated method stub
 		BufferedWriter writer = new BufferedWriter( new FileWriter (file));
@@ -166,6 +169,7 @@ public class SORTTool extends ATool implements ISortTool{
 		writer.close();
 	}
 
+	/*This method takes in the file directory path and returns the contents of the file*/
 	private String readFile(File file) throws Exception {
 		// TODO Auto-generated method stub
 		String         line = null;

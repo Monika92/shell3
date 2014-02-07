@@ -14,6 +14,7 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
 
+
 public class CUTToolTest {
 
 	private ICutTool cuttool; 
@@ -194,6 +195,7 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), 0);
     }
     
+    //In this test method, the file specified is empty
     @Test
     public void cOptionWithEmptyFileTest()
     {
@@ -207,6 +209,7 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), 0);
     }
     
+    //In case of multiple files, cut option is executed for all files
     @Test
     public void cOptionWithMultipleFilesTest()
     {
@@ -219,6 +222,7 @@ public class CUTToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
     }
+    
     
     @Test
     public void cOptionWithFileMissingTest()
@@ -233,6 +237,7 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), -1);
     }
     
+    /*Cut tool executes all options */
     @Test
     public void cOptionRepeatedTest()
     {

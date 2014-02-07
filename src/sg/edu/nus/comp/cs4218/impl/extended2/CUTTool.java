@@ -59,6 +59,7 @@ public class CUTTool extends ATool implements ICutTool {
 		// TODO Auto-generated constructor stub
 	}
 
+	/* This method returns modified input after removing the characters mentioned in the list */
 	@Override
 	public String cutSpecfiedCharacters(String list, String input) {
 		// TODO Auto-generated method stub
@@ -141,12 +142,14 @@ public class CUTTool extends ATool implements ICutTool {
 		return stringBuilder.toString();
 	}
 
+	/* Returns help contents*/
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
 		return helpOutput;
 	}
 
+	/*Executes the command given the working directory path*/
 	@Override
 	public String execute(File workingDir, String stdin) {
 		input = "";
@@ -246,6 +249,7 @@ public class CUTTool extends ATool implements ICutTool {
 	return output;
 }
 
+	/*Reads from the file specified and returns the contents of the file*/
 	private String readFile(File file) throws Exception {
 	// TODO Auto-generated method stub
 
