@@ -30,7 +30,7 @@ public class COPYToolTest {
 	String input = "This is a test run.";
 	List<File> childFilesList = new ArrayList();  
 	File argFolder,argFolderEmpty,argFolderInside;
-	File input_file_1,input_file_2;
+	File inputFile1,inputFile2;
 	
 @Before
 public void before() {
@@ -40,10 +40,10 @@ public void before() {
 	argFolder = new File("folder1");
 	argFolderEmpty = new File("folder2");
 	argFolderInside = new File(WorkingDirectory.workingDirectory+File.separator+"folder1"+ File.separator +"insideFolder1") ;
-	input_file_2 = new File("file2.txt");
-	input_file_1 = new File("file1.txt");
-	writeToFile(input_file_1, input);
-	writeToFile(input_file_2, "abc");
+	inputFile2 = new File("file2.txt");
+	inputFile1 = new File("file1.txt");
+	writeToFile(inputFile1, input);
+	writeToFile(inputFile2, "abc");
 	argFolder.mkdirs();
 	argFolderEmpty.mkdirs();
 	argFolderInside.mkdirs();
@@ -67,14 +67,13 @@ public void writeToFile(File file, String input){
 		}
 		bw.close();
 	} catch (IOException e){
-		System.out.println("Unable to create output file");
 	}
 }
 
-public String readFromFile(File input_file){
+public String readFromFile(File inputFile){
 	String output = ""; FileReader fr = null;
 	try{
-		fr = new FileReader(input_file);
+		fr = new FileReader(inputFile);
 	} catch(FileNotFoundException e){
 		e.printStackTrace();
 		return "File not found";
@@ -146,10 +145,10 @@ public static void deleteFolder(File folder) {
 public void after(){
 	copytool = null;
 	copy = null;
-	if(input_file_1.exists())
-		deleteFolder(input_file_1);//input_file_1.deleteOnExit();
-	if(input_file_2.exists())
-		deleteFolder(input_file_2);//input_file_2.deleteOnExit();
+	if(inputFile1.exists())
+		deleteFolder(inputFile1);//input_file_1.deleteOnExit();
+	if(inputFile2.exists())
+		deleteFolder(inputFile2);//input_file_2.deleteOnExit();
 	if(argFolderEmpty.exists())
 		deleteFolder(argFolderEmpty);//argFolderEmpty.deleteOnExit();
 	if(argFolderInside.exists())
@@ -164,13 +163,11 @@ public void existingFileToExistingFileArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);
 	
 	String contentFile2 = readFromFile(new File(arguments[1]));
 	String contentFile1 = readFromFile(new File(arguments[0]));
-	System.out.println(actualOutput);
 	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));
 }
 
@@ -180,13 +177,11 @@ public void existingFileToExistingFileAbsoluteArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);
 	
 	String contentFile2 = readFromFile(new File(arguments[1]));
 	String contentFile1 = readFromFile(new File(arguments[0]));
-	System.out.println(actualOutput);
 	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));
 }
 
@@ -196,13 +191,11 @@ public void existingFileToNonExistingFileArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);
 	
 	String contentFile2 = readFromFile(new File(arguments[1]));
 	String contentFile1 = readFromFile(new File(arguments[0]));
-	System.out.println(actualOutput);
 	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));
 	
 	File deletable = new File(arguments[1]);
@@ -215,24 +208,21 @@ public void nonExistingFileToExistingFileArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Error - Invalid input.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(copytool.getStatusCode(), 0);
+	assertEquals(copytool.getStatusCode(), -1);
 }
 
 @Test
-public void FileToDirectoryFileArgumentTest(){
+public void fileToDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folder1"} ;
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);
 	
 	String contentFile2 = readFromFile(new File(arguments[1] + File.separator + arguments[0]));
 	String contentFile1 = readFromFile(new File(arguments[0]));
-	System.out.println(actualOutput);
 	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));	
 
 	File deletable = new File(contentFile2);
@@ -241,18 +231,16 @@ public void FileToDirectoryFileArgumentTest(){
 }
 
 @Test
-public void FileToDirectoryFileRelativeArgumentTest(){
+public void fileToDirectoryFileRelativeArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folder1" + File.separator + "insidefolder1"} ;
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);
 	
 	String contentFile2 = readFromFile(new File(arguments[1] + File.separator + arguments[0]));
 	String contentFile1 = readFromFile(new File(arguments[0]));
-	System.out.println(actualOutput);
 	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));	
 
 
@@ -261,18 +249,16 @@ public void FileToDirectoryFileRelativeArgumentTest(){
 }
 
 @Test
-public void FileToDirectoryFileAbsoluteArgumentTest(){
+public void fileToDirectoryFileAbsoluteArgumentTest(){
 	String[] arguments = new String[]{WorkingDirectory.workingDirectory + File.separator + "file1.txt", WorkingDirectory.workingDirectory + File.separator + "folder1" + File.separator + "insidefolder1"} ;
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);
 	
 	String contentFile2 = readFromFile(new File(arguments[1] + File.separator + "file1.txt"));
 	String contentFile1 = readFromFile(new File(arguments[0]));
-	System.out.println(actualOutput);
 	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));	
 
 	File deletable = new File(contentFile2);
@@ -281,12 +267,11 @@ public void FileToDirectoryFileAbsoluteArgumentTest(){
 
 
 @Test
-public void FileToNonExistentDirectoryFileArgumentTest(){
+public void fileToNonExistentDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folderIdontexisthaha"} ;
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);	
 
@@ -301,13 +286,11 @@ public void directoryToDirectoryFileArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Copy completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);	
 
 	String contentFile2 = getStringForFiles(getFiles(new File(arguments[1])));
 	String contentFile1 = getStringForFiles(getFiles(new File(arguments[0])));
-	System.out.println(actualOutput);
 	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));	
 }
 
@@ -317,9 +300,8 @@ public void invalidDirectoryToDirectoryFileArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Error - Invalid input.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(copytool.getStatusCode(), 0);	
+	assertEquals(copytool.getStatusCode(), -1);	
 }
 
 @Test
@@ -328,7 +310,6 @@ public void multipleFilesToDirectoryArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "file1.txt's copy completed. \nfile2.txt's copy completed. \n";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(copytool.getStatusCode(), 0);	
 
@@ -346,9 +327,8 @@ public void multipleFilesOneInvalidToDirectoryArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "file1.txt's copy completed. \nfileIdontexisthaha.txt is an invalid file.\n";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(copytool.getStatusCode(), 0);	
+	assertEquals(copytool.getStatusCode(), -1);	
 
 	String contentFile3 = getStringForFiles(getFiles(new File(arguments[2])));
 	String expectedOutput2 ="";
@@ -364,9 +344,8 @@ public void multipleFilesToInvalidDirectoryArgumentTest(){
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "folderIdontexisthaha is an invalid directory.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(copytool.getStatusCode(), 0);	
+	assertEquals(copytool.getStatusCode(), -1);	
 }
 
 

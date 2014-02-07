@@ -30,7 +30,7 @@ public class MOVEToolTest {
 	String input = "This is a test run.";
 	List<File> childFilesList = new ArrayList();  
 	File argFolder,argFolderEmpty,argFolderInside;
-	File input_file_1,input_file_2;
+	File inputFile1,inputFile2;
 	
 
 @Before
@@ -41,10 +41,10 @@ public void before() {
 	argFolder = new File("folder1");
 	argFolderEmpty = new File("folder2");
 	argFolderInside = new File(WorkingDirectory.workingDirectory+File.separator+"folder1"+ File.separator +"insideFolder1") ;
-	input_file_2 = new File("file2.txt");
-	input_file_1 = new File("file1.txt");
-	writeToFile(input_file_1, input);
-	writeToFile(input_file_2, "abc");
+	inputFile2 = new File("file2.txt");
+	inputFile1 = new File("file1.txt");
+	writeToFile(inputFile1, input);
+	writeToFile(inputFile2, "abc");
 	argFolder.mkdirs();
 	argFolderEmpty.mkdirs();
 	argFolderInside.mkdirs();
@@ -68,14 +68,13 @@ public void writeToFile(File file, String input){
 		}
 		bw.close();
 	} catch (IOException e){
-		System.out.println("Unable to create output file");
 	}
 }
 
-public String readFromFile(File input_file){
+public String readFromFile(File inputFile){
 	String output = ""; FileReader fr = null;
 	try{
-		fr = new FileReader(input_file);
+		fr = new FileReader(inputFile);
 	} catch(FileNotFoundException e){
 		e.printStackTrace();
 		return "File not found";
@@ -147,10 +146,10 @@ public static void deleteFolder(File folder) {
 public void after(){
 	movetool = null;
 	move = null;
-	if(input_file_1.exists())
-		deleteFolder(input_file_1);//input_file_1.deleteOnExit();
-	if(input_file_2.exists())
-		deleteFolder(input_file_2);//input_file_2.deleteOnExit();
+	if(inputFile1.exists())
+		deleteFolder(inputFile1);//input_file_1.deleteOnExit();
+	if(inputFile2.exists())
+		deleteFolder(inputFile2);//input_file_2.deleteOnExit();
 	if(argFolderEmpty.exists())
 		deleteFolder(argFolderEmpty);//argFolderEmpty.deleteOnExit();
 	if(argFolderInside.exists())
@@ -176,13 +175,11 @@ public void existingFileToExistingFileArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);
 	
 	//check if content has been move
 	String contentFile1 = readFromFile(new File(arguments[1]));
-	System.out.println(contentFile0 + "   :::   " + contentFile1);
 	assertTrue(contentFile0.equalsIgnoreCase(contentFile1));
 	
 	//check if file1.txt has been removed
@@ -196,21 +193,19 @@ public void nonExistingFileToExistingFileArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Error - Invalid input.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(movetool.getStatusCode(), 0);
+	assertEquals(movetool.getStatusCode(), -1);
 }
 
 
 @Test
-public void FileToDirectoryFileArgumentTest(){
+public void fileToDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folder1"} ;
 	String contentFile0 = readFromFile(new File(arguments[0]));
 
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "file1.txt's move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);
 	
@@ -231,7 +226,6 @@ public void existingFileToExistingFileAbsoluteArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);
 	
@@ -251,7 +245,6 @@ public void existingFileToNonExistingFileArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);
 	
@@ -267,14 +260,13 @@ public void existingFileToNonExistingFileArgumentTest(){
 }
 
 @Test
-public void FileToDirectoryFileRelativeArgumentTest(){
+public void fileToDirectoryFileRelativeArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folder1" + File.separator + "insidefolder1"} ;
 	String contentFile0 = readFromFile(new File(arguments[0]));
 
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "file1.txt's move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);
 	
@@ -287,14 +279,13 @@ public void FileToDirectoryFileRelativeArgumentTest(){
 }
 
 @Test
-public void FileToDirectoryFileAbsoluteArgumentTest(){
+public void fileToDirectoryFileAbsoluteArgumentTest(){
 	String[] arguments = new String[]{WorkingDirectory.workingDirectory + File.separator + "file1.txt", WorkingDirectory.workingDirectory + File.separator + "folder1" + File.separator + "insidefolder1"} ;
 	String contentFile0 = readFromFile(new File(arguments[0]));
 
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = arguments[0] + "'s move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);
 	
@@ -308,14 +299,13 @@ public void FileToDirectoryFileAbsoluteArgumentTest(){
 
 
 @Test
-public void FileToNonExistentDirectoryFileArgumentTest(){
+public void fileToNonExistentDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folderIdontexisthaha"} ;
 	String contentFile0 = readFromFile(new File(arguments[0]));
 
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);	
 
@@ -335,12 +325,10 @@ public void directoryToDirectoryFileArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Move completed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);	
 
 	String contentFile1 = getStringForFiles(getFiles(new File(arguments[1])));
-	System.out.println(actualOutput);
 	assertTrue(contentFile0.contains(contentFile1));	
 	
 	//check if file1.txt has been removed
@@ -354,9 +342,8 @@ public void invalidDirectoryToDirectoryFileArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Error - Invalid input.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(movetool.getStatusCode(), 0);	
+	assertEquals(movetool.getStatusCode(), -1);	
 }
 
 @Test
@@ -365,7 +352,6 @@ public void multipleFilesToDirectoryArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "file1.txt's move completed. \nfile2.txt's move completed. \n";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);	
 
@@ -391,9 +377,8 @@ public void multipleFilesOneInvalidToDirectoryArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "file1.txt's move completed. \nfileIdontexisthaha.txt is invalid input.\n";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(movetool.getStatusCode(), 0);	
+	assertEquals(movetool.getStatusCode(), -1);	
 
 	String contentFile3 = getStringForFiles(getFiles(new File(arguments[2])));
 	String expectedOutput2 ="";
@@ -415,9 +400,8 @@ public void multipleFilesToInvalidDirectoryArgumentTest(){
 	movetool = new MOVETool(arguments);
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "folderIdontexisthaha is invalid input.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(movetool.getStatusCode(), 0);	
+	assertEquals(movetool.getStatusCode(), -1);	
 
 	//check if file1.txt has been removed
 	String result = ifFileExists(new File(arguments[0]));

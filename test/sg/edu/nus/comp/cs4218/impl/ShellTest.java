@@ -22,7 +22,7 @@ import sg.edu.nus.comp.cs4218.impl.extended2.SORTTool;
 public class ShellTest {
 
 	private Shell shell;
-	File input_file_1;
+	File inputFile1;
 	
 	@Before
 	public void before(){
@@ -30,8 +30,8 @@ public class ShellTest {
 		shell = new Shell();
 		
 		String input1 = "apple\nball\ncat\ndog";
-		input_file_1 = new File("test1.txt");
-		writeToFile(input_file_1, input1);
+		inputFile1 = new File("test1.txt");
+		writeToFile(inputFile1, input1);
 
 	}
 	
@@ -53,7 +53,7 @@ public class ShellTest {
 				}
 				bw.close();
 			} catch (IOException e){
-				System.out.println("Unable to create output file");
+				
 			}
 		}
 	 
@@ -61,8 +61,8 @@ public class ShellTest {
 	public void after()
 	{
 		shell = null;
-		if(input_file_1.exists())
-			input_file_1.delete();
+		if(inputFile1.exists())
+			inputFile1.delete();
 	}
 	
 	@Test
@@ -137,7 +137,7 @@ public class ShellTest {
 		  shell.execute(new SORTTool(new String[]{"test1.txt"}));
 		 
 		  // assert stdout's content value
-		  String actualOutput1 = readFromFile(input_file_1);
+		  String actualOutput1 = readFromFile(inputFile1);
 		  String expectedOutput1 = "apple\nball\ncat\ndog\n";
 		  assertTrue(expectedOutput1.equalsIgnoreCase(actualOutput1));
 	}

@@ -34,6 +34,7 @@ public class Shell extends Thread implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 
+		verifier = new CommandVerifier();
 		command = null;
 		verifier = new CommandVerifier();
 		int argsLength;
@@ -69,7 +70,6 @@ public class Shell extends Thread implements IShell {
 				// 0 show help
 
 				// 1 execute normally						
-				commandVerifyFlag = verifier.verifyCommand(command, argsList);
 				if(commandVerifyFlag == 0){
 					argsList = new String[1];
 					argsList[0] = "-help";
@@ -227,7 +227,6 @@ public class Shell extends Thread implements IShell {
 		String userDirectory = System.getProperty("user.dir");
 		WorkingDirectory.workingDirectory = new File(userDirectory);
 		
-		System.out.println(">");
 		Scanner scanner = new Scanner(System.in);
 		input = scanner.nextLine();
 		if (!input.trim().isEmpty())
@@ -238,7 +237,6 @@ public class Shell extends Thread implements IShell {
 				shell.execute(itool);
 			}
 
-			System.out.println(">");
 			scanner = new Scanner(System.in);
 			input = scanner.nextLine();
 			itool = shell.parse(input);

@@ -8,6 +8,7 @@ import java.util.List;
 
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
 
 
@@ -51,7 +52,7 @@ public class LSTool extends ATool implements ILsTool
 	 		return fileName;
 		else
 		{
-			return (new File(fileName)).getAbsolutePath();
+			return (WorkingDirectory.workingDirectory + File.separator + fileName);
 		}
 	}
 
@@ -89,7 +90,7 @@ public class LSTool extends ATool implements ILsTool
 			else if(dir.isFile())
 			{
 				//Displaying if file exits
-				outputString = "File Exists";
+				outputString += "File Exists";
 			}
 			else if(args[0].contains("*."))
 			{
@@ -109,6 +110,7 @@ public class LSTool extends ATool implements ILsTool
 					if(outputString == "")
 					{
 						outputString = "No files of type ." + fileType;
+						setStatusCode(-1);
 					}
 				}
 			}
@@ -116,6 +118,7 @@ public class LSTool extends ATool implements ILsTool
 			{
 				//If all else fails
 				outputString = "Invalid. Doesn't exist";
+				setStatusCode(-1);
 			}
 		}
 		return outputString;
