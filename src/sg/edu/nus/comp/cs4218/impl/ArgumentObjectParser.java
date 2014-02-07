@@ -141,9 +141,9 @@ public class ArgumentObjectParser {
 				
 				if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-m") || argument[i].equalsIgnoreCase("-w") || argument[i].equalsIgnoreCase("-l"))
 				{
+					argument[i] = argument[i].toLowerCase();
 					argumentObject.options.add(argument[i]);
-					argumentObject.optionArguments.add(null);
-					
+					argumentObject.optionArguments.add(null);	
 				}
 				else if(argument[i].equalsIgnoreCase("-"))
 				{

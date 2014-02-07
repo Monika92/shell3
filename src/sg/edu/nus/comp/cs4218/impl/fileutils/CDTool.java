@@ -23,14 +23,14 @@ public class CDTool extends ATool implements ICdTool{
 	public File getDirectoryPath(String dirName , String workingDir)
 	{
 		
-		if(dirName.contentEquals(".."))
+		if(dirName.replaceAll("\\s","").contentEquals(".."))
 		{
 			File wd = new File(workingDir);
 			if(wd.getParentFile()!=null)
 			dirName = wd.getParentFile().getAbsolutePath();	
 			return (new File(dirName));
 		}
-		else if(dirName.contentEquals("."))
+		else if(dirName.replaceAll("\\s","").contentEquals("."))
 		{
 			//remain as it is
 			File wd = new File(workingDir);
@@ -69,6 +69,7 @@ public class CDTool extends ATool implements ICdTool{
 		{
 			//To move to a directory using a full pathname: ex.   cd /home/physics/ercy04/ProjectX
 			//File dir = new File(args[0]);
+			args[0] = args[0].replaceAll("\\s","");
 			if(args[0].contains("~"))
 			{			
 				String home = System.getProperty("user.home") + File.separator;
@@ -76,7 +77,7 @@ public class CDTool extends ATool implements ICdTool{
 			}
 			
 			File dir = getDirectoryPath(args[0] , workingDir.getAbsolutePath());
-			if(dir.isDirectory()) 
+			if(dir.exists() && dir.isDirectory() && !dir.getAbsoluteFile().toString().contains(".")) 
 	        {
 				WorkingDirectory.changeWorkingDirectory(dir);
 	        	return "Changed current working directory to " + dir.getAbsolutePath() ;  	

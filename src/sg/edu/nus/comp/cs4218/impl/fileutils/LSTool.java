@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +50,9 @@ public class LSTool extends ATool implements ILsTool
 		if((new File(fileName)).isAbsolute())
 	 		return fileName;
 		else
-			return dir + File.separator +  fileName;
+		{
+			return (new File(fileName)).getAbsolutePath();
+		}
 	}
 
 	@Override
@@ -69,6 +72,8 @@ public class LSTool extends ATool implements ILsTool
 			//No arguments
 			childFilesList = getFiles(workingDir);
 			outputString = getStringForFiles(childFilesList);
+			if(outputString == "") 
+				outputString += "The folder is empty";
 		}
 		else
 		{
@@ -78,6 +83,8 @@ public class LSTool extends ATool implements ILsTool
 				//Displaying contents of directory
 				childFilesList = getFiles(dir);
 				outputString = getStringForFiles(childFilesList);
+				if(outputString == "") 
+					outputString += "The folder is empty";
 			}
 			else if(dir.isFile())
 			{
@@ -88,17 +95,21 @@ public class LSTool extends ATool implements ILsTool
 			{
 				//Display files of certain extension
 				String fileType = args[0].substring(args[0].indexOf(".") + 1, args[0].length());
-				String[] childFiles = workingDir.list();
-				for(String child: childFiles)
+				dir = new File(getFilePath(args[0].substring(0, args[0].indexOf('*')),workingDir));
+				if(dir.isDirectory() ==  true)
 				{
-				  if(child.endsWith(fileType))
-				  {
-					  outputString += child + " ";
-				  }					
-				}
-				if(outputString == "")
-				{
-					outputString = "No files of type ." + fileType;
+					String[] childFiles = dir.list();
+					for(String child: childFiles)
+					{
+					  if(child.endsWith(fileType))
+					  {
+						  outputString += child + " ";
+					  }					
+					}
+					if(outputString == "")
+					{
+						outputString = "No files of type ." + fileType;
+					}
 				}
 			}
 			else

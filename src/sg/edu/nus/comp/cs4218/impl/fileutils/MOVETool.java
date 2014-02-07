@@ -35,6 +35,36 @@ public class MOVETool extends ATool implements IMoveTool{
 			}
 	}
 	
+	public boolean moveDirectory(File sourceLocation, File targetLocation)
+	{
+		boolean bool = true; 
+		if (sourceLocation.isDirectory()) 
+		 {
+	            if (!targetLocation.exists()) {
+	                if(!targetLocation.mkdir()) return false;
+	            }
+
+	            String[] children = sourceLocation.list();
+	            for (int i=0; i<children.length; i++) {
+	                moveDirectory(new File(sourceLocation, children[i]),
+	                        new File(targetLocation, children[i]));
+	            }
+	            sourceLocation.delete();
+	            
+	      } 
+		  else 
+		  {
+			  if(move(sourceLocation,targetLocation))
+	        	bool = bool;
+			  else
+				  bool = false;
+	      }
+		sourceLocation.delete();
+		return bool;
+	}
+	
+	
+	
 	@Override
 	public String execute(File workingDir, String stdin) {
 		
@@ -64,16 +94,18 @@ public class MOVETool extends ATool implements IMoveTool{
 					outputString = "Error - Unable to move.";
 				}
 			}
-			else if((arg0.isDirectory()==true) && (arg1.isDirectory()==true))
+			else if((arg0.isDirectory() == true))
 			{
-				arg0 = arg0;
-				arg1 = arg1;
-			//	File source = new File("c:\\old_directory");
-			//	File destination = new File("c:\\some_directory\\new_directory");
-				
-				arg0.renameTo(new File(arg1 , arg0.getName()));
+				if (moveDirectory(arg0,arg1))
+				{
+					outputString = "Move completed.";
+				}
+				else
+				{
+					outputString = "Error - Invalid input.";
+				}
 			}
-			else if((arg0.isDirectory()==true)||(arg0.isFile()))
+			else if(arg0.isFile())
 			{
 				if(move(arg0,arg1))
 				{
