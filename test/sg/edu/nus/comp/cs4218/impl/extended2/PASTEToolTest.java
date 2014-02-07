@@ -21,8 +21,8 @@ public class PASTEToolTest {
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
 
-	File file_a,file_b,file_c,file_d,file_em1,file_em2;
-	String fileContent_a,fileContent_b,fileContent_c,fileContent_d,fileContent_e;
+	File fileA,fileB,fileC,fileD,fileEM1,fileEM2;
+	String fileContentA,fileContentB,fileContentC,fileContentD,fileContentE;
 
 	@Before
 	public void before() throws Exception {
@@ -37,26 +37,27 @@ public class PASTEToolTest {
 				+ "\n -d DELIM: Use characters from the DELIM instead of TAB character"
 				+ "\n -help : Brief information about supported options";
 
-		file_a = new File("a.txt");
-		file_b = new File("b.txt");
-		file_c = new File("c.txt");
-		file_d = new File("d.txt");
-		file_em1 = new File("em1.txt");
-		file_em2 = new File("em2.txt");
+		fileA = new File("a.txt");
+		fileB = new File("b.txt");
+		fileC = new File("c.txt");
+		fileD = new File("d.txt");
 		
-		file_em1.createNewFile();
-		file_em2.createNewFile();
+		fileEM1 = new File("em1.txt");
+		fileEM2 = new File("em2.txt");
 		
-		fileContent_a = "Table\nChair\nMan";
-		fileContent_b = "Wall\nFloor";
-		fileContent_c = "Superman\nSpiderman\nBatman";
-		fileContent_d = "Cat";
-		fileContent_e = "";
+		fileEM1.createNewFile();
+		fileEM2.createNewFile();
 		
-		writeToFile(file_a, fileContent_a);
-		writeToFile(file_b, fileContent_b);
-		writeToFile(file_c, fileContent_c);
-		writeToFile(file_d,fileContent_d);
+		fileContentA = "Table\nChair\nMan";
+		fileContentB = "Wall\nFloor";
+		fileContentC = "Superman\nSpiderman\nBatman";
+		fileContentD = "Cat";
+		fileContentE = "";
+		
+		writeToFile(fileA, fileContentA);
+		writeToFile(fileB, fileContentB);
+		writeToFile(fileC, fileContentC);
+		writeToFile(fileD,fileContentD);
 
 	}
 
@@ -80,12 +81,12 @@ public class PASTEToolTest {
 	@After
 	public void after() throws Exception {
 		pasteTool = null;
-		file_a.delete();
-		file_b.delete();
-		file_c.delete();
-		file_d.delete();
-		file_em1.delete();
-		file_em2.delete();
+
+		fileA.delete();
+		fileB.delete();
+		fileC.delete();
+		fileD.delete();
+
 	}
 
 	@Test
@@ -171,7 +172,7 @@ public class PASTEToolTest {
 		String[] arguments = new String[]{"b.txt"};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.pasteUseDelimiter("\t", arguments);
-		expectedOutput = fileContent_b;
+		expectedOutput = fileContentB;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}

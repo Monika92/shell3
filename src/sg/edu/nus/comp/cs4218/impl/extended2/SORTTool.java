@@ -102,13 +102,13 @@ public class SORTTool extends ATool implements ISortTool{
 			{
 				for (String fileName : fileList)
 				{
-					if(fileName.startsWith("//"))
+					if(fileName.startsWith(File.separator))
 					{
 						//Do nothing
 					}
 					else
 					{
-						fileName = workingDir.toString()+"/"+fileName;
+						fileName = workingDir.toString()+File.separator+fileName;
 					}
 					File file = new File(fileName);
 					try {
@@ -134,13 +134,13 @@ public class SORTTool extends ATool implements ISortTool{
 		{
 			for (String fileName : fileList)
 			{
-				if(fileName.startsWith("//"))
+				if(fileName.startsWith(File.separator))
 				{
 					//Do nothing
 				}
 				else
 				{
-					fileName = workingDir.toString()+"/"+fileName;
+					fileName = workingDir.toString()+File.separator+fileName;
 				}
 				File file = new File(fileName);
 				try {

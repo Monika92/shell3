@@ -6,13 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
-import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
+
 
 /**
  * Do not modify this file
@@ -137,13 +135,13 @@ public class UNIQTool extends ATool implements IUniqTool{
 		}
 		
 		for(int j = 0; j < lines.size(); j++){
-			String[] temp_words = lines.get(j).split(" ");
+			String[] tempWords = lines.get(j).split(" ");
 			ArrayList<String> words = new ArrayList<String>();
-			if(temp_words.length <= NUM)
+			if(tempWords.length <= NUM)
 				words.add("");
 			else{
-				for(int i = NUM; i < temp_words.length; i++){
-					words.add(temp_words[i]);
+				for(int i = NUM; i < tempWords.length; i++){
+					words.add(tempWords[i]);
 				}
 			}
 			String word = "";
@@ -240,13 +238,13 @@ public class UNIQTool extends ATool implements IUniqTool{
 			}
 		}
 		else{
-			int j = 0; File file, file_path; String fileName;
+			int j = 0; File file, filePath; String fileName;
 			while(j < fileList.size()){
 				try{
 					fileName = fileList.get(j);
-					file_path = new File(fileName);
-					if(file_path.isAbsolute()){
-						file = new File(file_path.getPath());
+					filePath = new File(fileName);
+					if(filePath.isAbsolute()){
+						file = new File(filePath.getPath());
 					}
 					else{
 						file = new File(workingDir.toString()+File.separator+fileName);

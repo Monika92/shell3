@@ -2,7 +2,14 @@ package sg.edu.nus.comp.cs4218.impl.extended2;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +23,7 @@ public class SORTToolTest {
 	private ISortTool sorttool; 
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
+	File inputFile1, inputFile2, inputFile3;
 	
 	@Before
 	public void before(){
@@ -27,13 +35,85 @@ public class SORTToolTest {
 				"if it is not all sorted, print a diagnostic containing the first " +
 				"line that is out of order" + "\n" +
 				"-help : Brief information about supported options" ;
+		
+		String input1 = "apple\nball\ncat\ndog";
+		String input2 = "hello\nworld\ncoding\nis\nfun";
+		String input3 = "";
+		inputFile1 = new File("test1.txt");
+		inputFile2 = new File("test2.txt");
+		inputFile3 = new File("test3.txt");
+		writeToFile(inputFile1, input1);
+		writeToFile(inputFile2, input2);
+		writeToFile(inputFile3, input3);
 	}
 
     @After
 	public void after(){
 		sorttool = null;
+		
+		if(inputFile1.exists())
+			inputFile1.delete();
+		if(inputFile2.exists())
+			inputFile2.delete();
+		if(inputFile3.exists())
+			inputFile3.delete();
 	}
 	
+    public void writeToFile(File file, String input){
+		try{
+			if(!file.exists())
+				file.createNewFile();
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			char[] temp = input.toCharArray(); int i = 0;
+			while(i<temp.length){
+				while(temp[i]!='\n'){
+					bw.write(temp[i]);
+					i++;
+					if(i>=temp.length)
+						break;
+				}
+				bw.newLine(); i++;
+			}
+			bw.close();
+		} catch (IOException e){
+			System.out.println("Unable to create output file");
+		}
+	}
+    
+    public String readFromFile(File inputFile){
+		String output = ""; FileReader fr = null;
+		try{
+			fr = new FileReader(inputFile);
+		} catch(FileNotFoundException e){
+			e.printStackTrace();
+			return "File not found";
+		}
+		BufferedReader br = new BufferedReader(fr);
+		try{
+			String line = br.readLine();
+			while(line != null){
+				if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
+					output+="\n";
+				else
+					output += line + "\n";
+				line = br.readLine();
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+			return "Unable to read file";
+		} finally{
+			try {
+				br.close();
+				fr.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return output;
+	}
+    
     @Test
     public void multipleOptionsTest1()
     {
@@ -51,7 +131,12 @@ public class SORTToolTest {
     	String[] arguments = new String[]{"test1.txt","test2.txt"} ;
 		sorttool = new SORTTool(arguments);
 		sorttool.execute(workingDirectory, null);
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		String actualOutput1 = readFromFile(inputFile1);
+		String actualOutput2 = readFromFile(inputFile2);
+		String expectedOutput1 = "apple\nball\ncat\ndog\n";
+		String expectedOutput2 = "coding\nfun\nhello\nis\nworld\n";
+		assertTrue(expectedOutput1.equalsIgnoreCase(actualOutput1));
+		assertTrue(expectedOutput2.equalsIgnoreCase(actualOutput2));
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
@@ -67,7 +152,7 @@ public class SORTToolTest {
     }
     
     @Test
-    public void MultipleOptionsTest3()
+    public void multipleOptionsTest3()
     {
     	String[] arguments = new String[]{"-help", "-c" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);

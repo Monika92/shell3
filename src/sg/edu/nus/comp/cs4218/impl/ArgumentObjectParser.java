@@ -30,8 +30,14 @@ public class ArgumentObjectParser {
 					argumentObject.fileList.add(null);
 					i+=1;
 				}
+				else if(argument[i].equalsIgnoreCase("-"))
+				{
+					//do nothing for stdin
+					i+=1;
+				}
 				else 
 				{
+					//the rest are considered as filenames
 					argumentObject.fileList.add(argument[i]);
 					i+=1;
 				}
@@ -135,9 +141,9 @@ public class ArgumentObjectParser {
 				
 				if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-m") || argument[i].equalsIgnoreCase("-w") || argument[i].equalsIgnoreCase("-l"))
 				{
+					argument[i] = argument[i].toLowerCase();
 					argumentObject.options.add(argument[i]);
-					argumentObject.optionArguments.add(null);
-					
+					argumentObject.optionArguments.add(null);	
 				}
 				else if(argument[i].equalsIgnoreCase("-"))
 				{
