@@ -6,12 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+
 
 /**
  * Do not modify this file
@@ -56,7 +55,9 @@ public class UNIQTool extends ATool implements IUniqTool{
 		}
 		
 		int ctr = 0; 
-		String pred, succ, curr; 
+		String pred;
+		String succ;
+		String curr; 
 		boolean predCheck = true; 
 		boolean succCheck = true;
 		
@@ -102,7 +103,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 				//Both check false, then add.
 				//If only succ_check is true, then also add curr. 
 				//If only pred_check is true, dont add.
-				if(succCheck || (!predCheck && !succCheck)){
+				if((succCheck && !predCheck) || (!predCheck && !succCheck)){
 					output.add(curr+"\n");
 				}
 				
@@ -134,24 +135,28 @@ public class UNIQTool extends ATool implements IUniqTool{
 		}
 		
 		for(int j = 0; j < lines.size(); j++){
-			String[] temp_words = lines.get(j).split(" ");
+			String[] tempWords = lines.get(j).split(" ");
 			ArrayList<String> words = new ArrayList<String>();
-			if(temp_words.length <= NUM)
+			if(tempWords.length <= NUM)
 				words.add("");
 			else{
-				for(int i = NUM; i < temp_words.length; i++){
-					words.add(temp_words[i]);
+				for(int i = NUM; i < tempWords.length; i++){
+					words.add(tempWords[i]);
 				}
 			}
 			String word = "";
 			for(String s : words)
-				word += s;
-			lines.set(j, word);
+				word += s + " ";
+			lines.set(j, word.trim());
 		}
 		
 		String str = "";
-		for(String s : lines)
-			str += s+"\n";
+		for(String s : lines){
+			if(s.equalsIgnoreCase(""))
+				str += "";
+			else
+				str += s+"\n";
+		}
 		result = getUnique(checkCase, str); 
 		return result;
 	}
@@ -206,6 +211,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 		return output;
 	}
 
+	
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
@@ -232,19 +238,36 @@ public class UNIQTool extends ATool implements IUniqTool{
 			}
 		}
 		else{
-			int j = 0; File file;
+			int j = 0; File file, filePath; String fileName;
 			while(j < fileList.size()){
 				try{
-					file = new File(fileList.get(j));
+					fileName = fileList.get(j);
+					filePath = new File(fileName);
+					if(filePath.isAbsolute()){
+						file = new File(filePath.getPath());
+					}
+					else{
+						file = new File(workingDir.toString()+File.separator+fileName);
+					}
 				} catch(Exception e){
 					//System.out.println("Invalid file name");
 					setStatusCode(-1);
-					return result+"\nInvalid file name";
+					if (result.equalsIgnoreCase(""))
+						return "Invalid file name";
+					else if (result.endsWith("\n"))
+						return result + "Invalid file name";
+					else
+						return result+"\nInvalid file name";
 				}
 				if (!file.exists()){
 					setStatusCode(-1);
 					//System.out.println("No such file");
-					return result+"\nNo such file";
+					if (result.equalsIgnoreCase(""))
+						return "No such file";
+					else if(result.endsWith("\n"))
+						return result + "No such file";
+					else
+						return result+"\nNo such file";
 				}
 				input = readFromFile(file);
 				
@@ -266,7 +289,24 @@ public class UNIQTool extends ATool implements IUniqTool{
 					if(options.contains("-f")){
 						while(i < options.size()){
 								if(options.get(i).equalsIgnoreCase("-f")){
-									numArg = Integer.decode(optionArguments.get(i));
+									try{
+										numArg = Integer.decode(optionArguments.get(i));
+										if(numArg < 0){
+											if (result.equalsIgnoreCase(""))
+												return "Invalid argument for -f";
+											else if(result.endsWith("\n"))
+												return result + "Invalid argument for -f";
+											else
+												return result + "\nInvalid argument for -f";
+										}
+									}catch(NumberFormatException e){
+										if (result.equalsIgnoreCase(""))
+											return "Invalid argument for -f";
+										else if(result.endsWith("\n"))
+											return result + "Invalid argument for -f";
+										else
+											return result + "\nInvalid argument for -f";
+									}
 									result += getUniqueSkipNum(numArg, checkCase, input);
 								}
 								i++;
@@ -277,12 +317,12 @@ public class UNIQTool extends ATool implements IUniqTool{
 				}
 				else
 					result += getUnique(checkCase, input);
-				
+				result = result.trim(); result = result + "\n";
 				j++;
 			}
 		}
 		
-		return result;
+		return result.trim();
 	}
 
 }

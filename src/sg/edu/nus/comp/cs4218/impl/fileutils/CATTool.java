@@ -5,12 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.FileSystem;
-
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-import sg.edu.nus.comp.cs4218.impl.FilePathIdentifier;
+
 
 public class CATTool extends ATool implements ICatTool {
 
@@ -59,9 +56,9 @@ public class CATTool extends ATool implements ICatTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-		File file;
+		File file, filePath;
 		int argsLength = args.length;
-		String output = "", outputMsg = "";
+		String output = "", outputMsg = "", fileName;
 		
 		//Check for stdin
 		if(stdin!=null){
@@ -71,15 +68,14 @@ public class CATTool extends ATool implements ICatTool {
 		
 		for(int i = 0; i < argsLength; i++){
 			try{
-				
-				String fileName = args[i];
-				if(FilePathIdentifier.testPath(fileName)){
-					//Do nothing
+				fileName = args[i];
+				filePath = new File(fileName);
+				if(filePath.isAbsolute()){
+					file = new File(filePath.getPath());
 				}
 				else{
-					fileName = workingDir.toString()+File.separator+fileName;
+					file = new File(workingDir.toString()+File.separator+fileName);
 				}
-				file = new File(fileName);
 			} catch(Exception e){
 				setStatusCode(-1);
 				if (outputMsg.equalsIgnoreCase(""))
