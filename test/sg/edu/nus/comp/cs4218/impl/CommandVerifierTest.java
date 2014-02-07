@@ -27,11 +27,30 @@ public class CommandVerifierTest {
     @Test
     //Overall command test
     public void verifyCommandTest(){
+    	String[] args = new String[3];
+    	args[0]="-c";
+    	args[1]="1-2";
+    	args[2]="c.txt";
+    	String cmd = "cut";
     	
+    	actualResultCode = verifier.verifyCommand(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    	
+    	args = new String[2];  	
+    	args[0] = "c.txt";
+    	args[1] = "b.txt";
+    	cmd = "delete";
+    	
+    	actualResultCode = verifier.verifyCommand(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
     }
     
     @Test
     //Invalid command Test
+    //For basic - return incorrect command status code -1
+    //For text Util - return display help command status code 0
     public void verifyWrongCommandTest(){
     	ArrayList<String> args = new ArrayList<String>();
     	args.add("a.txt");args.add("b.txt");args.add("ccc");
@@ -90,6 +109,7 @@ public class CommandVerifierTest {
     
     @Test
     //Boundary case: Positive: Check if cmd such as "delete"/"cat" allow infinite args
+    //Checking with 1000 arguments
     public void verifyBasicInifiniteArgsTest(){
       	ArrayList<String> args = new ArrayList<String>();
       	for(int i = 0; i<1000; i++){
@@ -116,6 +136,7 @@ public class CommandVerifierTest {
     
     @Test
     //Combined: 1 positive and 1 negative case for stdin
+    //Which commands allow "stdin"
     public void verifyBasicCommandAllowsStdinTest(){
       	ArrayList<String> args = new ArrayList<String>();
       	args.add("-");
@@ -148,8 +169,7 @@ public class CommandVerifierTest {
     	assertEquals(expectedResultCode, actualResultCode);	
 
     }
-    
-    
+       
     @Test
     //Boundary case
     //Negative: No arguments for command
@@ -251,8 +271,7 @@ public class CommandVerifierTest {
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
     	expectedResultCode = 0;    	
-    	
-       	
+    	     	
     	System.out.println(actualResultCode);
     	assertEquals(expectedResultCode, actualResultCode);	
     }
@@ -279,8 +298,17 @@ public class CommandVerifierTest {
     	args.add("file"); args.add("file2"); args.add("-i");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 1;    	
+    	expectedResultCode = 0;    
     	assertEquals(expectedResultCode, actualResultCode);
+    	
+    	cmd = "paste"; 
+    	args.clear();
+    	args.add("file1"); args.add("file2"); args.add("-s");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    
+    	assertEquals(expectedResultCode, actualResultCode);
+    	
     }
     
     @Test
@@ -298,7 +326,7 @@ public class CommandVerifierTest {
     
     @Test
     //Negative: Combination of options for command - with wrong options for cmd
-    //command: wc -l -p file1
+    //command: wc -l -s file1
     public void verifyTextutilMultipleOptionsWrongTest(){
     	ArrayList<String >args = new ArrayList<String>();
     	String cmd = "wc"; 
@@ -348,19 +376,20 @@ public class CommandVerifierTest {
     //wrong: cut -c 1-2 file1 >
     //correct: cut -c 1-2 file1 > a.txt
     public void verifyCommandWithRedirectionTest(){
-    	ArrayList<String> args = new ArrayList<String>();
+    	String[] args = new String[4];
     	String cmd = "cut"; 
-    	args.add("-c"); args.add("1-2"); args.add("file");args.add(">");
+    	args[0] = ("-c"); args[1] = ("1-2"); args[2] = ("file");args[3] = (">");
     	
-    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	actualResultCode = verifier.verifyCommand(cmd, args);
     	expectedResultCode = 0;    	
     	assertEquals(expectedResultCode, actualResultCode);
     	
-    	args = new ArrayList<String>();
+    	args = new String[5];
     	cmd = "cut"; 
-    	args.add("-c"); args.add("1-2"); args.add("file");args.add(">");args.add("op");
+    	args[0] = "-c"; args[1] = "1-2"; args[2] = "file";
+    	args[3] = ">";args[4] = "op";
     	
-    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	actualResultCode = verifier.verifyCommand(cmd, args);
     	expectedResultCode = 1;    	
     	assertEquals(expectedResultCode, actualResultCode);
     	
@@ -370,11 +399,26 @@ public class CommandVerifierTest {
     //To verify that -a.txt could be possible file name and
     //not thrown as error as incorrect option
     public void verifyTextutilFileNameWithSpecChars(){
-    	fail("not implemented yet!");
+    	ArrayList<String> args = new ArrayList<String>();
+    	args.add("-a.txt");args.add("b.txt");
+    	String cmd = "paste";
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
     }
     
     @Test
+    //If option -help is present, allow priority to command
+    // Return 0 to indicate print -help
     public void verifyGetHelpOptionPriority(){
-    	fail("not yet implemented yet!");
+    	ArrayList<String> args = new ArrayList<String>();
+    	args.add("a.txt");args.add("-help");
+    	String cmd = "sort";
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 0;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+
     }
 }

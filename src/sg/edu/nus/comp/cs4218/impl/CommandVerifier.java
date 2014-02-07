@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 
 public class CommandVerifier {
 
+	//Upper bound for number of arguments
 	private final int INF = 10000;
 
 	ArrayList<String> basCmds;
@@ -187,15 +188,6 @@ public class CommandVerifier {
 		ArrayList<Integer> indexUsed = new ArrayList<Integer>();
 		int numOptions = map.size() - 2;
 
-		//check if command has only -help
-		/*
-		if(args.size() == 1){
-			if(args.get(0).equals("-help")){
-				return 0;
-			}
-		}
-		*/
-		
 		//if options contain -help return only help
 		if(args.contains("-help")){
 			return 0;
@@ -224,11 +216,13 @@ public class CommandVerifier {
 				idx = args.indexOf(value);
 				indexUsed.add(idx);
 
-				//check if num of args after option is correct
+				//check if num of args for option after its idx is correct
 				for(int j=1; j<=numArgs; j++){
 
 					String arg = args.get(idx + j);
-					if(tuCmds.contains(arg)){
+					
+					//if immediately followed arguments are other options					
+					if(map.keySet().contains(arg)){
 						return 0;
 					}
 					indexUsed.add(idx + j);					
