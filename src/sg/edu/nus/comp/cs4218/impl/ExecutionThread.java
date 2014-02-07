@@ -8,13 +8,13 @@ import java.io.IOException;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.ITool;
 
-public class SimpleThread extends Thread {
+public class ExecutionThread extends Thread {
 
 	ITool itool;
 	String stdin, stdout;
 	String[] args;
 	IShell shell;
-	SimpleThread(ITool itoolinstance,String input,String[] argsList)
+	ExecutionThread(ITool itoolinstance,String input,String[] argsList)
 	{
 		itool = itoolinstance;
 		stdin = input;

@@ -147,7 +147,6 @@ public class SORTTool extends ATool implements ISortTool{
 					input = readFile(file);
 					String sortedFile = sortFile(input);
 					writeFile(file,sortedFile);
-					output = "sorted";
 				} catch (Exception e) {
 					output = "File not found";
 					setStatusCode(-1);
