@@ -36,6 +36,10 @@ public class PASTETool extends ATool implements IPasteTool{
 	private static String result;
 	private static int toggleBit; 
 
+/*
+ * Constructor for PASTETool - initializes the super class's arguments 
+ * with the passed arguments and also necessary global variables.
+ */
 	public PASTETool(String[] arguments) {		
 		super(arguments);
 		fileError = false;
@@ -44,6 +48,9 @@ public class PASTETool extends ATool implements IPasteTool{
 		result = "";
 	}
 
+/*
+ * Executes the paste command in serial mode.
+ */
 	@Override
 	public String pasteSerial(String[] input) {
 
@@ -69,6 +76,10 @@ public class PASTETool extends ATool implements IPasteTool{
 		return result;
 	}
 
+/*
+ * Uses the delimiter provided by the user to separator the output 
+ * while executing the paste command.
+ */
 	@Override
 	public String pasteUseDelimiter(String delim, String[] input) {
 
@@ -117,6 +128,10 @@ public class PASTETool extends ATool implements IPasteTool{
 		return result;
 	}
 
+/*
+ * Loads the file given by the filename and returns 
+ * the file's lines as an array of strings.
+ */
 	private ArrayList<String> loadLinesFromFile(String fname){
 		ArrayList<String> lines = new ArrayList<String>();
 
@@ -143,6 +158,9 @@ public class PASTETool extends ATool implements IPasteTool{
 		return lines;
 	}
 
+/*
+ * Returns the help message for paste command.
+ */
 	@Override
 	public String getHelp() {
 
@@ -159,6 +177,10 @@ public class PASTETool extends ATool implements IPasteTool{
 		return helpText;
 	}
 
+/*
+ * Resolving the paths of the filenames - absolute or relative and
+ * creating the files appropriately.
+ */
 	public ArrayList<String> getCorrectFileNames(File workingDir, ArrayList<String> fNames){
 		String name = "";
 		ArrayList<String> names = new ArrayList<String>();
@@ -198,6 +220,9 @@ public class PASTETool extends ATool implements IPasteTool{
 		return names;
 	}
 
+/*
+ * Removes the stdin input from the argument list.
+ */
 	private String[] removeStdinFromArg(String[] args){
 		
 		setStatusCode(0);
@@ -210,6 +235,9 @@ public class PASTETool extends ATool implements IPasteTool{
 		return newArgs;
 	}
 
+/*
+ * Executes the paste commad.
+ */
 	@Override
 	public String execute(File workingDir, String stdin) {
 

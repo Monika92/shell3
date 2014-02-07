@@ -11,11 +11,18 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class CATTool extends ATool implements ICatTool {
 
+/*
+ * Constructor for CATTool - initializes the super class's arguments with the passed
+ * arguments.
+ */
 	public CATTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
 	}
 
+/*
+ * Reads the information in the input file and returns it as a string
+ */
 	@Override
 	public String getStringForFile(File toRead) {
 		// TODO Auto-generated method stub
@@ -52,6 +59,9 @@ public class CATTool extends ATool implements ICatTool {
 		return output;
 	}
 
+/*
+ * Executes the Cat command
+ */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub

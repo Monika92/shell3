@@ -34,10 +34,16 @@ public class COMMTool extends ATool implements ICommTool{
 
 	private int checkOrderFlag = 0;
 
+/*
+ * Constructor for COMMTool - initializes the super class's arguments 
+ * with the passed arguments.
+ */
 	public COMMTool(String[] arguments) {
 		super(arguments);
 	}
 
+/*Executes the comm command.
+ */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		
@@ -53,27 +59,42 @@ public class COMMTool extends ATool implements ICommTool{
 			return getHelp();
 		}
 		
+		String result = "";
+		
 		//priority to "-d" option
 		if(ao.getOptions().contains("-d")){
-			return compareFilesDoNotCheckSortStatus(fileName1, fileName2);
+			result = compareFilesDoNotCheckSortStatus(fileName1, fileName2);
 		}
 				
 		if(ao.getOptions().contains("-c")){
-			return compareFilesCheckSortStatus(fileName1,fileName2);
+			result = compareFilesCheckSortStatus(fileName1,fileName2);
 		}
 		
 		String filePath1 = getCorrectPathFromArg(workingDir,fileName1);
 		String filePath2 = getCorrectPathFromArg(workingDir,fileName2);
 
-		if(filePath1 == null || filePath2 == null){
-			return null;
+		if(filePath1 == null && filePath2 == null){
+			return "File 1 and File 2 both don't exist!";
+		}
+		else if(filePath1 == null){
+			result = "File 1 doesn't exist!";
+			return result;
+			
+		}
+		else if (filePath2 == null){
+			result = "File 1 doesn't exist!";
+			return result;
 		}
 
-		String result = compareFiles(filePath1, filePath2);
+		 result = compareFiles(filePath1, filePath2);
 
 		return result;
 	}
 
+/*
+ * Checks whether the input filename is an absolute path
+ * and creates the file with the appropriate path.
+ */
 	private String getCorrectPathFromArg(File workingDir,String fName){
 		String name = null;
 		
@@ -91,7 +112,10 @@ public class COMMTool extends ATool implements ICommTool{
 		return null;
 	}
 	
-	
+/*
+ * Compares the two given inputs and returns a string with the differences
+ * between the corresponding lines of the two strings.
+ */
 	@Override
 	public String compareFiles(String input1, String input2) {
 		ArrayList<String> fileLines1 = loadFile(input1);
@@ -109,13 +133,11 @@ public class COMMTool extends ATool implements ICommTool{
 			//include check for option --check-order
 			if(checkOrderFlag != 0){
 				if((i+1) <fileLines1.size() && val1.compareTo(fileLines1.get(i+1))>0){
-					System.out.println(val1 + ":" + fileLines1.get(i+1));
 					result += "File 1 not sorted!\n";
 					unsorted = true;
 					break;
 				}
 				else if((j+1) <fileLines2.size() && val2.compareTo(fileLines2.get(j+1))>0){
-					System.out.println(val2 + ":" + fileLines2.get(j+1));
 					result += "File 2 not sorted!\n";
 					
 					unsorted = true;
@@ -146,7 +168,7 @@ public class COMMTool extends ATool implements ICommTool{
 			
 		}
 	
-		while(i<fileLines1.size()){
+		while(i<fileLines1.size() && unsorted == false){
 			
 			result += fileLines1.get(i) + "\t" + " " + "\t" + " ";
 			i++;
@@ -154,7 +176,7 @@ public class COMMTool extends ATool implements ICommTool{
 				result += "\n";
 			}
 		}
-		while(j<fileLines2.size()){			
+		while(j<fileLines2.size() && unsorted == false){			
 			result += " " + "\t" + fileLines2.get(j) + "\t" + " ";
 			j++;
 			if(j < fileLines2.size()){
@@ -164,6 +186,11 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+/*
+ * Private function to load file from the given file path and
+ * return an array of strings containing the line-wise 
+ * information in the file.
+ */
 	private ArrayList<String> loadFile(String fname){
 		ArrayList<String> lines = new ArrayList<String>();
 
@@ -189,6 +216,9 @@ public class COMMTool extends ATool implements ICommTool{
 		return lines;
 	}
 
+/*
+ * Compares the files and checks if the information in them is already sorted.
+ */
 	@Override
 	public String compareFilesCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 1;
@@ -197,6 +227,9 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+/*
+ * Compares the files but does not check whether the information is already sorted.
+ */
 	@Override
 	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 0;
@@ -205,6 +238,9 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+/*
+ * Returns the help message for the comm command.
+ */
 	@Override
 	public String getHelp() {
 
