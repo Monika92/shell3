@@ -19,8 +19,9 @@ public class COMMToolTest {
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
 
-	File file_a,file_b,file_c,file_d;
-	String fileContent_a,fileContent_b,fileContent_c,fileContent_d;
+	File fileA,fileB,fileC,fileD;
+	String fileContentA,fileContentB,fileContentC,fileContentD;
+	private String fileContent_c;
 	
 	@Before
 	public void before() throws Exception {
@@ -39,20 +40,20 @@ public class COMMToolTest {
 				"\n*      -help : Brief information about supported options" +
 				"\n*/";
 
-		file_a = new File("a.txt");
-		file_b = new File("b.txt");
-		file_c = new File("c.txt");
-		file_d = new File("d.txt");
+		fileA = new File("a.txt");
+		fileB = new File("b.txt");
+		fileC = new File("c.txt");
+		fileD = new File("d.txt");
 
-		fileContent_a = "Apple\nOrange\nPear\nMelon";
-		fileContent_b = "Banana\nOrange\nMelon";
+		fileContentA = "Apple\nOrange\nPear\nMelon";
+		fileContentB = "Banana\nOrange\nMelon";
 		fileContent_c = "Superman\nSpiderman\nBatman";
-		fileContent_d = "Banana\nOrange\nMelon";
+		fileContentD = "Banana\nOrange\nMelon";
 		
-		writeToFile(file_a, fileContent_a);
-		writeToFile(file_b, fileContent_b);
-		writeToFile(file_c, fileContent_c);
-		writeToFile(file_d,fileContent_d);
+		writeToFile(fileA, fileContentA);
+		writeToFile(fileB, fileContentB);
+		writeToFile(fileC, fileContent_c);
+		writeToFile(fileD,fileContentD);
 		
 	}
 
@@ -76,10 +77,10 @@ public class COMMToolTest {
 	@After
 	public void after() throws Exception {
 		commTool = null;
-		file_a.delete();
-		file_b.delete();
-		file_c.delete();
-		file_d.delete();
+		fileA.delete();
+		fileB.delete();
+		fileC.delete();
+		fileD.delete();
 	}
 
 	@Test

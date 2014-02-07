@@ -227,7 +227,6 @@ public class Shell extends Thread implements IShell {
 		String userDirectory = System.getProperty("user.dir");
 		WorkingDirectory.workingDirectory = new File(userDirectory);
 		
-		System.out.println(">");
 		Scanner scanner = new Scanner(System.in);
 		input = scanner.nextLine();
 		if (!input.trim().isEmpty())
@@ -238,7 +237,6 @@ public class Shell extends Thread implements IShell {
 				shell.execute(itool);
 			}
 
-			System.out.println(">");
 			scanner = new Scanner(System.in);
 			input = scanner.nextLine();
 			itool = shell.parse(input);

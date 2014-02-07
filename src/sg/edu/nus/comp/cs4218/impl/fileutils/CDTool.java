@@ -84,7 +84,9 @@ public class CDTool extends ATool implements ICdTool{
 	        } 
 	        else 
 	        {
+	        	setStatusCode(-1);
 	        	return args[0] + " is not a valid directory. The working directory has not changed.";
+	        	
             }
 			 //TODO : Implement relative pathname and cd .. and moving ahead into subdir
 		}

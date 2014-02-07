@@ -77,7 +77,6 @@ public class SORTToolTest {
 			}
 			bw.close();
 		} catch (IOException e){
-			System.out.println("Unable to create output file");
 		}
 	}
     
@@ -141,7 +140,7 @@ public class SORTToolTest {
     }
     
     @Test
-    public void MultipleOptionsTest2()
+    public void multipleOptionsTest2()
     {
     	String[] arguments = new String[]{"-c", "-help" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);

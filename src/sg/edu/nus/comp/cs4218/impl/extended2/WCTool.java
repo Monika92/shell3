@@ -146,13 +146,17 @@ public class WCTool extends ATool implements IWcTool{
 				else
 				{
 					outputString += fileList.get(i) + " : error - Invalid Input. \n";
+					setStatusCode(-1);
 				}
 			}
 			
 			if(stdin == null)
 			{
 				if(outputString == "")
+				{
 					outputString += "No filename given.";
+					setStatusCode(-1);
+				}
 			}
 			else
 			{
@@ -164,6 +168,7 @@ public class WCTool extends ATool implements IWcTool{
 				else
 				{
 					outputString += stdin + " : error - Invalid Input. \n";
+					setStatusCode(-1);
 				}
 			}
 		}
