@@ -50,7 +50,8 @@ public class WCTool extends ATool implements IWcTool{
 	public String getNewLineCount(String input) {
 		// TODO Auto-generated method stub
 		 String[] lines = input.split("\r\n|\r|\n");
-		 return  Integer.toString(lines.length);
+		 if(input.replaceAll("\\s","").isEmpty() == true) return "0";
+		 else return  Integer.toString(lines.length);
 	}
 
 	@Override
@@ -81,7 +82,7 @@ public class WCTool extends ATool implements IWcTool{
 		{
 			outputString += file +" : -m  "+  getCharacterCount(readFile(file, StandardCharsets.UTF_8))
 					        + " , -w  " +  getWordCount(readFile(file, StandardCharsets.UTF_8))
-					        + " , -l " +  getNewLineCount(readFile(file, StandardCharsets.UTF_8)) + "\n";
+					        + " , -l " +  getNewLineCount(readFile(file, StandardCharsets.UTF_8)) ;
 		}
 		else
 		{
@@ -89,7 +90,7 @@ public class WCTool extends ATool implements IWcTool{
 			
 			if(options.contains("-help"))
 			{
-				outputString += getHelp() + "\n";
+				outputString += getHelp();
 			}
 			else
 			{
@@ -107,9 +108,8 @@ public class WCTool extends ATool implements IWcTool{
 				}	
 			}
 					        
-			outputString += "\n";
 		}
-		return outputString;
+		return outputString + "\n";
 	}
 	
 	public String getFilePath(String fileName, File dir)
@@ -150,7 +150,10 @@ public class WCTool extends ATool implements IWcTool{
 			}
 			
 			if(stdin == null)
-			{}
+			{
+				if(outputString == "")
+					outputString += "No filename given.";
+			}
 			else
 			{
 				File filePath = new File(getFilePath(stdin , workingDir));

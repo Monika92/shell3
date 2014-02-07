@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,70 +36,15 @@ public void before(){
 	WorkingDirectory.changeWorkingDirectory(new File(System.getProperty("user.dir")));
 	stdin = null;
 	String input = "This is \na test \nrun.";
-	writeToFile(input_file_1, input);
 	if(argFolder.mkdirs())
 	{}
 	
 }
 
-public void writeToFile(File file, String input){
-	try{
-		if(!file.exists())
-			file.createNewFile();
-		FileWriter fw = new FileWriter(file.getAbsoluteFile());
-		BufferedWriter bw = new BufferedWriter(fw);
-		char[] temp = input.toCharArray(); int i = 0;
-		while(i<temp.length){
-			while(temp[i]!='\n'){
-				bw.write(temp[i]);
-				i++;
-				if(i>=temp.length)
-					break;
-			}
-			bw.newLine(); i++;
-		}
-		bw.close();
-	} catch (IOException e){
-		System.out.println("Unable to create output file");
-	}
-}
-
-public String readFromFile(File input_file){
-	String output = ""; FileReader fr = null;
-	try{
-		fr = new FileReader(input_file);
-	} catch(FileNotFoundException e){
-		e.printStackTrace();
-		return "File not found";
-	}
-	BufferedReader br = new BufferedReader(fr);
-	try{
-		String line = br.readLine();
-		while(line != null){
-			if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
-				output+="\n";
-			else
-				output += line + "\n";
-			line = br.readLine();
-		}
-	} catch(IOException e){
-		e.printStackTrace();
-		return "Unable to read file";
-	} finally{
-		try {
-			br.close();
-			fr.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	return output;
-}
-
 @After
 public void after(){
 	cdtool = null;
+	cd = null;
 	if(input_file_1.exists())
 		input_file_1.delete();
 	if(argFolder.exists())
@@ -219,7 +166,7 @@ public void cdWrongArgumentTest(){
 public void cdValidDirectoryArgumentTest(){
 	if(argFolder.exists())
 	{
-	String[] arguments = new String[]{"argumentFolder1"} ; //assuming a folder called blahblah doesn't exist in your working directory
+	String[] arguments = new String[]{"argumentFolder1"} ; 
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
