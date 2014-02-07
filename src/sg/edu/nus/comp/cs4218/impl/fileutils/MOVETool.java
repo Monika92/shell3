@@ -18,7 +18,10 @@ public class MOVETool extends ATool implements IMoveTool{
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	/*
+	 * 
+	 * Uses Java7 move to move from File to toFile
+	 */
 	@Override
 	public boolean move(File from, File to) {
 		// TODO Auto-generated method stub
@@ -35,6 +38,9 @@ public class MOVETool extends ATool implements IMoveTool{
 			}
 	}
 	
+	/*
+	 * USes recursive function to move contents of one directory to another
+	 */
 	public boolean moveDirectory(File sourceLocation, File targetLocation)
 	{
 		boolean bool = true; 
@@ -64,7 +70,14 @@ public class MOVETool extends ATool implements IMoveTool{
 	}
 	
 	
-	
+	/*
+	 * Executes Move
+	 * Possible Executions
+	 * 1. move file1 file2 - moves contents of file1 to file2. if file2 doesn't already exist, it gets created then moving happens
+	 * 2. move file dir - moves the file into the directory
+	 * 3. move dir1 dir2 - moves contents of one directory into the second
+	 * 4. move file1 file2 file3.. dir - moves all the valid files into dir. The invalid ones are not copied 
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		

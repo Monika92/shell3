@@ -20,6 +20,9 @@ public class LSTool extends ATool implements ILsTool
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * This function take a File parameter and lists all the childfiles inside it
+	 */
 	@Override
 	public List<File> getFiles(File directory) {
 		
@@ -35,6 +38,9 @@ public class LSTool extends ATool implements ILsTool
 		return childFilesList;		
 	}
 
+	/*
+	 * Given a File List, this function parses them into a string separated by spaces
+	 */
 	@Override
 	public String getStringForFiles(List<File> files) {
 		// TODO Auto-generated method stub
@@ -46,6 +52,9 @@ public class LSTool extends ATool implements ILsTool
 		return outputString;
 	}
 	
+	/*
+	 * Give a String and the working directory file, this function finds if that string is an absolute or relative path
+	 */
 	public String getFilePath(String fileName, File dir)
 	{		
 		if((new File(fileName)).isAbsolute())
@@ -56,6 +65,14 @@ public class LSTool extends ATool implements ILsTool
 		}
 	}
 
+	/* 
+	 * Executes Ls
+	 * Possible Executions
+	 * 1. Ls ie no arguments : just displays all files and folders in present workingdir
+	 * 2. Ls Directory : Directory could be absolute or relative. Displays the files and folders inside it
+	 * 3. Ls file : File could be absolute or replative. Displays whether the file exits or not
+	 * 4. ls *.txt : or any other extension. Displays list of .txt (or any other file extension) files in current working dir.
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub

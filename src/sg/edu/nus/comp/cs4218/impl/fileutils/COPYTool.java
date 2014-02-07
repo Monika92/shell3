@@ -24,7 +24,10 @@ public class COPYTool extends ATool implements ICopyTool{
 		// TODO Auto-generated constructor stub
 	}
 
-		@Override
+	/*
+	 * Java7 copy funtion used to copy From file to To file
+	 */
+	@Override
 	public boolean copy(File from, File to) {
 		// TODO Auto-generated method stub
 		
@@ -41,6 +44,9 @@ public class COPYTool extends ATool implements ICopyTool{
 
 	}
 	
+	/*
+	 * Copies contents of one directory to another using a recursive function
+	 */
 	public boolean copyDirectory(File sourceLocation, File targetLocation)
 	{
 		boolean bool = true; 
@@ -66,7 +72,14 @@ public class COPYTool extends ATool implements ICopyTool{
 		return bool;
 	}
 	
-	
+	/*
+	 * Executes Copy
+	 * Possible Executions
+	 * 1. Copy file1 file2 - copies contents of file1 to file2. if file2 doesn't already exist, it gets created then copying happens
+	 * 2. copy file dir - copies the file into the directory
+	 * 3. copy dir1 dir2 - copies contents of one directory into the second
+	 * 4. copy file1 file2 file3.. dir - copies all the valid files into dir. The invalid ones are not copied 
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub

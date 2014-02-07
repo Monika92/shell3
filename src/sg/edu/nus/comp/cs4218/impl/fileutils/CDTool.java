@@ -20,6 +20,9 @@ public class CDTool extends ATool implements ICdTool{
 		return null;	
 	}
 	
+	/*
+	 * This function converts the dirName string parameter into its proper,absolute path
+	 */
 	public File getDirectoryPath(String dirName , String workingDir)
 	{
 		
@@ -50,6 +53,14 @@ public class CDTool extends ATool implements ICdTool{
 		
 	}
 
+	/*
+	 * Executes Cd
+	 * Possible Executions
+	 *1. cd (no arguments) - changes working dir to your home directory
+	 *2. cd . - keeps your working directory the same
+	 *3. cd .. - working directory goes one folder up.
+	 *4. cd Directory - Directory can be relatibe or absolute. If its a valid directory path, working dir is changed to that. If invalid, no change.
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub

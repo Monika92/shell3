@@ -30,6 +30,9 @@ public class WCTool extends ATool implements IWcTool{
 		command = "wc";
 	}
 
+	/*
+	 * Find number of characters in a string
+	 */
 	@Override
 	public String getCharacterCount(String input) {
 		// TODO Auto-generated method stub
@@ -38,6 +41,9 @@ public class WCTool extends ATool implements IWcTool{
 		return Integer.toString(length);
 	}
 
+	/*
+	 * Find number of words in a string and return as int
+	 */
 	@Override
 	public String getWordCount(String input) {
 		// TODO Auto-generated method stub
@@ -46,6 +52,9 @@ public class WCTool extends ATool implements IWcTool{
 		return Integer.toString(words);
 	}
 
+	/*
+	 * Find number of lines in a string and return as int. A string = " " is considered to have 0 lines
+	 */
 	@Override
 	public String getNewLineCount(String input) {
 		// TODO Auto-generated method stub
@@ -54,12 +63,17 @@ public class WCTool extends ATool implements IWcTool{
 		 else return  Integer.toString(lines.length);
 	}
 
+	/*return help string
+	 */
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
 		return helpOutput;
 	}
 
+	/*
+	 * reading contents of the string
+	 */
 	static String readFile(String path, Charset encoding)
 	{
 		//"The character count of " + input + " is " + 
@@ -74,7 +88,14 @@ public class WCTool extends ATool implements IWcTool{
 	
 	}
 		
-	
+	/*
+	 * Implementation of wc
+	 * 1. wc file1 : shows -m , -l and -w in the file1
+	 * 2. wc -m -l -w : or any other combination of options, display respective numbers for the file
+	 * 3. wc -m -l -w file1 file2 : shows the respective numbers for the valid files in the argument list
+	 * 4. wc -m - -l file1 : ignores the - in the middle and executes normally
+	 * 5. wc -m -l -w file1 - : executes numbers for file1 and takes stdin
+	 */
 	public String implementWC(String file, ArrayList<String> options)
 	{
 		String outputString = "";
