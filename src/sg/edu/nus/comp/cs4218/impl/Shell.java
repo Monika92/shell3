@@ -35,6 +35,7 @@ public class Shell extends Thread implements IShell {
 	public ITool parse(String commandline) {
 
 		command = null;
+		verifier = new CommandVerifier();
 		int argsLength;
 		ArrayList<String> list = new ArrayList<String>();
 		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
@@ -222,7 +223,6 @@ public class Shell extends Thread implements IShell {
 
 		Shell shell = new Shell();
 		ITool itool = null;
-		verifier = new CommandVerifier();
 		String input = null;
 		String userDirectory = System.getProperty("user.dir");
 		WorkingDirectory.workingDirectory = new File(userDirectory);

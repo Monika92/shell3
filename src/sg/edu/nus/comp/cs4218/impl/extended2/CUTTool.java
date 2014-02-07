@@ -194,9 +194,8 @@ public class CUTTool extends ATool implements ICutTool {
 			else if (options.get(i).equalsIgnoreCase("-c")) {
 				list = optionArguments.get(i);
 				StringBuilder stringBuilder = new StringBuilder();
-				String ls = System.getProperty("line.separator");
-				String[] inputLines = input.split(System
-						.getProperty("line.separator"));
+				String ls = "\n";
+				String[] inputLines = input.split("\n");
 				for (String inputLine : inputLines) {
 					stringBuilder
 					.append(cutSpecfiedCharacters(list, inputLine));
@@ -211,9 +210,8 @@ public class CUTTool extends ATool implements ICutTool {
 						list = optionArguments.get(i + 1);
 						delim = optionArguments.get(i).replace("\"", "");
 						StringBuilder stringBuilder = new StringBuilder();
-						String ls = System.getProperty("line.separator");
-						String[] inputLines = input.split(System
-								.getProperty("line.separator"));
+						String ls = "\n";
+						String[] inputLines = input.split("\n");
 						for (String inputLine : inputLines) {
 							stringBuilder
 							.append(cutSpecifiedCharactersUseDelimiter(
@@ -231,9 +229,8 @@ public class CUTTool extends ATool implements ICutTool {
 					list = optionArguments.get(i);
 					delim = optionArguments.get(i + 1).replace("\"", "");
 						StringBuilder stringBuilder = new StringBuilder();
-						String ls = System.getProperty("line.separator");
-						String[] inputLines = input.split(System
-								.getProperty("line.separator"));
+						String ls = "\n";
+						String[] inputLines = input.split("\n");
 						for (String inputLine : inputLines) {
 							stringBuilder
 							.append(cutSpecifiedCharactersUseDelimiter(
@@ -255,7 +252,7 @@ public class CUTTool extends ATool implements ICutTool {
 	String line = null;
 	BufferedReader reader = new BufferedReader(new FileReader(file));
 	StringBuilder stringBuilder = new StringBuilder();
-	String ls = System.getProperty("line.separator");
+	String ls = "\n";
 	while ((line = reader.readLine()) != null) {
 		stringBuilder.append(line);
 		stringBuilder.append(ls);

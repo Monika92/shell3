@@ -71,7 +71,7 @@ public class ShellTest {
 		String commandline = "cut -c 1-2 -";
 		String[] expectedArgsList = {"-c","1-2","-"};
 		assertEquals("CUTTool",shell.parse(commandline).getClass().getSimpleName());
-		assertArrayEquals(shell.getArgumentList(), expectedArgsList);		
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());		
 	}
 	@Test
 	public void parseCdCommandTest()
@@ -79,16 +79,16 @@ public class ShellTest {
 		String commandline = "cd /Users/";
 		String[] expectedArgsList = {"/Users/"};
 		assertEquals("CDTool",shell.parse(commandline).getClass().getSimpleName());
-		assertArrayEquals(shell.getArgumentList(), expectedArgsList);		
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());		
 	}
 	
 	@Test
 	public void parseCutCommandRandomArgumentsTest()
 	{
 		String commandline = "cut 3432!@#@ fdsf";
-		String[] expectedArgsList = {"3432!@#@","fdsf"};
+		String[] expectedArgsList = {"-help"};
 		assertEquals("CUTTool",shell.parse(commandline).getClass().getSimpleName());
-		assertArrayEquals(shell.getArgumentList(), expectedArgsList);		
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());		
 	}
 	
 	@Test
