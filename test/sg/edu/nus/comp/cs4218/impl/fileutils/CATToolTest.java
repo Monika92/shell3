@@ -86,7 +86,6 @@ public class CATToolTest {
 			}
 			bw.close();
 		} catch (IOException e){
-			System.out.println("Unable to create output file");
 		}
 	}
 	

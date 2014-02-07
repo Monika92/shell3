@@ -62,7 +62,6 @@ public class DELETEToolTest {
 			}
 			bw.close();
 		} catch (IOException e){
-			System.out.println("Unable to create output file");
 		}
 	}
 	
@@ -88,7 +87,6 @@ public class DELETEToolTest {
     	String[] arguments = new String[]{"Test_Output.txt"} ;
 		deletetool = new DELETETool(arguments);
 		actualOutput = deletetool.execute(workingDirectory, stdin);
-		System.out.println(actualOutput);
 		assertFalse(inputFile1.exists());
 		assertEquals(deletetool.getStatusCode(), 0);
     }
