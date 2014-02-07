@@ -59,23 +59,34 @@ public class COMMTool extends ATool implements ICommTool{
 			return getHelp();
 		}
 		
+		String result = "";
+		
 		//priority to "-d" option
 		if(ao.getOptions().contains("-d")){
-			return compareFilesDoNotCheckSortStatus(fileName1, fileName2);
+			result = compareFilesDoNotCheckSortStatus(fileName1, fileName2);
 		}
 				
 		if(ao.getOptions().contains("-c")){
-			return compareFilesCheckSortStatus(fileName1,fileName2);
+			result = compareFilesCheckSortStatus(fileName1,fileName2);
 		}
 		
 		String filePath1 = getCorrectPathFromArg(workingDir,fileName1);
 		String filePath2 = getCorrectPathFromArg(workingDir,fileName2);
 
-		if(filePath1 == null || filePath2 == null){
-			return null;
+		if(filePath1 == null && filePath2 == null){
+			return "File 1 and File 2 both don't exist!";
+		}
+		else if(filePath1 == null){
+			result = "File 1 doesn't exist!";
+			return result;
+			
+		}
+		else if (filePath2 == null){
+			result = "File 1 doesn't exist!";
+			return result;
 		}
 
-		String result = compareFiles(filePath1, filePath2);
+		 result = compareFiles(filePath1, filePath2);
 
 		return result;
 	}
@@ -122,13 +133,11 @@ public class COMMTool extends ATool implements ICommTool{
 			//include check for option --check-order
 			if(checkOrderFlag != 0){
 				if((i+1) <fileLines1.size() && val1.compareTo(fileLines1.get(i+1))>0){
-					System.out.println(val1 + ":" + fileLines1.get(i+1));
 					result += "File 1 not sorted!\n";
 					unsorted = true;
 					break;
 				}
 				else if((j+1) <fileLines2.size() && val2.compareTo(fileLines2.get(j+1))>0){
-					System.out.println(val2 + ":" + fileLines2.get(j+1));
 					result += "File 2 not sorted!\n";
 					
 					unsorted = true;
@@ -159,7 +168,7 @@ public class COMMTool extends ATool implements ICommTool{
 			
 		}
 	
-		while(i<fileLines1.size()){
+		while(i<fileLines1.size() && unsorted == false){
 			
 			result += fileLines1.get(i) + "\t" + " " + "\t" + " ";
 			i++;
@@ -167,7 +176,7 @@ public class COMMTool extends ATool implements ICommTool{
 				result += "\n";
 			}
 		}
-		while(j<fileLines2.size()){			
+		while(j<fileLines2.size() && unsorted == false){			
 			result += " " + "\t" + fileLines2.get(j) + "\t" + " ";
 			j++;
 			if(j < fileLines2.size()){

@@ -122,7 +122,7 @@ public class COMMToolTest {
 		commTool = new COMMTool(arguments);		
 		actualOutput = commTool.execute(workingDirectory, null);
 
-		expectedOutput = null;
+		expectedOutput = "File 1 doesn't exist!";
 		assertEquals(expectedOutput, actualOutput);	
 
 	}
@@ -219,6 +219,21 @@ public class COMMToolTest {
 				testDash + testTab + "Banana" + testTab +testDash + testNewLine +
 				testDash + testTab + testDash + testTab + "Melon" + testNewLine +
 				testDash + testTab + testDash + testTab + "Orange";
+
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(commTool.getStatusCode(), 0);	
+	}
+	
+
+	@Test
+	//Negative case: File 2 not sorted
+	public void compareFilesCheckSortStatusTest2(){
+		String[] arguments = new String[]{"-c","a.txt","d.txt"};
+		String input1 = "a.txt";
+		String input2 = "d.txt";
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.compareFilesCheckSortStatus(input1, input2);
+		expectedOutput = "File 2 not sorted!\n";
 
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(commTool.getStatusCode(), 0);	
