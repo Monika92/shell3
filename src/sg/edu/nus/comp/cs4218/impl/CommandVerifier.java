@@ -218,9 +218,12 @@ public class CommandVerifier {
 
 				//check if num of args for option after its idx is correct
 				for(int j=1; j<=numArgs; j++){
-
+				
+					if(idx + j >= args.size()){
+						break;
+						
+					}
 					String arg = args.get(idx + j);
-					
 					//if immediately followed arguments are other options					
 					if(map.keySet().contains(arg)){
 						return 0;
