@@ -29,7 +29,7 @@ public class CDToolTest {
 	//WorkingDirectory wd;
 	String stdin;
 	File argFolder = new File("argumentFolder1");
-	File input_file_1 = new File("Test_Output.txt") ;
+	File inputFile1 = new File("Test_Output.txt") ;
 	
 @Before
 public void before(){
@@ -45,8 +45,8 @@ public void before(){
 public void after(){
 	cdtool = null;
 	cd = null;
-	if(input_file_1.exists())
-		input_file_1.delete();
+	if(inputFile1.exists())
+		inputFile1.delete();
 	if(argFolder.exists())
 		argFolder.delete();
 		
@@ -58,7 +58,6 @@ public void cdNoArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "The working directory is " + (System.getProperty("user.home"));
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 }
@@ -69,9 +68,8 @@ public void cdFileArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Test_Output.txt is not a valid directory. The working directory has not changed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(cdtool.getStatusCode(), 0);
+	assertEquals(cdtool.getStatusCode(), -1);
 }
 
 @Test
@@ -80,7 +78,6 @@ public void cdTildeArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + (System.getProperty("user.home"));
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 }
@@ -91,7 +88,6 @@ public void cdTildeSpaceArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + (System.getProperty("user.home"));
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 }
@@ -102,7 +98,6 @@ public void cdDotArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 }
@@ -113,7 +108,6 @@ public void cdDotSpaceArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 }
@@ -124,7 +118,6 @@ public void cdDotDotArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 }
@@ -135,7 +128,6 @@ public void cdDotDotSpaceArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 }
@@ -146,9 +138,8 @@ public void cdFourDotsArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = ".... is not a valid directory. The working directory has not changed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(cdtool.getStatusCode(), 0);
+	assertEquals(cdtool.getStatusCode(), -1);
 }
 
 @Test
@@ -157,9 +148,8 @@ public void cdWrongArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "blahblah is not a valid directory. The working directory has not changed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(cdtool.getStatusCode(), 0);
+	assertEquals(cdtool.getStatusCode(), -1);
 }
 
 @Test
@@ -170,7 +160,6 @@ public void cdValidDirectoryArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 	}
@@ -184,7 +173,6 @@ public void cdValidAbsoluteDirectoryArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
 	}
@@ -196,9 +184,8 @@ public void cdInvalidDirectoryArgumentTest(){
 	cdtool = new CDTool(arguments);
 	actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = expectedOutput = "argumentFolder123z is not a valid directory. The working directory has not changed.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	assertEquals(cdtool.getStatusCode(), 0);
+	assertEquals(cdtool.getStatusCode(), -1);
 }
 
 @Test
@@ -207,7 +194,6 @@ public void cdGetDirectoryPathFunctionTest(){
 	cd = new CDTool(arguments);
 	actualOutput = (cd.getDirectoryPath("testFolder",WorkingDirectory.workingDirectory.getAbsolutePath())).toString();
 	expectedOutput = (WorkingDirectory.workingDirectory.toString() + File.separator +  "testFolder");
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cd.getStatusCode(), 0);
 }

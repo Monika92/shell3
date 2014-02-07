@@ -92,6 +92,7 @@ public class MOVETool extends ATool implements IMoveTool{
 				else
 				{	
 					outputString = "Error - Unable to move.";
+					setStatusCode(-1);
 				}
 			}
 			else if((arg0.isDirectory() == true))
@@ -103,6 +104,7 @@ public class MOVETool extends ATool implements IMoveTool{
 				else
 				{
 					outputString = "Error - Invalid input.";
+					setStatusCode(-1);
 				}
 			}
 			else if(arg0.isFile())
@@ -114,11 +116,13 @@ public class MOVETool extends ATool implements IMoveTool{
 				else
 				{
 					outputString = "Error - Invalid input.";
+					setStatusCode(-1);
 				}
 			}
 			else
 			{
 				outputString = "Error - Invalid input.";
+				setStatusCode(-1);
 			}
 		}
 		else if(numArgs > 2)
@@ -139,17 +143,20 @@ public class MOVETool extends ATool implements IMoveTool{
 						else
 						{
 							outputString += args[i] + " is invalid input.\n";
+							setStatusCode(-1);
 						}
 					}
 					else
 					{
 						outputString += args[i] + " is invalid input.\n";
+						setStatusCode(-1);
 					}
 				 }
 			}
 			else
 			{
 				outputString = args[numArgs-1] + " is invalid input.";
+				setStatusCode(-1);
 			}
 			
 		}

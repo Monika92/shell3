@@ -25,7 +25,7 @@ public class ExecutionThread extends Thread {
     	{
     		//System.out.println("MyRunnable running");
     		stdout = itool.execute(WorkingDirectory.workingDirectory, stdin);
-    		
+    		boolean isOutputRedirection = false;
     		File outputFile = null;
 
     		if(args!=null && (itool.getStatusCode() != (-1))){
@@ -33,10 +33,11 @@ public class ExecutionThread extends Thread {
 				if(argsLength>=2 && args[argsLength -2].equalsIgnoreCase(">")){
 					outputFile = new File(args[argsLength - 1]);
 					writeOutputToFile(outputFile);
+					isOutputRedirection = true;
 				}
     		}
-    		
-			System.out.println(stdout);
+    		if(!isOutputRedirection)
+    			System.out.println(stdout);
 			System.out.println("Status code is " + itool.getStatusCode());
 			Thread.currentThread().interrupt();
     	}
@@ -63,7 +64,6 @@ public class ExecutionThread extends Thread {
 			}
 			bw.close();
 		} catch (IOException e){
-			System.out.println(outputMsg+"Unable to create output file");
 		}
 		return true;	    
     }

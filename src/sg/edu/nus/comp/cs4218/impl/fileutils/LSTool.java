@@ -111,6 +111,7 @@ public class LSTool extends ATool implements ILsTool
 					if(outputString == "")
 					{
 						outputString = "No files of type ." + fileType;
+						setStatusCode(-1);
 					}
 				}
 			}
@@ -118,6 +119,7 @@ public class LSTool extends ATool implements ILsTool
 			{
 				//If all else fails
 				outputString = "Invalid. Doesn't exist";
+				setStatusCode(-1);
 			}
 		}
 		return outputString;

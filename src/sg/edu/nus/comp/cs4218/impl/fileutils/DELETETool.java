@@ -38,7 +38,6 @@ public class DELETETool extends ATool implements IDeleteTool{
 					file = new File(workingDir.toString()+File.separator+fileName);
 				}
 			} catch(Exception e){
-				System.out.println(outputMsg+"Invalid file name");
 				setStatusCode(-1);
 				if (outputMsg.equalsIgnoreCase(""))
 					return "Invalid file name";
@@ -49,7 +48,6 @@ public class DELETETool extends ATool implements IDeleteTool{
 			}
 			if (!file.exists()){
 				setStatusCode(-1);
-				System.out.println("No such file");
 				if (outputMsg.equalsIgnoreCase(""))
 					return "No such file";
 				else if(outputMsg.endsWith("\n"))

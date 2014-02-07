@@ -22,17 +22,17 @@ public class WCToolTest {
 	private WCTool wc; 
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
-	File input_file_1,input_file_2;
+	File inputFile1,inputFile2;
 
 	
 	@Before
 	public void before(){
 		
 		WorkingDirectory.changeWorkingDirectory(new File(System.getProperty("user.dir")));
-		input_file_1 = new File("input1.txt");
-		input_file_2 = new File("input2.txt");
-		writeToFile(input_file_1, "abc\nb d\n---\n");
-		writeToFile(input_file_2, "  ");
+		inputFile1 = new File("input1.txt");
+		inputFile2 = new File("input2.txt");
+		writeToFile(inputFile1, "abc\nb d\n---\n");
+		writeToFile(inputFile2, "  ");
 		helpOutput = "wc [OPTIONS] [FILE]" + "\n" +
 				"FILE : Name of the file" + "\n" +
 				"OPTIONS : -m : Print only the number of characters \n" +
@@ -59,7 +59,6 @@ public class WCToolTest {
 			}
 			bw.close();
 		} catch (IOException e){
-			System.out.println("Unable to create output file");
 		}
 	}
 
@@ -67,10 +66,10 @@ public class WCToolTest {
 	public void after(){
 		wctool = null;
 		wc = null;
-		if(input_file_1.exists())
-			input_file_1.delete();
-		if(input_file_2.exists())
-			input_file_2.delete();
+		if(inputFile1.exists())
+			inputFile1.delete();
+		if(inputFile2.exists())
+			inputFile2.delete();
 		
 	}
 	
@@ -104,7 +103,7 @@ public class WCToolTest {
 		actualOutput = wctool.execute(workingDirectory, "abcde");
 		expectedOutput = "abcde : error - Invalid Input. \n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertEquals(wctool.getStatusCode(), -1);
     }
 
 	@Test
@@ -115,7 +114,7 @@ public class WCToolTest {
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput =  "idontexisthaha.txt : error - Invalid Input. \n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertEquals(wctool.getStatusCode(), -1);
     }
 	
 	@Test
@@ -126,7 +125,7 @@ public class WCToolTest {
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput =  "No filename given.";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertEquals(wctool.getStatusCode(), -1);
     }
 	
 	@Test
@@ -137,7 +136,7 @@ public class WCToolTest {
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput =  "No filename given.";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertEquals(wctool.getStatusCode(), -1);
     }
 	
 	@Test
@@ -147,7 +146,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -159,7 +157,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -171,7 +168,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -183,7 +179,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -195,7 +190,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -207,7 +201,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0 -l  0\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -219,8 +212,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input2.txt : -m  0 , -w  0 , -l 0\n";
-		System.out.println(actualOutput);
-		System.out.println(expectedOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -233,7 +224,6 @@ public class WCToolTest {
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4\n"
 				         + WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -246,9 +236,8 @@ public class WCToolTest {
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4\n"
 				         + "input3.txt : error - Invalid Input. \n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertEquals(wctool.getStatusCode(), -1);
     }
 	
 	@Test
@@ -260,9 +249,8 @@ public class WCToolTest {
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4\n"
 				         + "input3.txt : error - Invalid Input. \n"
 				         +  WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0\n" ;
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertEquals(wctool.getStatusCode(), -1);
     }
 	
 	@Test
@@ -274,9 +262,8 @@ public class WCToolTest {
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4\n"
 				         +  WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0\n"
 				         + "input3.txt : error - Invalid Input. \n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertEquals(wctool.getStatusCode(), -1);
     }
 	
 	@Test
@@ -286,7 +273,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, "input2.txt");
 		expectedOutput = WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -298,8 +284,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, "input2.txt");
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input2.txt : -m  0 , -w  0 , -l 0\n";
-		System.out.println(actualOutput);
-		System.out.println(expectedOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
@@ -311,7 +295,6 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, WorkingDirectory.workingDirectory + File.separator + "input2.txt");
 		expectedOutput = WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0\n";
-		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }

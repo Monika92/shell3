@@ -33,12 +33,20 @@ public class UNIQTool extends ATool implements IUniqTool{
 
 	static String cachedline = "";
 	
+/*
+ * Constructor for UNIQTool - intialises the super class's arguments with the passed 
+ * arguments.
+ */
 	public UNIQTool(String[] arguments) {
 		super(arguments);
 		cachedline = "";
 		// TODO Auto-generated constructor stub
 	}
 
+/*
+ * Returns the unique lines in the given input, ignoring case depending on the checkCase
+ * argument
+ */
 	@Override
 	public String getUnique(boolean checkCase, String input) {
 		// TODO Auto-generated method stub
@@ -119,6 +127,10 @@ public class UNIQTool extends ATool implements IUniqTool{
 		
 	}
 
+/*
+ * Returns the unique lines in the given input after skipping NUM fields in every line
+ * of the input. Case check is done depending on the checkCase argument.
+ */
 	@Override
 	public String getUniqueSkipNum(int NUM, boolean checkCase, String input) {
 		// TODO Auto-generated method stub
@@ -161,6 +173,9 @@ public class UNIQTool extends ATool implements IUniqTool{
 		return result;
 	}
 
+/*
+ * Returns the help message for Uniq command
+ */
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
@@ -172,7 +187,10 @@ public class UNIQTool extends ATool implements IUniqTool{
 				 
 		return helpMsg;
 	}
-	
+
+/*
+ * Reads the lines in the file passed as argument and returns the information as a string
+ */
 	public String readFromFile(File toRead){
 		FileReader fr;
 		String output = "";
@@ -211,7 +229,9 @@ public class UNIQTool extends ATool implements IUniqTool{
 		return output;
 	}
 
-	
+/*
+ * Executes the uniq command for the given input - either stdin or input file
+ */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
