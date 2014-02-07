@@ -158,17 +158,6 @@ public void after(){
 		deleteFolder(argFolder);//argFolder.deleteOnExit();	
 }
 
-public String getCopyTestResult(String source, String dest)
-{
-	File sourceFile = new File(source);
-	File destFile = new File(dest);
-	
-	if(readFromFile(sourceFile.getAbsoluteFile()) == readFromFile(destFile.getAbsoluteFile()))
-		return "Copy successful";
-	else 
-		return "Copy failed";
-}
-
 @Test
 public void existingFileToExistingFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "file2.txt"} ;
