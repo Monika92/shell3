@@ -176,16 +176,7 @@ public class PASTETool extends ATool implements IPasteTool{
 			else{
 				fileName = nameSplit[nameSplit.length -1];
 			}
-			
-			
-			if(fNames.get(i).startsWith("//") || fNames.get(i).charAt(1) == ':'){
-				name = fNames.get(i);
-			}
-			else{
-				name = workingDir.getAbsolutePath() + File.separator + fNames.get(i);
-			}
-			
-			/*
+
 			File fTemp = new File(fNames.get(i));
 			if(fTemp.isAbsolute()){
 				name = fNames.get(i);
@@ -193,7 +184,7 @@ public class PASTETool extends ATool implements IPasteTool{
 			else{
 				name = workingDir.getAbsolutePath() + File.separator + fNames.get(i);
 			}
-			*/
+			
 			if((new File(name)).exists()){
 				names.add(name);
 			}

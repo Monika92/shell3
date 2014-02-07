@@ -116,14 +116,13 @@ public class COMMToolTest {
 	public void compareFilesInvalidFileArgsTest(){
 		String fileName1 = "C:\\Users\\Dale\\a.txt";
 		String fileName2 = "./b.txt";
+		String[] arguments = new String[]{"C:\\Users\\Dale\\a.txt","./b.txt"};
+		commTool = new COMMTool(arguments);		
+		actualOutput = commTool.execute(workingDirectory, null);
 
-		//commTool = new COMMTool(arguments);		
-		//actualOutput = "";
-		//TODO:
-		
 		expectedOutput = null;
 		assertEquals(expectedOutput, actualOutput);	
-		fail("not yet implemented");
+
 	}
 	
 	@Test

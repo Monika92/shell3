@@ -114,18 +114,18 @@ public class PASTEToolTest {
 	@Test
 	//Check for invalid files
 	public void pasteNoOptionsInvalidFilesTest(){
+		String[] arguments = new String[]{"C:\\Users\\Dale\\a.txt","./b.txt"};
 		String fileName1 = "C:\\Users\\Dale\\a.txt";
 		String fileName2 = "./b.txt";
 		ArrayList<String> fNames = new ArrayList<String>();
 		fNames.add(fileName1);fNames.add(fileName2);
 		
-		//pasteTool = new PASTETool(arguments);		
-		//actualOutput = "";
-		//TODO:
-		
-		expectedOutput = "a.txt : No such file or directory!";
+		pasteTool = new PASTETool(arguments);		
+		actualOutput = pasteTool.execute(workingDirectory, null);
+
+		expectedOutput = "a.txt: No such file or directory!";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));	
-		fail("not yet implemented");
+
 	}
 
 	@Test

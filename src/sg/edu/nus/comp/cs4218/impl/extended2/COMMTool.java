@@ -76,14 +76,7 @@ public class COMMTool extends ATool implements ICommTool{
 
 	private String getCorrectPathFromArg(File workingDir,String fName){
 		String name = null;
-		if(fName.startsWith("//")){
-			name = fName;
-		}
-		else{
-			name = workingDir.getAbsolutePath() + File.separator + fName;
-		}
 		
-		/*
 		File fTemp = new File(fName);
 		if(fTemp.isAbsolute()){
 			name = fName;
@@ -91,8 +84,7 @@ public class COMMTool extends ATool implements ICommTool{
 		else{
 			name = workingDir.getAbsolutePath() + File.separator + fName;
 		}
-		*/
-		
+				
 		if((new File(name)).exists()){
 			return name;
 		}
@@ -113,9 +105,7 @@ public class COMMTool extends ATool implements ICommTool{
 
 			String val1 = fileLines1.get(i);
 			String val2 = fileLines2.get(j);
-			
-			
-			
+						
 			//include check for option --check-order
 			if(checkOrderFlag != 0){
 				if((i+1) <fileLines1.size() && val1.compareTo(fileLines1.get(i+1))>0){
@@ -164,16 +154,13 @@ public class COMMTool extends ATool implements ICommTool{
 				result += "\n";
 			}
 		}
-		while(j<fileLines2.size()){
-
-			
+		while(j<fileLines2.size()){			
 			result += " " + "\t" + fileLines2.get(j) + "\t" + " ";
 			j++;
 			if(j < fileLines2.size()){
 				result += "\n";
 			}
 		}
-
 		return result;
 	}
 
