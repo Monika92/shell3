@@ -34,10 +34,16 @@ public class COMMTool extends ATool implements ICommTool{
 
 	private int checkOrderFlag = 0;
 
+/*
+ * Constructor for COMMTool - initializes the super class's arguments 
+ * with the passed arguments.
+ */
 	public COMMTool(String[] arguments) {
 		super(arguments);
 	}
 
+/*Executes the comm command.
+ */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		
@@ -74,6 +80,10 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+/*
+ * Checks whether the input filename is an absolute path
+ * and creates the file with the appropriate path.
+ */
 	private String getCorrectPathFromArg(File workingDir,String fName){
 		String name = null;
 		
@@ -91,7 +101,10 @@ public class COMMTool extends ATool implements ICommTool{
 		return null;
 	}
 	
-	
+/*
+ * Compares the two given inputs and returns a string with the differences
+ * between the corresponding lines of the two strings.
+ */
 	@Override
 	public String compareFiles(String input1, String input2) {
 		ArrayList<String> fileLines1 = loadFile(input1);
@@ -164,6 +177,11 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+/*
+ * Private function to load file from the given file path and
+ * return an array of strings containing the line-wise 
+ * information in the file.
+ */
 	private ArrayList<String> loadFile(String fname){
 		ArrayList<String> lines = new ArrayList<String>();
 
@@ -189,6 +207,9 @@ public class COMMTool extends ATool implements ICommTool{
 		return lines;
 	}
 
+/*
+ * Compares the files and checks if the information in them is already sorted.
+ */
 	@Override
 	public String compareFilesCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 1;
@@ -197,6 +218,9 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+/*
+ * Compares the files but does not check whether the information is already sorted.
+ */
 	@Override
 	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 0;
@@ -205,6 +229,9 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+/*
+ * Returns the help message for the comm command.
+ */
 	@Override
 	public String getHelp() {
 
