@@ -76,69 +76,91 @@ public class COMMTool extends ATool implements ICommTool{
 
 	private String getCorrectPathFromArg(File workingDir,String fName){
 		String name = null;
-		if(fName.startsWith("//")){
+		
+		File fTemp = new File(fName);
+		if(fTemp.isAbsolute()){
 			name = fName;
 		}
 		else{
 			name = workingDir.getAbsolutePath() + File.separator + fName;
 		}
-		
+				
 		if((new File(name)).exists()){
 			return name;
 		}
 		return null;
 	}
-
+	
+	
 	@Override
 	public String compareFiles(String input1, String input2) {
-
 		ArrayList<String> fileLines1 = loadFile(input1);
 		ArrayList<String> fileLines2 = loadFile(input2);
 
-		String result = null;
+		String result = "";
+		boolean unsorted = false;
 
 		int i=0,j=0;
-		for( i=0,j=0; i<fileLines1.size()&& j<fileLines2.size();){
-			
-			result = "";
-			
+		for( i=0,j=0; i<fileLines1.size() && j<fileLines2.size() && !unsorted;){
+
 			String val1 = fileLines1.get(i);
 			String val2 = fileLines2.get(j);
-			
+						
 			//include check for option --check-order
 			if(checkOrderFlag != 0){
 				if((i+1) <fileLines1.size() && val1.compareTo(fileLines1.get(i+1))>0){
-					result += " File 1 not sorted!\n";
+					System.out.println(val1 + ":" + fileLines1.get(i+1));
+					result += "File 1 not sorted!\n";
+					unsorted = true;
+					break;
 				}
-				if((j+1) <fileLines2.size() && val2.compareTo(fileLines2.get(j+1))>0){
-					result += " File 2 not sorted!\n";
+				else if((j+1) <fileLines2.size() && val2.compareTo(fileLines2.get(j+1))>0){
+					System.out.println(val2 + ":" + fileLines2.get(j+1));
+					result += "File 2 not sorted!\n";
+					
+					unsorted = true;
+					break;
 				}
+			}
+			
+			if(unsorted){
+				break;
 			}
 			
 			if(val1.compareTo(val2) < 0){
 				i++;
-				result += val1 + "\t" + "-" + "\t" + "-" +"\n";				
+				result += val1 + "\t" + " " + "\t" + " ";				
 			}
 			else if(val1.compareTo(val2) > 0){
 				j++;
-				result += "-" + "\t" + val2 + "\t" + "-" +"\n";
+				result += " " + "\t" + val2 + "\t" + " ";
 			}else if(val1.compareTo(val2) == 0){
 				i++;j++;
-				result += "-" + "\t" + "-" + "\t" + val1 +"\n";
-			}		
+				result += " " + "\t" + " " + "\t" + val1;
+			}	
+			
+			//if not last line of printing
+			if(!( i == fileLines1.size() && j == fileLines2.size())){
+				result += "\n";
+			}
+			
 		}
-
+	
 		while(i<fileLines1.size()){
-
+			
+			result += fileLines1.get(i) + "\t" + " " + "\t" + " ";
 			i++;
-			result += fileLines1.get(i) + "\t" + "-" + "\t" + "-" +"\n";
+			if(i < fileLines1.size()){
+				result += "\n";
+			}
 		}
-		while(j<fileLines2.size()){
-
+		while(j<fileLines2.size()){			
+			result += " " + "\t" + fileLines2.get(j) + "\t" + " ";
 			j++;
-			result += "-" + "\t" + fileLines2.get(j) + "\t" + "-" +"\n";
+			if(j < fileLines2.size()){
+				result += "\n";
+			}
 		}
-
 		return result;
 	}
 
@@ -170,17 +192,17 @@ public class COMMTool extends ATool implements ICommTool{
 	@Override
 	public String compareFilesCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 1;
-		compareFiles(input1, input2);
+		String result = compareFiles(input1, input2);
 		
-		return null;
+		return result;
 	}
 
 	@Override
 	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 0;
-		compareFiles(input1, input2);
+		String result = compareFiles(input1, input2);
 
-		return null;
+		return result;
 	}
 
 	@Override
