@@ -95,7 +95,6 @@ public class LSTool extends ATool implements ILsTool
 		}
 		else
 		{
-			System.out.println(getFilePath(args[0],workingDir));
 			File dir = new File(getFilePath(args[0],workingDir));
 			if(dir.isDirectory()==true)
 			{

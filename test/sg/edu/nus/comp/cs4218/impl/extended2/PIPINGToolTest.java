@@ -85,12 +85,18 @@ public class PIPINGToolTest {
 		ILsTool leftTool = new LSTool(leftToolArgs);
 		ICatTool rightTool = new CATTool(rightToolArgs);
 		String pipeResult = pipingTool.pipe(leftTool, rightTool);
+		
+		
 		String errorMessage = errContent.toString();
 		assertTrue("".equals(pipeResult));
-	//	assertTrue(String.format(LSTool.LS_ERROR_MSG, "filenotfound").equals(
-	//			errorMessage));
+		//	assertTrue(String.format(LSTool.LS_ERROR_MSG, "filenotfound").equals(
+		//			errorMessage));
 		// because rightTool executes fine
+		
+		System.out.println("pipe result:" + pipeResult + "end");
+		System.out.println("code:" + pipingTool.getStatusCode());
 		assertTrue(pipingTool.getStatusCode() == 0);
+		
 	}
 
 	/**
@@ -106,6 +112,7 @@ public class PIPINGToolTest {
 		ICatTool rightTool = new CATTool(rightToolArgs);
 		String pipeResult = pipingTool.pipe(leftTool, rightTool);
 		assertTrue("".equals(pipeResult));
+		
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 
