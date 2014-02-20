@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.cs4218.impl.extended2;
+package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import static org.junit.Assert.*;
 
@@ -15,6 +15,8 @@ import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.GREPTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.PIPINGTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CATTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.LSTool;
 

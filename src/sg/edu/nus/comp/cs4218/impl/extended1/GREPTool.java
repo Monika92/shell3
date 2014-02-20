@@ -1,7 +1,7 @@
 /**
  * 
  */
-package sg.edu.nus.comp.cs4218.impl.extended2;
+package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import java.io.File;
 
@@ -13,6 +13,9 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  *
  */
 public class GREPTool extends ATool implements IGrepTool {
+
+	public static final String GREP_FILE_ERR_MSG = null;
+	public static final Object GREP_ERR_CODE = null;
 
 	/**
 	 * @param arguments
