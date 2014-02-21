@@ -1,5 +1,0 @@
-coding
-fun
-hello
-is
-world
