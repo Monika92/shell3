@@ -7,6 +7,7 @@ public class ArgumentObject {
 	ArrayList<String> fileList;
 	ArrayList<String> options ;
 	ArrayList<String> optionArguments;
+	String pattern;
 	
 	public ArgumentObject()
 	{
@@ -26,5 +27,9 @@ public class ArgumentObject {
 	public ArrayList<String> getFileList()
 	{
 		return fileList;
+	}
+	public String getPattern()
+	{
+		return pattern;
 	}
 }
