@@ -156,6 +156,46 @@ public class ArgumentObjectParser {
 		
 			}
 		}
+		else if(command.equalsIgnoreCase("grep"))
+		{
+			int argumentSize = argument.length;
+			for(int i = 0 ; i < argumentSize ; )
+			{
+				
+				if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-c") ||
+						argument[i].equalsIgnoreCase("-o") ||argument[i].equalsIgnoreCase("-v"))
+				{
+					argumentObject.options.add(argument[i]);
+					argumentObject.optionArguments.add(null);
+					i+=1;
+				}
+				else if(argument[i].equalsIgnoreCase("-A") || argument[i].equalsIgnoreCase("-B") ||
+						argument[i].equalsIgnoreCase("-C"))
+				{
+					argumentObject.options.add(argument[i]);
+					argumentObject.optionArguments.add(argument[i+1]);
+					i+=2;
+				}
+				else if(argument[i].equalsIgnoreCase("-"))
+				{
+					//do nothing for stdin
+					i+=1;
+				}
+				else 
+				{
+					argumentObject.pattern = argument[i];
+					i+=1;
+					//the rest are considered as filenames
+					while(i <argumentSize)
+					{
+						argumentObject.fileList.add(argument[i]);
+						i++;
+					}
+				}
+			}
+			
+		}					
+
 		return argumentObject;		
 	}
 }

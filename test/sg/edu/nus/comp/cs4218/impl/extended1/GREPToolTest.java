@@ -110,11 +110,12 @@ public class GREPToolTest {
 		assertEquals("", tool.execute(workingDir, ""));
 	}
 
+	/** Changed : exception not thrown,just error message"
 	/**
 	 * Test for cat. Destructive case where workingDir is not valid. Should
 	 * throw exception
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testExecuteNullWorkingDir() {
 		String[] cmdArgs = { "pattern", "someFile" };
 		IGrepTool tool = new GREPTool(cmdArgs);
@@ -1070,8 +1071,7 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testOnlyMatchingLinesWithMatchOneWord() {
-		String matchingLines = grepTool.getOnlyMatchingLines("4evr",
-				CONTENT_STORY);
+		String matchingLines = grepTool.getOnlyMatchingLines("4evr",CONTENT_STORY);
 		String expected = "she sed \"bbz will u luv me 4evr?\"\n(dat mean he luv her moar den 4evr)\n";
 		assertTrue(expected.equals(matchingLines));
 	}
@@ -1083,8 +1083,7 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testOnlyMatchingLinesWithFullMatch() {
-		String matchingLines = grepTool
-				.getOnlyMatchingLines(" ", CONTENT_STORY);
+		String matchingLines = grepTool.getOnlyMatchingLines(" ", CONTENT_STORY);
 		assertTrue(CONTENT_STORY.equals(matchingLines));
 		matchingLines = grepTool.getOnlyMatchingLines("$", CONTENT_STORY);
 		assertTrue(CONTENT_STORY.equals(matchingLines));
