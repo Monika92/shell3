@@ -291,8 +291,8 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteBOptionMultipleFiles() {
-		String[] cmdArgs = { "-B", "1", "(T|W)", "textFiles/testA.txt",
-				"textFiles/testB.txt" };
+		String[] cmdArgs = { "-B", "1", "(T|W)", "../textFiles/testA.txt",
+				"../textFiles/testB.txt" };
 		String expected = "textFiles/testA.txt:\nThe quick\ntextFiles/testB.txt:\nWeeds are flowers,\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
@@ -306,7 +306,7 @@ public class GREPToolTest {
 	@Test
 	public void testExecuteCOptionMultipleFiles() {
 		String[] cmdArgs = { "-C", "2", "(brown|fox|too)",
-				"textFiles/testA.txt", "textFiles/testB.txt" };
+				"../textFiles/testA.txt", "../textFiles/testB.txt" };
 		String expected = "textFiles/testA.txt:\nThe quick\nbrown fox\njumped over\nthe lazy \ntextFiles/testB.txt:\nWeeds are flowers,\n too,\n  once you get to know them.\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
