@@ -47,7 +47,7 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteEmptyFile() {
-		String[] cmdArgs = { "../../textFiles/empty.txt" };
+		String[] cmdArgs = { "../../../../../textFiles/empty.txt" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
 		assertEquals(tool.getStatusCode(), 0);
@@ -58,7 +58,7 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteBinaryFile() {
-		String[] cmdArgs = { "../../textFiles/picture.gif" };
+		String[] cmdArgs = { "../../../../../textFiles/picture.gif" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
 		assertEquals(tool.getStatusCode(), 0);
@@ -161,15 +161,15 @@ public class GREPToolTest {
 	@Test
 	public void testExecuteMultipleFiles() {
 		//file problem
-		String[] cmdArgs = { " over", "../../textFiles/testA.txt",
-				"../textFiles/filenotfound" };
-		String expected = "../textFiles/testA.txt:\njumped over\n";
+		String[] cmdArgs = { " over", "../../../../../textFiles/testA.txt",
+				"../../../../../textFiles/filenotfound" };
+		String expected = "../../../../../textFiles/testA.txt:\njumped over\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertTrue(tool.getStatusCode() != 0);
 		String errorMessage = errContent.toString();
 		assertTrue(String.format(GREPTool.GREP_FILE_ERR_MSG,
-				"../textFiles/filenotfound").equals(errorMessage));
+				"../../../../../textFiles/filenotfound").equals(errorMessage));
 	}
 
 	/**
@@ -178,10 +178,9 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteCountOptionMultipleFiles() {
-		//file issues
-		String[] cmdArgs = { "-c", "(t|T)", "../textFiles/testA.txt",
-				"../textFiles/testB.txt" };
-		String expected = "../textFiles/testA.txt:\n2\n../textFiles/testB.txt:\n2\n";
+		String[] cmdArgs = { "-c", "(t|T)", "../../../../../textFiles/testA.txt",
+				"../../../../../textFiles/testB.txt" };
+		String expected = "../../../../../textFiles/testA.txt:\n2\n../../../../../textFiles/testB.txt:\n2\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertEquals(tool.getStatusCode(), 0);
@@ -207,11 +206,10 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteOOptionMultipleFiles() {
-		//file prob
-		String[] cmdArgs = { "-o", "[a-z]*", "../textFiles/testA.txt",
-				"../textFiles/testB.txt" };
-		String expected = "../textFiles/testA.txt:\nhe\nquick\nbrown\nfox\njumped\nover\nthe\nlazy\ndog\n"
-				+ "../textFiles/testB.txt:\needs\nare\nflowers\ntoo\nonce\nyou\nget\nto\nknow\nthem\n";
+		String[] cmdArgs = { "-o", "[a-z]*", "../../../../../textFiles/testA.txt",
+				"../../../../../textFiles/testB.txt" };
+		String expected = "../../../../../textFiles/testA.txt:\nhe\nquick\nbrown\nfox\njumped\nover\nthe\nlazy\ndog\n"
+				+ "../../../../../textFiles/testB.txt:\needs\nare\nflowers\ntoo\nonce\nyou\nget\nto\nknow\nthem\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertEquals(tool.getStatusCode(), 0);
@@ -223,10 +221,10 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteOOptionStdinMultipleFiles() {
-		String[] cmdArgs = { "-o", "[a-z]*", "-", "../textFiles/testA.txt",
-				"../textFiles/testB.txt" };
-		String expected = "Standard Input:\ne\nr\ni\n../textFiles/testA.txt:\nhe\nquick\nbrown\nfox\njumped\nover\nthe\nlazy\ndog\n"
-				+ "../textFiles/testB.txt:\needs\nare\nflowers\ntoo\nonce\nyou\nget\nto\nknow\nthem\n";
+		String[] cmdArgs = { "-o", "[a-z]*", "-", "../../../../../textFiles/testA.txt",
+				"../../../../../textFiles/testB.txt" };
+		String expected = "Standard Input:\ne\nr\ni\n../../../../../textFiles/testA.txt:\nhe\nquick\nbrown\nfox\njumped\nover\nthe\nlazy\ndog\n"
+				+ "../../../../../textFiles/testB.txt:\needs\nare\nflowers\ntoo\nonce\nyou\nget\nto\nknow\nthem\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		System.out.println(tool.execute(workingDir, "e\nr\ni\nN\n")+"lol");
 		assertTrue(expected.equals(tool.execute(workingDir, "e\nr\ni\nN\n")));
@@ -240,9 +238,8 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteOOptionNoResultMultipleFiles() {
-		//file problem
-		String[] cmdArgs = { "-o", "", "../textFiles/testA.txt",
-				"../textFiles/testB.txt" };
+		String[] cmdArgs = { "-o", "", "../../../../../textFiles/testA.txt",
+				"../../../../../textFiles/testB.txt" };
 		String expected = "";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
@@ -255,10 +252,9 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteVOptionMultipleFiles() {
-		//file not found problem
-		String[] cmdArgs = { "-v", " \\w", "..\textFiles\testA.txt",
-				"..\textFiles\testB.txt" };
-		String expected = "..\textFiles\testA.txt:\ndog.\n";
+		String[] cmdArgs = { "-v", " \\w", "../../../../../textFiles/testA.txt",
+				"../../../../../textFiles/testB.txt" };
+		String expected = "../../../../../textFiles/testA.txt:\ndog.\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertEquals(tool.getStatusCode(), 0);
@@ -285,9 +281,9 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteAOptionExtraOptionsMultipleFiles() {
-		String[] cmdArgs = { "-A", "2", "-o", "-v", "k", "../textFiles/testA.txt",
-				"../textFiles/testB.txt" };
-		String expected = "../textFiles/testA.txt:\nThe quick\nbrown fox\njumped over\n../textFiles/testB.txt:\n  once you get to know them.\n";
+		String[] cmdArgs = { "-A", "2", "-o", "-v", "k", "../../../../../textFiles/testA.txt",
+				"../../../../../textFiles/testB.txt" };
+		String expected = "../../../../../textFiles/testA.txt:\nThe quick\nbrown fox\njumped over\n../../../../../textFiles/testB.txt:\n  once you get to know them.\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertEquals(tool.getStatusCode(), 0);
@@ -299,9 +295,9 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteBOptionMultipleFiles() {
-		String[] cmdArgs = { "-B", "1", "(T|W)", "../textFiles/testA.txt",
-				"../textFiles/testB.txt" };
-		String expected = "../textFiles/testA.txt:\nThe quick\n../textFiles/testB.txt:\nWeeds are flowers,\n";
+		String[] cmdArgs = { "-B", "1", "(T|W)", "../../../../../../textFiles/testA.txt",
+				"../../../../../../textFiles/testB.txt" };
+		String expected = "../../../../../textFiles/testA.txt:\nThe quick\n../../../../../textFiles/testB.txt:\nWeeds are flowers,\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertEquals(tool.getStatusCode(), 0);
@@ -321,29 +317,6 @@ public class GREPToolTest {
 		assertEquals(tool.getStatusCode(), 0);
 	}
 
-	/**
-	 * Test for grep command with -help as first argument. Expected correct help
-	 * text as output.
-	 */
-	/*
-	@Test
-	public void testExecuteHelpExtraOptions() {
-		String[] cmdArgs = { "-help", "-o", "nonsense" };
-		String expected = "Usage: grep [OPTIONS] PATTERN [FILE]\n"
-				+ "Search for PATTERN in each FILE or standard input.\n"
-				+ "PATTERN - This specifies a regular expression pattern that describes a set of strings.\n"
-				+ "FILE - Name of the file, when no file is present (denoted by \"-\") uses standard input.\n"
-				+ "OPTIONS\n"
-				+ "	-A NUM : Print NUM lines of trailing context after matching lines\n"
-				+ "	-B NUM : Print NUM lines of leading context before matching lines\n"
-				+ "	-C NUM : Print NUM lines of output context\n"
-				+ "	-c : Suppress normal output. Instead print a count of matching lines for each input file\n"
-				+ "	-v : Select non-matching (instead of matching) lines\n";
-		IGrepTool tool = new GREPTool(cmdArgs);
-		assertTrue(expected.equals(tool.execute(workingDir, "")));
-		assertEquals(tool.getStatusCode(), 0);
-	}
-	*/
 
 	/**
 	 * Test for interface method getHelp(). Expects the correct help text to be
