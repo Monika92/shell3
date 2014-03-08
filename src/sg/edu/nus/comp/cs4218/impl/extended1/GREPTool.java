@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import java.awt.List;
@@ -432,3 +430,4 @@ public class GREPTool extends ATool implements IGrepTool {
 	}
 
 }
+

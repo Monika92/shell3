@@ -51,19 +51,36 @@ public class SORTTool extends ATool implements ISortTool{
 	@Override
 	public String sortFile(String input) {
 		// TODO Auto-generated method stub
-		String[] inputLines = input.split("\n");
-		Arrays.sort(inputLines);
-		StringBuilder builder = new StringBuilder();
-		for(String s : inputLines) {
-		    builder.append(s);
-		    builder.append("\n");
+		try{
+		String output = "";
+		if(input!=null) {
+		if(!input.isEmpty())
+		{
+			String[] inputLines = input.split("\n");
+			int n=inputLines.length;
+			Arrays.sort(inputLines);
+			StringBuilder builder = new StringBuilder();
+			for(String s : inputLines) {
+			    builder.append(s);
+			    builder.append("\n");
+			}
+			output = builder.toString();
 		}
-		return builder.toString();
+		}
+		return output;
+		}
+		catch(Exception e)
+		{
+			setStatusCode(-1);
+			return "";	
+		}
 	}
 
 	/*This method takes in the contents of a file and checks if the file lines are sorted*/
 	@Override
 	public String checkIfSorted(String input) {
+		try{
+		if(input!=null) {
 		String[] inputLines = input.split("\n");
 		
 		int n=inputLines.length;
@@ -71,8 +88,14 @@ public class SORTTool extends ATool implements ISortTool{
         for (int i=0;i< n-1;++i)
         	if (inputLines[i].compareTo(inputLines[i+1]) > 0)
                 return inputLines[i] + " is out of order";
-
+		}
         return "Already sorted";
+		}
+		catch(Exception e)
+		{
+			setStatusCode(-1);
+			return "";	
+		}
 	}
 
 	@Override
@@ -84,6 +107,7 @@ public class SORTTool extends ATool implements ISortTool{
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
+		try{
 		input = "";
 		output = "";
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
@@ -159,6 +183,12 @@ public class SORTTool extends ATool implements ISortTool{
 			
 		
 		return output;
+		}
+		catch(Exception e)
+		{
+			setStatusCode(-1);
+			return "";	
+		}
 	}
 	
 	/*This method writes sorted contents to a file specified*/

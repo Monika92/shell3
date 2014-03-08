@@ -90,7 +90,7 @@ public class CUTToolTest {
 	}
     
     @Test
-    public void cOptionTest()
+    public void testExecuteCOption()
     {
     	String[] arguments = new String[]{"-c", "1-2","-"} ;
 		cuttool = new CUTTool(arguments);
@@ -101,11 +101,9 @@ public class CUTToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
     }
-    
-
     //Both std input and file input are executed (std input first)
 	@Test
-	public void fileInputAndStdInputTest()
+	public void testExecuteFileInputAndStdInput()
 	{
 		String[] arguments = new String[]{"-c", "1-2","test1.txt","-"} ;
 		cuttool = new CUTTool(arguments);
@@ -118,7 +116,7 @@ public class CUTToolTest {
 	}
 	
 	@Test
-	public void absoluteFilePathTest()
+	public void testExecuteAbsoluteFilePath()
 	{
 		String[] arguments = new String[]{"-c", "1-2", absoluteFilePath } ;
 		cuttool = new CUTTool(arguments);
@@ -131,7 +129,7 @@ public class CUTToolTest {
 	}
 	
     @Test
-    public void cOptionInputInvalidRangeTest()
+    public void testExecuteCOptionInputInvalidRange()
     {
     	String[] arguments = new String[]{"-c", "2-1","-"} ;
 		cuttool = new CUTTool(arguments);
@@ -144,7 +142,7 @@ public class CUTToolTest {
     }
     
     @Test
-    public void dOptionFollowedByFOptionTest()
+    public void testExecuteDOptionFollowedByFOption()
     {
     	String[] arguments = new String[]{"-d", ":","-f","1-2","-"} ;
 		cuttool = new CUTTool(arguments);
@@ -157,7 +155,7 @@ public class CUTToolTest {
     }
     
     @Test
-    public void fOptionFollowedByDOptionTest()
+    public void testExecuteFOptionFollowedByDOption()
     {
     	String[] arguments = new String[]{"-f", "1-2","-d",":","-"} ;
 		cuttool = new CUTTool(arguments);
@@ -170,7 +168,7 @@ public class CUTToolTest {
     }
     
     @Test
-    public void dOptionWithFileTest()
+    public void testExecuteDOptionWithFile()
     {
     	String[] arguments = new String[]{"-d", ":","-f","0","test1.txt"} ;
 		cuttool = new CUTTool(arguments);
@@ -183,7 +181,7 @@ public class CUTToolTest {
     }
     
     @Test
-    public void cOptionWithFileTest()
+    public void testExecuteCOptionWithFile()
     {
     	String[] arguments = new String[]{"-c", "1-2","test1.txt"} ;
 		cuttool = new CUTTool(arguments);
@@ -197,7 +195,7 @@ public class CUTToolTest {
     
     //In this test method, the file specified is empty
     @Test
-    public void cOptionWithEmptyFileTest()
+    public void testExecuteCOptionWithEmptyFileTest()
     {
     	String[] arguments = new String[]{"-c", "1-2","test3.txt"} ;
 		cuttool = new CUTTool(arguments);
@@ -211,7 +209,7 @@ public class CUTToolTest {
     
     //In case of multiple files, cut option is executed for all files
     @Test
-    public void cOptionWithMultipleFilesTest()
+    public void testExecuteCOptionWithMultipleFiles()
     {
     	String[] arguments = new String[]{"-c", "1-2","test1.txt","test2.txt"} ;
 		cuttool = new CUTTool(arguments);
@@ -225,7 +223,7 @@ public class CUTToolTest {
     
     
     @Test
-    public void cOptionWithFileMissingTest()
+    public void testExecuteCOptionWithFileMissing()
     {
     	String[] arguments = new String[]{"-c", "1-2","file.txt"} ;
 		cuttool = new CUTTool(arguments);
@@ -239,7 +237,7 @@ public class CUTToolTest {
     
     /*Cut tool executes all options */
     @Test
-    public void cOptionRepeatedTest()
+    public void testExecuteCOptionRepeated()
     {
     	String[] arguments = new String[]{"-c", "1-2", "-c", "3-4", "-"} ;
 		cuttool = new CUTTool(arguments);
@@ -253,7 +251,7 @@ public class CUTToolTest {
     
     // in case of multiple d options, the latest delimiter is considered
     @Test
-    public void dOptionRepeatedTest()
+    public void testExecuteDOptionRepeated()
     {
     	String[] arguments = new String[]{"-d", " ", "-d", ":", "-f","1-3","-"} ;
 		cuttool = new CUTTool(arguments);
@@ -267,7 +265,7 @@ public class CUTToolTest {
     
     //when c and d options are present, c option is taken as priority
     @Test
-    public void cDOptionTest()
+    public void testExecuteCDOption()
     {
     	String[] arguments = new String[]{"-c", "1-2", "-d", ":", "-"} ;
 		cuttool = new CUTTool(arguments);
@@ -281,7 +279,7 @@ public class CUTToolTest {
     
    //when c and f options are present, c option is taken as priority
     @Test
-    public void cFOptionTest()
+    public void testExecuteCFOption()
     {
     	String[] arguments = new String[]{"-c", "1-2", "-f", "2", "-"} ;
 		cuttool = new CUTTool(arguments);
@@ -295,7 +293,7 @@ public class CUTToolTest {
     
    //when c , d and f options are present, all options are executed
     @Test
-    public void cDFOptionTest()
+    public void testExecuteCDFOptions()
     {
     	String[] arguments = new String[]{"-c", "1-2", "-f", "2-4", "-d", ":","-"} ;
 		cuttool = new CUTTool(arguments);
@@ -308,7 +306,7 @@ public class CUTToolTest {
     }
     
     @Test
-    public void helpTest()
+    public void testExecuteHelp()
     {
     	String[] arguments = new String[]{"-help"} ;
 		cuttool = new CUTTool(arguments);
@@ -320,8 +318,9 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), 0);
     }
     
+    
 	@Test
-	public void cutSpecfiedCharactersTest1() throws IOException {
+	public void testCutSpecfiedCharactersWithContiguousList() throws IOException {
 	
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
@@ -334,7 +333,7 @@ public class CUTToolTest {
 	}
 	
 	@Test
-	public void cutSpecfiedCharactersTest2() throws IOException {
+	public void testCutSpecfiedCharactersWithListContiguousAndDiscrete() throws IOException {
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
 		actualOutput = cuttool.cutSpecfiedCharacters("1-4,5,6,10", "the quick brown fox jumps over the lazy dog");
@@ -347,7 +346,7 @@ public class CUTToolTest {
 	
 	@Test 
 	//LIST with negative values as -2-3 as  1 till 2
-	public void cutSpecfiedCharactersTest3() throws IOException {
+	public void testCutSpecfiedCharactersWithNegativeList() throws IOException {
 	
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
@@ -360,21 +359,83 @@ public class CUTToolTest {
 	}
 	
 	@Test
-	public void cutSpecfiedCharactersForEmptyStringTest() throws IOException {
+	public void testCutSpecfiedCharactersWithNoInput() throws IOException {
 	
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
-		actualOutput = cuttool.cutSpecfiedCharacters("1-2", "");
+		actualOutput = cuttool.cutSpecfiedCharacters("", "");
 		expectedOutput = "";
 		actualOutput = actualOutput.replace("\n", "");
 		expectedOutput = expectedOutput.replace("\n", "");
 		assertTrue(expectedOutput.equals(actualOutput));
 		assertEquals(cuttool.getStatusCode(), 0);
     }
-
+	
+	@Test
+	public void testCutSpecfiedCharactersWithInvalidParams() throws IOException {
+	
+		String[] arguments = null ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.cutSpecfiedCharacters("dfsdsfds", "fds");
+		expectedOutput = "";
+		actualOutput = actualOutput.replace("\n", "");
+		expectedOutput = expectedOutput.replace("\n", "");
+		assertTrue(expectedOutput.equals(actualOutput));
+		assertEquals(cuttool.getStatusCode(), -1);
+    }
+	
+	@Test
+	public void testCutSpecfiedCharactersWithNullParams() throws IOException {
+	
+		String[] arguments = null ;
+		cuttool = new CUTTool(arguments);
+		actualOutput = cuttool.cutSpecfiedCharacters(null, null);
+		expectedOutput = "";
+		actualOutput = actualOutput.replace("\n", "");
+		expectedOutput = expectedOutput.replace("\n", "");
+		assertTrue(expectedOutput.equals(actualOutput));
+		assertEquals(cuttool.getStatusCode(), -1);
+    }
+	@Test
+	public void testCutSpecifiedCharactersUseDelimiterWithInvalidParams() throws IOException {
+	
+		String[] arguments = null ;
+		cuttool = new CUTTool(arguments);	
+		actualOutput = cuttool.cutSpecifiedCharactersUseDelimiter("invalidlist", ":" ,"a:b");
+		expectedOutput = "";
+		actualOutput = actualOutput.replace("\n", "");
+		expectedOutput = expectedOutput.replace("\n", "");
+		assertTrue(expectedOutput.equals(actualOutput));
+		assertEquals(cuttool.getStatusCode(), -1);
+    }
+	@Test
+	public void testCutSpecifiedCharactersUseDelimiterWithNullParams() throws IOException {
+	
+		String[] arguments = null ;
+		cuttool = new CUTTool(arguments);	
+		actualOutput = cuttool.cutSpecifiedCharactersUseDelimiter(null,null,null);
+		expectedOutput = "";
+		actualOutput = actualOutput.replace("\n", "");
+		expectedOutput = expectedOutput.replace("\n", "");
+		assertTrue(expectedOutput.equals(actualOutput));
+		assertEquals(cuttool.getStatusCode(), -1);
+    }
+	
+	@Test
+	public void testCutSpecifiedCharactersUseDelimiterWithNoInput() throws IOException {
+	
+		String[] arguments = null ;
+		cuttool = new CUTTool(arguments);	
+		actualOutput = cuttool.cutSpecifiedCharactersUseDelimiter("5-", ":" ,"");
+		expectedOutput = "";
+		actualOutput = actualOutput.replace("\n", "");
+		expectedOutput = expectedOutput.replace("\n", "");
+		assertTrue(expectedOutput.equals(actualOutput));
+		assertEquals(cuttool.getStatusCode(), 0);
+    }
 	//5- as LIST is interpreted as 5 till end of string
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterTest1() throws IOException {
+	public void testCutSpecifiedCharactersUseDelimiterAndListWithNoEndingValue() throws IOException {
 		
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);	
@@ -388,7 +449,7 @@ public class CUTToolTest {
 	
 	//-3 as LIST is interpreted as 1-3
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterTest2() throws IOException {
+	public void testCutSpecifiedCharactersUseDelimiterTestAndListWithNoStartingValue() throws IOException {
 		
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
@@ -402,7 +463,7 @@ public class CUTToolTest {
 	
 	//test 3
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterTest3() throws IOException {
+	public void testCutSpecifiedCharactersUseDelimiterAndListExceedingLengthOfInput() throws IOException {
 		
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
@@ -415,7 +476,7 @@ public class CUTToolTest {
 	}	
 	//test 4
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterTest4() throws IOException {
+	public void testCutSpecifiedCharactersUseNonExistingDelimiterAndListSingleInput() throws IOException {
 		
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
@@ -428,7 +489,7 @@ public class CUTToolTest {
 	}
 	
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterTest5() throws IOException {
+	public void testCutSpecifiedCharactersUseDelimiterAndListSingleInput() throws IOException {
 		
 		String[] arguments = null ;
 		cuttool = new CUTTool(arguments);
