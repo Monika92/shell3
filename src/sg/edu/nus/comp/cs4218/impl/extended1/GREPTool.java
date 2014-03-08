@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import java.awt.List;
@@ -217,13 +215,12 @@ public class GREPTool extends ATool implements IGrepTool {
 		StringBuilder matchingLines = new StringBuilder();
 		String output="";
 		String ls = "\n";
-		if(pattern == null || input == null || input.isEmpty() ||option_C < 0)
-		{
+		if(pattern == null || input == null || option_C < 0)
 			setStatusCode(-1);
-			return output;
-		}
 		else
 		{
+			if(!input.isEmpty())
+			{
 				String[] inputLines = input.split("\n");
 				for(int i =0;i<inputLines.length;i++)
 				{
@@ -258,6 +255,7 @@ public class GREPTool extends ATool implements IGrepTool {
 					}
 				}
 				output += matchingLines.toString();
+			}
 		}
 		return output;
 	}
@@ -274,6 +272,7 @@ public class GREPTool extends ATool implements IGrepTool {
 		else
 		{
 			String[] inputLines = input.split("\n");
+			//System.out.println(inputLines.);
 			for(int i =0;i<inputLines.length;i++)
 			{
 				Pattern p = Pattern.compile(pattern);
@@ -431,3 +430,4 @@ public class GREPTool extends ATool implements IGrepTool {
 	}
 
 }
+

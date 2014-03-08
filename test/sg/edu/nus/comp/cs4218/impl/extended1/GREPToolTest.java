@@ -162,6 +162,7 @@ public class GREPToolTest {
 		String[] cmdArgs = { " over", "../../textFiles/testA.txt",
 				"../textFiles/filenotfound" };
 		String expected = "../textFiles/testA.txt:\njumped over\n";
+
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertTrue(tool.getStatusCode() != 0);
@@ -227,6 +228,7 @@ public class GREPToolTest {
 				+ "../textFiles/testB.txt:\needs\nare\nflowers\ntoo\nonce\nyou\nget\nto\nknow\nthem\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		//System.out.println(tool.execute(workingDir, "e\nr\ni\nN\n")+"lol");
+
 		assertTrue(expected.equals(tool.execute(workingDir, "e\nr\ni\nN\n")));
 		assertEquals(tool.getStatusCode(), 0);
 	}
@@ -342,6 +344,7 @@ public class GREPToolTest {
 		assertEquals(tool.getStatusCode(), 0);
 	}
 	*/
+
 
 	/**
 	 * Test for interface method getHelp(). Expects the correct help text to be
