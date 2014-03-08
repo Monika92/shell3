@@ -298,4 +298,94 @@ public class WCToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
+	
+	@Test
+    public void getCharacterCountTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getCharacterCount("lo3");
+		expectedOutput = "3";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
+	@Test
+    public void getCharacterCountEmptyInputTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getCharacterCount(" ");
+		expectedOutput = "0";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
+	@Test
+    public void getCharacterCountNewlineInputTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getCharacterCount("\n");
+		expectedOutput = "0";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
+	@Test
+    public void getCharacterCountSplCharInputTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getCharacterCount("..\n!@");
+		expectedOutput = "4";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
+	@Test
+    public void getWordCountTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getWordCount("lol lol lollll");
+		expectedOutput = "3";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
+	@Test
+    public void getWordCountCrazyInputWithNewLinesTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getWordCount("lol\n\n    lol\n2 . lollll");
+		expectedOutput = "5";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
+	@Test
+    public void getNewLineCountTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getNewLineCount("lol\n lol\n lollll");
+		expectedOutput = "3";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
+	@Test
+    public void getNewLineCountEmptylinesTest()
+    {
+    	String[] arguments = new String[]{" "} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getNewLineCount("\n \n");
+		expectedOutput = "0";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertFalse(expectedOutput.equals("3"));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+	
 }

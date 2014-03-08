@@ -102,6 +102,7 @@ public class GREPTool extends ATool implements IGrepTool {
 				}
 				output += matchingLines.toString();
 			}
+			//dont we need to set status code here
 		}
 		return output;
 	}
@@ -126,8 +127,10 @@ public class GREPTool extends ATool implements IGrepTool {
 				{
 					Pattern p = Pattern.compile(pattern);
 					Matcher m = p.matcher(inputLines[i]);
+					
 					if(m.find()) 
 					{
+						
 						matchFound = true;
 						matchingLines.append(inputLines[i]);
 						matchingLines.append(ls);
@@ -195,10 +198,67 @@ public class GREPTool extends ATool implements IGrepTool {
 
 	/**/
 	@Override
-	public String getMatchingLinesWithOutputContext(int option_C,
-			String pattern, String input) {
+	public String getMatchingLinesWithOutputContext(int option_C, String pattern, String input) {
 		// TODO Auto-generated method stub
-		String output = "";
+		/*
+		output = getMatchingLinesWithLeadingContext(option_C,pattern,input);
+		if(output!="")
+		{
+			output = output.substring(0, output.length()-1); //remove the last last newline
+			//find if there is any other newline in the string
+			if(output.contains("\n"))
+			{
+				//remove the last sentence ie the one with the match
+				output = output.substring(output.lastIndexOf("\n")+1,output.length());
+			}
+			*/
+				
+		int start,tracker=0;
+		StringBuilder matchingLines = new StringBuilder();
+		String output="";
+		String ls = "\n";
+		if(pattern == null || input == null || option_C < 0)
+			setStatusCode(-1);
+		else
+		{
+			if(!input.isEmpty())
+			{
+				String[] inputLines = input.split("\n");
+				for(int i =0;i<inputLines.length;i++)
+				{
+					Pattern p = Pattern.compile(pattern);
+					Matcher m = p.matcher(inputLines[i]);
+					if(m.find()) 
+					{
+						//leading lines
+						start = i-option_C;
+						if(start<0)
+							start = 0;
+						if(start<tracker)
+							start = tracker;
+						for(int j = start ; j<= i ;j++)
+						{
+							matchingLines.append(inputLines[j]);
+							matchingLines.append(ls);
+						}
+						tracker=i;
+					
+						//trailing lines
+						for(int k = 1; k<= option_C ;k++)
+						{
+							if(i+k <= inputLines.length-1)
+							{
+								matchingLines.append(inputLines[i+k]);
+								matchingLines.append(ls);
+							}
+						}
+						i+=option_C;
+											
+					}
+				}
+				output += matchingLines.toString();
+			}
+		}
 		return output;
 	}
 
@@ -214,13 +274,15 @@ public class GREPTool extends ATool implements IGrepTool {
 		else
 		{
 			String[] inputLines = input.split("\n");
+			//System.out.println(inputLines.);
 			for(int i =0;i<inputLines.length;i++)
 			{
 				Pattern p = Pattern.compile(pattern);
 				Matcher m = p.matcher(inputLines[i]);
-				if(m.find()) 
-				{
-					matchingLines.append(m.group(1));
+				int count = 1;
+		   		while(m.find()) 
+				{	
+		   			matchingLines.append(m.group());
 					matchingLines.append(ls);
 				}
 			}
@@ -284,13 +346,17 @@ public class GREPTool extends ATool implements IGrepTool {
 			input += stdin + "\n";
 			stdInFlag = true;
 		}
-		if (fileList != null) {
-			for (String fileName : fileList) {
-
+		if (fileList != null)
+		{	
+			for (String fileName : fileList) 
+			{
 				if (fileName != null && workingDir!=null) {
-					if (fileName.startsWith(File.separator)) {
+					if (fileName.startsWith(File.separator))
+					{	
 						// Do nothing
-					} else {
+					}
+					else
+					{
 						fileName = workingDir.toString() + File.separator
 								+ fileName;
 					}
@@ -312,13 +378,40 @@ public class GREPTool extends ATool implements IGrepTool {
 				output = getHelp();
 				i++;
 			}
-			else if (options.get(i).equalsIgnoreCase("-v")){
-
+			else
+			{
+				if (options.get(i).equalsIgnoreCase("-v"))
+				{
 				output += getNonMatchingLines(pattern, input);
 				i++;
-			}
+				}	
+				else if (options.get(i).equalsIgnoreCase("-o"))
+				{
+				output += getMatchingLinesOnlyMatchingPart(pattern, input);
+				i++;
+				}
+				else if (options.get(i).equals("-c"))
+				{
+				output += getCountOfMatchingLines(pattern, input);
+				i++;
+				}
+				else if (options.get(i).equals("-C"))
+				{
+				output += getMatchingLinesWithOutputContext(Integer.parseInt(optionArguments.get(i)), pattern, input);
+				i++;
+				}
+				else if (options.get(i).equalsIgnoreCase("-A"))
+				{
+				output += getMatchingLinesWithTrailingContext(Integer.parseInt(optionArguments.get(i)), pattern, input);
+				i++;
+				}
+				else if (options.get(i).equalsIgnoreCase("-B"))
+				{
+				output += getMatchingLinesWithLeadingContext(Integer.parseInt(optionArguments.get(i)), pattern, input);
+				i++;
+				}
+			}	
 		}
-
 		return output;
 	}
 
