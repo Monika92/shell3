@@ -157,19 +157,19 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testExecuteMultipleFiles() {
-		//file problem
+		
 		String[] cmdArgs = { " over", "textFiles"+File.separator+"testA.txt",
-				"textFiles"+File.separator+"testB.txt" };
+		"textFiles"+File.separator+"filenotfound" };
 		String expected = "textFiles"+File.separator+"testA.txt:\njumped over\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		String actual = tool.execute(workingDir, "");
 		actual = actual.replace("\n", "");
 		expected = expected.replace("\n", "");
 		assertTrue(expected.equals(actual));
-		assertEquals(tool.getStatusCode(), 0);
-//		String errorMessage = errContent.toString();
-//		assertTrue(String.format(GREPTool.GREP_FILE_ERR_MSG,
-//				"../textFiles/filenotfound").equals(errorMessage));
+		assertTrue(tool.getStatusCode() != 0);	
+		String errorMessage = errContent.toString();
+		assertTrue(String.format(GREPTool.GREP_FILE_ERR_MSG,
+		"textFiles/filenotfound").equals(errorMessage));
 	}
 
 	/**
@@ -638,7 +638,6 @@ public class GREPToolTest {
 	public void testMatchingLinesLeadingContextFullMatchWithContext() {
 		String matchingLines = grepTool.getMatchingLinesWithLeadingContext(10,
 				"", CONTENT_ALPHABET);
-		//check output on mac
 		assertTrue(CONTENT_ALPHABET.equals(matchingLines));
 	}
 
@@ -777,7 +776,6 @@ public class GREPToolTest {
 	public void testMatchingLinesOutputContextFullMatchWithContext() {
 		String matchingLines = grepTool.getMatchingLinesWithOutputContext(10,
 				"[a-z]", CONTENT_ALPHABET);
-		//check on mac
 		assertTrue(CONTENT_ALPHABET.equals(matchingLines));
 	}
 
@@ -787,10 +785,10 @@ public class GREPToolTest {
 	 */
 	@Test
 	public void testMatchingLinesOutputContextNoContext() {
-//		String matchingLines = grepTool.getMatchingLinesWithOutputContext(0,
-//				"a", CONTENT_ALPHABET);
-//		assertTrue("a\na\na\na\na\na\na\na\n".equals(matchingLines));
-		String matchingLines = grepTool.getMatchingLinesWithOutputContext(0, "z",
+		String matchingLines = grepTool.getMatchingLinesWithOutputContext(0,
+				"a", CONTENT_ALPHABET);
+		assertTrue("a\na\na\na\na\na\na\na\n".equals(matchingLines));
+		matchingLines = grepTool.getMatchingLinesWithOutputContext(0, "z",
 				CONTENT_ALPHABET);
 		assertTrue("z\n".equals(matchingLines));
 	}
@@ -820,13 +818,9 @@ public class GREPToolTest {
 	/*Output given by testcase initially wrong, so changed code to update correct output*/
 	@Test
 	public void testMatchingLinesOutputContextWithCharacter() {
-//		String matchingLines = grepTool.getMatchingLinesWithOutputContext(1,
-//				"c", CONTENT_ALPHABET);
-//		assertTrue("b\nc\nc\nz\n".equals(matchingLines));
-		
-		String matchingLines = grepTool.getMatchingLinesWithTrailingContext(1,
-				"c","c\nc\nz\n" );
-		assertTrue("c\nc\nz\n".equals(matchingLines));
+		String matchingLines = grepTool.getMatchingLinesWithOutputContext(1,
+				"c", CONTENT_ALPHABET);
+		assertTrue("b\nc\nc\nz\n".equals(matchingLines));
 	}
 
 	/**
@@ -878,7 +872,7 @@ public class GREPToolTest {
 	@Test
 	public void testMatchingLinesOutputContextLastWord() {
 		String matchingLines = grepTool.getMatchingLinesWithOutputContext(2,
-				"~*xxx", CONTENT_STORY);
+				"(~*xxx)", CONTENT_STORY);
 		String expected = "he whispered 2 her corpse \"I ment 2 sey i will luv u...FIVE-ever\"\n(dat mean he luv her moar den 4evr)\nxxx~*...like dis if u cry evry time...~*xxx\n";
 		assertTrue(expected.equals(matchingLines));
 	}
