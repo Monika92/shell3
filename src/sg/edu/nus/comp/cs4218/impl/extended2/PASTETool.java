@@ -241,6 +241,7 @@ public class PASTETool extends ATool implements IPasteTool{
 	@Override
 	public String execute(File workingDir, String stdin) {
 
+		
 		String[] args = super.args;
 		setStatusCode(0);
 		

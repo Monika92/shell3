@@ -8,10 +8,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+
 import sg.edu.nus.comp.cs4218.extended2.IWcTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 
 public class WCTool extends ATool implements IWcTool{
@@ -144,7 +146,13 @@ public class WCTool extends ATool implements IWcTool{
 	
 	@Override
 	public String execute(File workingDir, String stdin) {
-		
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("wc", super.args);
+
+		if(validCode == -1){
+		setStatusCode(-1);
+		return "";
+		}
 		String outputString = "";
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);

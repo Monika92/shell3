@@ -7,10 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import sg.edu.nus.comp.cs4218.extended2.ISortTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 /**
  * Do not modify this file
@@ -107,6 +109,15 @@ public class SORTTool extends ATool implements ISortTool{
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
+		
+//		CommandVerifier cv = new CommandVerifier();
+//		int validCode = cv.verifyCommand("sort", super.args);
+//
+//		if(validCode == -1){
+//		setStatusCode(-1);
+//		return "";
+//		}
+		
 		try{
 		input = "";
 		output = "";

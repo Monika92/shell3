@@ -13,6 +13,7 @@ import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 /**
  * Do not modify this file
@@ -176,6 +177,15 @@ public class CUTTool extends ATool implements ICutTool {
 	/*Executes the command given the working directory path*/
 	@Override
 	public String execute(File workingDir, String stdin) {
+		
+//		CommandVerifier cv = new CommandVerifier();
+//		int validCode = cv.verifyCommand("cut", super.args);
+//
+//		if(validCode == -1){
+//		setStatusCode(-1);
+//		return "";
+//		}
+		
 		try{
 			input = "";
 			output = "";

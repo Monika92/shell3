@@ -184,10 +184,16 @@ public class ArgumentObjectParser {
 				else 
 				{
 						argumentObject.pattern = argument[i];
+						
 						i+=1;
 						//the rest are considered as filenames
 						while(i <argumentSize)
 						{
+							if(argument[i].equalsIgnoreCase("-"))
+							{
+								//do nothing for stdin
+							}
+							else
 							argumentObject.fileList.add(argument[i]);
 							i++;
 						}
