@@ -424,8 +424,7 @@ public class GREPTool extends ATool implements IGrepTool {
 					outputString += getMatchingLinesOnlyMatchingPart(pattern, input);
 					i++;
 				} else if (options.get(i).equals("-c")) {
-					outputString += Integer.toString(getCountOfMatchingLines(pattern,
-							input));
+					outputString += Integer.toString(getCountOfMatchingLines(pattern,input));
 					i++;
 				} else if (options.get(i).equals("-C")) {
 					outputString += getMatchingLinesWithOutputContext(

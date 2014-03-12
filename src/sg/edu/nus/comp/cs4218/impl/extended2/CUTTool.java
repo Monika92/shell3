@@ -246,7 +246,7 @@ public class CUTTool extends ATool implements ICutTool {
 						.append(cutSpecfiedCharacters(list, inputLine));
 						stringBuilder.append(ls);
 					}
-					output += stringBuilder.toString() + "\n";
+					output += stringBuilder.toString() ;
 					i++;
 				}
 				else if (options.get(i).equalsIgnoreCase("-d")) {
@@ -263,7 +263,7 @@ public class CUTTool extends ATool implements ICutTool {
 										list, delim, inputLine));
 								stringBuilder.append(ls);
 							}
-							output += stringBuilder.toString() + "\n";
+							output += stringBuilder.toString() ;
 						}
 					}
 					i++;
@@ -282,7 +282,7 @@ public class CUTTool extends ATool implements ICutTool {
 										list, delim, inputLine));
 								stringBuilder.append(ls);
 							}
-							output += stringBuilder.toString() + "\n";
+							output += stringBuilder.toString() ;
 						}
 					}
 					i++;

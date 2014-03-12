@@ -213,6 +213,10 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			return new UNIQTool(args);
 		else if (command.equalsIgnoreCase("wc"))
 			return new WCTool(args);
+		
+		else if (command.equalsIgnoreCase("grep"))
+			return new GREPTool(args);
+		
 		else return null;
 
 	}
