@@ -213,7 +213,7 @@ public class GREPTool extends ATool implements IGrepTool {
 			}
 			*/
 				
-		int start,tracker=0;
+		int start=0,tracker=0;
 		StringBuilder matchingLines = new StringBuilder();
 		String output="";
 		String ls = "\n";
@@ -231,11 +231,13 @@ public class GREPTool extends ATool implements IGrepTool {
 					if(m.find()) 
 					{
 						//leading lines
+						
 						start = i-option_C;
 						if(start<0)
 							start = 0;
 						if(start<tracker)
 							start = tracker;
+						
 						for(int j = start ; j<= i ;j++)
 						{
 							matchingLines.append(inputLines[j]);
@@ -253,7 +255,7 @@ public class GREPTool extends ATool implements IGrepTool {
 							}
 						}
 						i+=option_C;
-											
+												
 					}
 				}
 				output += matchingLines.toString();
