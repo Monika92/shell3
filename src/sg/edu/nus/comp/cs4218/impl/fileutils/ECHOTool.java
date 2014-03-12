@@ -34,6 +34,11 @@ public class ECHOTool extends ATool implements IEchoTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
+		if(stdin != null){
+			setStatusCode(0);
+			return stdin;
+		}
+		
 		StringBuilder sb = new StringBuilder();
 		for(String s : args){
 			sb.append(s);
