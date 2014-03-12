@@ -41,19 +41,19 @@ public class PASTEToolTest {
 		fileB = new File("b.txt");
 		fileC = new File("c.txt");
 		fileD = new File("d.txt");
-		
+
 		fileEM1 = new File("em1.txt");
 		fileEM2 = new File("em2.txt");
-		
+
 		fileEM1.createNewFile();
 		fileEM2.createNewFile();
-		
+
 		fileContentA = "Table\nChair\nMan";
 		fileContentB = "Wall\nFloor";
 		fileContentC = "Superman\nSpiderman\nBatman";
 		fileContentD = "Cat";
 		fileContentE = "";
-		
+
 		writeToFile(fileA, fileContentA);
 		writeToFile(fileB, fileContentB);
 		writeToFile(fileC, fileContentC);
@@ -86,12 +86,21 @@ public class PASTEToolTest {
 		fileB.delete();
 		fileC.delete();
 		fileD.delete();
-
+		fileEM1.delete();
+		fileEM2.delete();
 	}
 
-	//TODO:
+	@Test
 	//paste with stdin - valid case
-	
+	public void pasteTestValidWithFileAndStdin(){
+		String[] arguments = new String[]{"a.txt","-"};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, "This is stdin");
+		expectedOutput = "Table\nChair\nMan" + "\nThis is stdin";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
+	}
+
 	@Test
 	//Check for invalid command : "paste" and no stdin
 	public void pasteTestInvalidCommands1(){
@@ -99,11 +108,11 @@ public class PASTEToolTest {
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
-		
+
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
-	
+
 	@Test
 	//Check for invalid command: "paste -s" 
 	public void pasteTestInvalidCommands2(){
@@ -112,9 +121,9 @@ public class PASTEToolTest {
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(pasteTool.getStatusCode(), -1);	
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
 	}
-	
+
 	@Test
 	//Check for invalid command: paste filename -s
 	public void pasteTestInvalidCommands3(){
@@ -123,9 +132,9 @@ public class PASTEToolTest {
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(pasteTool.getStatusCode(), -1);	
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
 	}
-	
+
 	@Test
 	//Check for invalid option: paste -s -k fname
 	public void pasteTestInvalidCommands4(){
@@ -134,23 +143,20 @@ public class PASTEToolTest {
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(pasteTool.getStatusCode(), -1);	
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
 	}
-	
-	//TODO
-	/*
+
 	@Test
 	//Positive case - valid command: paste -s -d fname
 	public void pasteTestValidCommand5(){
-		String[] arguments = new String[]{"-s","-d","em1.txt"};		
+		String[] arguments = new String[]{"-s","-d",":","em1.txt"};		
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.execute(workingDirectory, null);
-		expectedOutput = helpOutput;
+		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(pasteTool.getStatusCode(), -1);	
+		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
-	*/
-	
+
 	@Test
 	//If only "-help", print help message
 	public void pasteGetHelpAsOnlyArgumentTest() {
@@ -159,7 +165,7 @@ public class PASTEToolTest {
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
 
-		
+
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);		
 	}
@@ -175,7 +181,7 @@ public class PASTEToolTest {
 		assertEquals(pasteTool.getStatusCode(), 0);			
 
 	}
-	
+
 	@Test
 	//Check for invalid files
 	public void pasteNoOptionsInvalidFilesTest(){
@@ -184,7 +190,7 @@ public class PASTEToolTest {
 		String fileName2 = "./b.txt";
 		ArrayList<String> fNames = new ArrayList<String>();
 		fNames.add(fileName1);fNames.add(fileName2);
-		
+
 		pasteTool = new PASTETool(arguments);		
 		actualOutput = pasteTool.execute(workingDirectory, null);
 
@@ -199,37 +205,37 @@ public class PASTEToolTest {
 		String[] arguments = new String[]{"em1.txt"};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.pasteUseDelimiter("\t", arguments);
-		
+
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
-		
+
 	}
-	
+
 	@Test
 	//Check for empty file when between multiple non empty files
 	public void pasteUseDelimWithOneEmptyInManyFilesTest(){
 		String[] arguments = new String[]{"b.txt","em1.txt","d.txt"};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.pasteUseDelimiter("*", arguments);
-		
+
 		expectedOutput = "Wall**Cat" + "\n" + "Floor**";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
-	
+
 	@Test
 	//Serial output using empty files
 	public void pasteUseSerialWithManyEmptyFilesTest(){
 		String[] arguments = new String[]{"em1.txt","em2.txt"};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.pasteSerial(arguments);
-		
+
 		expectedOutput = "\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
-	
+
 	@Test
 	//Check paste o/p with 1 file, no options
 	public void pasteNoOptionsOneFileTest(){
@@ -383,7 +389,7 @@ public class PASTEToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}	
-	
+
 	@Test
 	//if multiple delim, choose last option and args
 	public void pasteUseDelimMultipleDelimsTest(){
@@ -394,7 +400,7 @@ public class PASTEToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
-	
+
 	@Test
 	//should choose -s over -d
 	public void pasteOptionsPriorityCheckTest(){
@@ -406,4 +412,64 @@ public class PASTEToolTest {
 		assertEquals(pasteTool.getStatusCode(), 0);	
 	}
 
+	@Test
+	//Test interface methods with null filename inputs
+	public void pasteFileNameNull(){
+		String[] toolArguments = new String[]{"-s","-d",":","a.txt"};
+		pasteTool = new PASTETool(toolArguments);
+
+		String[] arguments = new String[]{"a.txt",null};
+		actualOutput = pasteTool.pasteSerial(arguments);
+		expectedOutput = "Table\tChair\tMan\nfile error!";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
+	}
+
+	@Test
+	//Test interface methods with null filename inputs
+	public void pasteFileNameNull2(){
+		String[] toolArguments = new String[]{"-s","-d",":","a.txt"};
+		pasteTool = new PASTETool(toolArguments);
+
+		String[] arguments = new String[]{"a.txt",null};
+		actualOutput = pasteTool.pasteUseDelimiter(":",arguments);
+		expectedOutput = "file error!";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
+	}
+
+	@Test
+	//Test interface method "pasteUseDelimiter" with null delim
+	public void pasteDelimNull(){
+		String[] toolArguments = new String[]{"-s","-d",":","a.txt"};
+		pasteTool = new PASTETool(toolArguments);
+
+		String[] arguments = new String[]{"a.txt","b.txt"};
+		actualOutput = pasteTool.pasteUseDelimiter(null,arguments);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
+	}
+
+	@Test
+	//Test Paste execute method with null in args
+	public void pasteArgumentsContailNull(){
+		String[] arguments = new String[]{"-s","-d",":",null};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
+	}
+	
+	@Test
+	//Test Paste execute method with null in args
+	public void pasteArgumentsAreNull(){
+		String[] arguments = null;
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
+	}
 }
