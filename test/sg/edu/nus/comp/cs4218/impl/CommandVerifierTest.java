@@ -420,4 +420,18 @@ public class CommandVerifierTest {
     	assertEquals(expectedResultCode, actualResultCode);	
 
     }
+    
+    
+    @Test
+    //Test for pipe command. Bypassed check here
+    //since pipe is checked within pipe tool
+    public void verifyPipe(){
+    	
+    	String cmd = "pipe";
+    	String[] args = {"pwd","paste"};
+    	
+    	actualResultCode = verifier.verifyCommand(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
 }

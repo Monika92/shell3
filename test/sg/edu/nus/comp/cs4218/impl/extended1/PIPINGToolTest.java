@@ -49,7 +49,7 @@ public class PIPINGToolTest {
 	@Before
 	public void setUp() throws Exception {
 		pipingTool = new PIPINGTool(null, null);
-		pipingTool.execute(workingDir, "");
+		//pipingTool.execute(workingDir, "");
 		System.setErr(new PrintStream(errContent)); // to test error output
 		
 		fileA = new File("a.txt");
@@ -164,8 +164,8 @@ public class PIPINGToolTest {
 		//			errorMessage));
 		// because rightTool executes fine
 		
-		System.out.println("pipe result:" + pipeResult + "end");
-		System.out.println("code:" + pipingTool.getStatusCode());
+		//System.out.println("pipe result:" + pipeResult + "end");
+		//System.out.println("code:" + pipingTool.getStatusCode());
 		assertTrue(pipingTool.getStatusCode() == 0);
 		
 	}
@@ -330,6 +330,7 @@ public class PIPINGToolTest {
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
 		expectedOutput = "Appl\nMelo\nOran";
+		System.out.println(actualOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	

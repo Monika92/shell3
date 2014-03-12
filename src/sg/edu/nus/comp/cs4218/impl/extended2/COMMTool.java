@@ -12,6 +12,7 @@ import sg.edu.nus.comp.cs4218.extended2.ICommTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 /**
  * Do not modify this file
@@ -46,6 +47,19 @@ public class COMMTool extends ATool implements ICommTool{
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
+		
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("comm", super.args);
+		
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
 		
 		String fileName1 = "", fileName2 = "";
 		ArgumentObjectParser aop = new ArgumentObjectParser();

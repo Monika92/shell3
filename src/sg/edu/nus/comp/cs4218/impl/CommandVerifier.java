@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 
 public class CommandVerifier {
 
+	private boolean pipeCommand;
+	
 	//Upper bound for number of arguments
 	private final int INF = 10000;
 
@@ -17,6 +19,7 @@ public class CommandVerifier {
 	LinkedHashMap<String, Integer> sortMap;
 	LinkedHashMap<String, Integer> wcMap;
 	LinkedHashMap<String, Integer> uniqMap;
+	LinkedHashMap<String, Integer> grepMap;
 
 	ArrayList<Integer> pwdMap;
 	ArrayList<Integer> cdLsMap;
@@ -28,8 +31,16 @@ public class CommandVerifier {
 		initializeCommandList();
 		initializeBasic();
 		initializeTextUtil();
+		pipeCommand = false;
 	}
 
+	public CommandVerifier(boolean isPipeCmd){				
+		initializeCommandList();
+		initializeBasic();
+		initializeTextUtil();
+		pipeCommand = true;
+	}
+	
 	private void initializeCommandList(){
 		basCmds = new ArrayList<String>();
 		basCmds.add("pwd");
@@ -48,6 +59,7 @@ public class CommandVerifier {
 		tuCmds.add("sort");
 		tuCmds.add("wc");
 		tuCmds.add("uniq");
+		tuCmds.add("grep");
 	}
 
 	private void initializeBasic(){
@@ -110,11 +122,29 @@ public class CommandVerifier {
 		uniqMap.put("-help",0);
 		uniqMap.put("defMin",1);
 		uniqMap.put("defMax",INF);
-
+		
+		grepMap = new LinkedHashMap<String, Integer>();
+		grepMap.put("-A",1);
+		grepMap.put("-B",1);
+		grepMap.put("-C",1);
+		grepMap.put("-c",0);
+		grepMap.put("-o",0);
+		grepMap.put("-v",0);
+		grepMap.put("-help",0);
+		grepMap.put("defMin",2); //include 1 pattern and atleast 1 (file or "-")
+		grepMap.put("defMax",INF);
+		
 	}
 
 	public int verifyBasic(String cmd, ArrayList<String> args){
-
+		
+		//if command is from pipe, then either with or w/o args are both valid
+		if(pipeCommand){
+			if(cmd.equalsIgnoreCase("cat") ||cmd.equalsIgnoreCase("echo")){
+				return 1;
+			}
+		}
+		
 		int numArgs = args.size();
 
 		if(cmd.equals("pwd")){
@@ -140,14 +170,14 @@ public class CommandVerifier {
 	}
 
 	private int basicCheck(ArrayList<Integer> map, int numArgs){
-		
+
 		int lowerLimit = map.get(0);
 		int upperLimit = map.get(1);
-		
+
 		if(upperLimit == INF && numArgs >= lowerLimit){
 			return 1;
 		}
-		
+
 		if(numArgs >= lowerLimit && numArgs <= upperLimit){
 			return 1;
 		}
@@ -159,56 +189,67 @@ public class CommandVerifier {
 		if(cmd.equals("cut")){
 			//should contain "-c"
 			if(args.contains("-c")){
-				return textUtilCheck(cutMap, args);
+				return textUtilCheck(cmd,cutMap, args);
 			}
 		}
 		else if(cmd.equals("paste")){
-			return textUtilCheck(pasteMap, args);
+			return textUtilCheck(cmd,pasteMap, args);
 		}
 		else if(cmd.equals("comm") && args.contains("-") == false){
-
-			return textUtilCheck(commMap, args);
+			return textUtilCheck(cmd,commMap, args);
 		}
 		else if(cmd.equals("sort") && args.contains("-") == false){
-			return textUtilCheck(sortMap, args);
+			return textUtilCheck(cmd,sortMap, args);
 		}
 		else if(cmd.equals("wc")){
-			return textUtilCheck(wcMap, args);
+			return textUtilCheck(cmd,wcMap, args);
 		}
 		else if(cmd.equals("uniq")){
-			return textUtilCheck(uniqMap, args);
+			return textUtilCheck(cmd,uniqMap, args);
+		}
+		else if(cmd.equals("grep")){
+			return textUtilCheck(cmd,grepMap, args);
 		}
 
-		return 0;
+		return -1;
 	}
 
-	private int textUtilCheck(LinkedHashMap<String, Integer> map, 
+	private int textUtilCheck(String cmd,LinkedHashMap<String, Integer> map, 
 			ArrayList<String> args){
 
 		ArrayList<Integer> indexUsed = new ArrayList<Integer>();
 		int numOptions = map.size() - 2;
 
+
 		//if options contain -help return only help
-		if(args.contains("-help")){
-			return 0;
+		if(args.size() == 1 && args.get(0).equalsIgnoreCase("-help")){
+			return 1;
 		}
-		
+
+
 		//Check if arguments are valid options
 		for( int j=0; j<args.size(); j++){	
 			String argToCheck = args.get(j);
-			if(argToCheck.length() == 2 
-					&& argToCheck.charAt(0) == '-' 
-					&& !map.containsKey(args.get(j))){
-				return 0;
+
+			//if its not help
+			if(!argToCheck.equalsIgnoreCase("-help")){
+
+				//if any option of the form "-x" and is valid for the command
+				if(argToCheck.length() == 2 
+						&& argToCheck.charAt(0) == '-' 
+						&& !map.containsKey(argToCheck)){				
+					return -1;
+				}
 			}
+
 		}
-		
+
 		//Iterate thro possible options for given command
 		for(int i = 0; i<numOptions; i++){
 
 			String value = (new ArrayList<String>(map.keySet())).get(i);
 			int numArgs = 0, idx = 0;
-					
+
 			//if option exists in args
 			if(args.contains(value)){
 
@@ -218,43 +259,66 @@ public class CommandVerifier {
 
 				//check if num of args for option after its idx is correct
 				for(int j=1; j<=numArgs; j++){
-				
+
 					if(idx + j >= args.size()){
-						break;
-						
+						break;			
 					}
+
 					String arg = args.get(idx + j);
 					//if immediately followed arguments are other options					
 					if(map.keySet().contains(arg)){
-						return 0;
+						return -1;
 					}
+
 					indexUsed.add(idx + j);					
 				}				
 			}
 		}
 
-		ArrayList<Integer> defArgIdxList = new ArrayList<Integer>();
+		ArrayList<Integer> defaultArgIdxList = new ArrayList<Integer>();
 
 		//check for default option args
 		int countDefaultArgs = 0;
 		for (int i=0; i<args.size(); i++){
 			if(!indexUsed.contains(i)){
-				defArgIdxList.add(i);
+				defaultArgIdxList.add(i);
 				countDefaultArgs++;
 			}
 		}
+		
+		//in case verifier is called from pipe
+		if(pipeCommand){
+			if(!cmd.equalsIgnoreCase("grep")){
+				if(countDefaultArgs == 0){
+					return 2;//code to enable stdin
+				}
+				else{
+					return 1;
+				}
+			}		
+			else if(cmd.equalsIgnoreCase("grep")){
+				if(countDefaultArgs == 1){
+					return 2;
+				}
+				else{
+					return 1;
+				}				
+			}	
+			return -1;
+		}
 
+		//default check from the tool
 		if(countDefaultArgs < map.get("defMin")){
-			return 0;
+			return -1;
 		}
 		if(map.get("defMax") != INF){
 			if(countDefaultArgs != map.get("defMax")){
-				return 0;
+				return -1;
 			}
 		}	
 
-		if(areOptionsBeforeFilenames(defArgIdxList, indexUsed) == 0){
-			return 0;
+		if(areOptionsBeforeFilenames(defaultArgIdxList, indexUsed) == 0){
+			return -1;
 		}
 
 		return 1;
@@ -279,19 +343,24 @@ public class CommandVerifier {
 		ArrayList<String> argList = new ArrayList<String>();
 		int resultCode = -1;
 
+		//Perform no checking for pipe
+		if(cmd == "pipe"){
+			return 1;
+		}
+
+
 		if(args != null){
-
-
 			for(int i = 0; i<args.length; i++){
 				argList.add(args[i]);
 			}
 
+			//get list of args without ">" and after
 			if(argList.contains(">")){
 				if (argList.indexOf(">") == argList.size()-2){
 					argList.subList(0,argList.indexOf(">")); //removing > filename from check
 				}
 				else{
-					return 0; // case where ">" not followed by fileName
+					return -1; // case where ">" not followed by fileName
 				}
 			}
 		}
