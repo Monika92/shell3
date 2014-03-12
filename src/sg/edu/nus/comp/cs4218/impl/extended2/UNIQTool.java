@@ -247,7 +247,16 @@ public class UNIQTool extends ATool implements IUniqTool{
 		setStatusCode(-1);
 		return "";
 		}
-		
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+
+		}
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, "uniq");
 		ArrayList<String> fileList = argumentObject.getFileList();

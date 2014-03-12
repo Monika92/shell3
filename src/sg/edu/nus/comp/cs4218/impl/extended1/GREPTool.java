@@ -349,6 +349,11 @@ public class GREPTool extends ATool implements IGrepTool {
 		String pattern = argumentObject.getPattern();
 		if(workingDir != null)
 		{
+			
+			if(!workingDir.exists()){
+				setStatusCode(-1);
+				return "";
+			}
 		if (stdin != null && !stdin.isEmpty()) {
 			input = stdin + "\n";
 			//prefixString = "Standard Input:";
@@ -368,6 +373,8 @@ public class GREPTool extends ATool implements IGrepTool {
 		if (fileList != null) {
 			
 			for (String fileName : fileList) {
+				
+				fileInFlag = false;
 				input = "";
 				prefixString = fileName + ":";
 				if (fileName != null) {
@@ -380,13 +387,12 @@ public class GREPTool extends ATool implements IGrepTool {
 						input += readFile(file) + "\n";
 						fileInFlag = true;
 					} catch (Exception e) {
-						output = "File not found";
 						GREP_FILE_ERR_MSG = "Filenotfound";
-						setStatusCode(-1);
-						return output;
+						GREP_ERR_CODE =-1;
+						setStatusCode(GREP_ERR_CODE);
 					}
 				}
-				if (!options.isEmpty()) {
+				if (!options.isEmpty() && fileInFlag) {
 					String outputString = executeOptions(options, optionArguments, pattern,input);
 					if(!outputString.trim().isEmpty())
 						output+=prefixString+outputString;

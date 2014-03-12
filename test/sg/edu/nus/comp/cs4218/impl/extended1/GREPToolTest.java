@@ -142,12 +142,9 @@ public class GREPToolTest {
 		for (String[] cmdArgs : cmdArgsList) {
 			IGrepTool tool = new GREPTool(cmdArgs);
 			assertTrue("".equals(tool.execute(workingDir, "")));
-			String errorMessage = errContent.toString();
-			assertTrue(String
-					.format(GREPTool.GREP_FILE_ERR_MSG, "filenotfound").equals(
-							errorMessage));
+			assertTrue(tool.getStatusCode() != 0);
 			assertEquals(GREPTool.GREP_ERR_CODE, tool.getStatusCode());
-			errContent.reset();
+			assertEquals(GREPTool.GREP_FILE_ERR_MSG, "Filenotfound");
 		}
 	}
 
@@ -167,9 +164,8 @@ public class GREPToolTest {
 		expected = expected.replace("\n", "");
 		assertTrue(expected.equals(actual));
 		assertTrue(tool.getStatusCode() != 0);	
-		String errorMessage = errContent.toString();
-		assertTrue(String.format(GREPTool.GREP_FILE_ERR_MSG,
-		"textFiles/filenotfound").equals(errorMessage));
+		assertEquals(GREPTool.GREP_ERR_CODE, tool.getStatusCode());
+		assertEquals(GREPTool.GREP_FILE_ERR_MSG, "Filenotfound");
 	}
 
 	/**
@@ -297,14 +293,15 @@ public class GREPToolTest {
 
 	/**
 	 * Test for grep command with -A option with extra options and multiple
-	 * files passed in as arguments. Extra options should be ignored. Checks for
+	 * files passed in as arguments. Extra options are also executed. Checks for
 	 * correct output after execution.
 	 */
 	@Test
 	public void testExecuteAOptionExtraOptionsMultipleFiles() {
 		String[] cmdArgs = { "-A", "2", "-o", "-v", "k", "textFiles"+File.separator+"testA.txt",
 				"textFiles"+File.separator+"testB.txt" };
-		String expected = "textFiles"+File.separator+"testA.txt:\nThe quick\nbrown fox\njumped over\ntextFiles"+File.separator+"testB.txt:\n  once you get to know them.\n";
+		String expected = "textFiles/testA.txt:The quick\nbrown fox\njumped over\nk\nbrown fox\njumped over\nthe "
+				+ "lazy \ndog.\ntextFiles/testB.txt:  once you get to know them.\nk\nWeeds are flowers,\n too,\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		String actual = tool.execute(workingDir, "");
 		actual = actual.replace("\n", "");
