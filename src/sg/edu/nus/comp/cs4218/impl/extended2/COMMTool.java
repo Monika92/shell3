@@ -59,6 +59,7 @@ public class COMMTool extends ATool implements ICommTool{
 		if(!workingDir.exists()){
 			setStatusCode(-1);
 			return "";
+
 		}
 		
 		String fileName1 = "", fileName2 = "";

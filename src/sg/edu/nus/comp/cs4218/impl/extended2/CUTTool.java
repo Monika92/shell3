@@ -13,6 +13,7 @@ import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 /**
  * Do not modify this file
@@ -63,83 +64,107 @@ public class CUTTool extends ATool implements ICutTool {
 	@Override
 	public String cutSpecfiedCharacters(String list, String input) {
 		// TODO Auto-generated method stub
-
-		if (list.isEmpty() || input.isEmpty())
-			return input;
-		else {
-			int fromNumber = 0, toNumber = 0;
-			StringBuilder stringBuilder = new StringBuilder();
-			String[] listNumbers = list.split(",");
-			for (String listNumber : listNumbers) {
-				if (listNumber.startsWith("-")) {
-					fromNumber = 0;
-					toNumber = Character.getNumericValue(listNumber.charAt(1));
-				} else if (listNumber.endsWith("-")) {
-					fromNumber = Character
-							.getNumericValue(listNumber.charAt(0));
-					toNumber = input.length();
-				} else {
-					String[] rangeNumbers = listNumber.split("-");
-					if (rangeNumbers.length == 2) {
-						fromNumber = Integer.parseInt(rangeNumbers[0]);
-						toNumber = Integer.parseInt(rangeNumbers[1]);
-					} else if (rangeNumbers.length == 1) {
-						fromNumber = Integer.parseInt(rangeNumbers[0]);
-						toNumber = Integer.parseInt(rangeNumbers[0]);
+		try
+		{
+			if (list==null || input==null)
+			{
+				setStatusCode(-1);
+				return "";	
+			}
+			else if (list.isEmpty() || input.isEmpty())
+				return input;
+			else {
+				int fromNumber = 0, toNumber = 0;
+				StringBuilder stringBuilder = new StringBuilder();
+				String[] listNumbers = list.split(",");
+				for (String listNumber : listNumbers) {
+					if (listNumber.startsWith("-")) {
+						fromNumber = 0;
+						toNumber = Character.getNumericValue(listNumber.charAt(1));
+					} else if (listNumber.endsWith("-")) {
+						fromNumber = Character
+								.getNumericValue(listNumber.charAt(0));
+						toNumber = input.length();
+					} else {
+						String[] rangeNumbers = listNumber.split("-");
+						if (rangeNumbers.length == 2) {
+							fromNumber = Integer.parseInt(rangeNumbers[0]);
+							toNumber = Integer.parseInt(rangeNumbers[1]);
+						} else if (rangeNumbers.length == 1) {
+							fromNumber = Integer.parseInt(rangeNumbers[0]);
+							toNumber = Integer.parseInt(rangeNumbers[0]);
+						}
+					}
+					if (toNumber > input.length())
+						toNumber = input.length();
+					for (int i = fromNumber; i <= toNumber; i++) {
+						if (i > 0)
+							stringBuilder.append(input.charAt(i - 1));
 					}
 				}
-				if (toNumber > input.length())
-					toNumber = input.length();
-				for (int i = fromNumber; i <= toNumber; i++) {
-					if (i > 0)
-						stringBuilder.append(input.charAt(i - 1));
-				}
+				return stringBuilder.toString();
 			}
-			return stringBuilder.toString();
+		}
+		catch(Exception e)
+		{
+			setStatusCode(-1);
+			return "";	
 		}
 	}
 
 	@Override
 	public String cutSpecifiedCharactersUseDelimiter(String list, String delim,
 			String input) {
-		StringBuilder stringBuilder = new StringBuilder();
-		if (input.contains(delim) == false) {
-			stringBuilder.append(input);
-		} else {
-			int fromNumber = 0, toNumber = 0;
-			String[] words = input.split(delim);
-			String[] listNumbers = list.split(",");
-			for (String listNumber : listNumbers) {
-				if (listNumber.startsWith("-")) {
-					fromNumber = 0;
-					toNumber = Character.getNumericValue(listNumber.charAt(1));
-				} else if (listNumber.endsWith("-")) {
-					fromNumber = Character
-							.getNumericValue(listNumber.charAt(0));
-					toNumber = words.length;
-				} else {
-					String[] rangeNumbers = listNumber.split("-");
-					if (rangeNumbers.length == 2) {
-						fromNumber = Integer.parseInt(rangeNumbers[0]);
-						toNumber = Integer.parseInt(rangeNumbers[1]);
-					} else if (rangeNumbers.length == 1) {
-						fromNumber = Integer.parseInt(rangeNumbers[0]);
-						toNumber = Integer.parseInt(rangeNumbers[0]);
+		try{
+			StringBuilder stringBuilder = new StringBuilder();	
+			if(list==null || delim==null || input==null)
+			{
+				setStatusCode(-1);
+				return  "";
+			}
+			else if (input.contains(delim) == false) {
+				stringBuilder.append(input);
+			} else {
+				int fromNumber = 0, toNumber = 0;
+				String[] words = input.split(delim);
+				String[] listNumbers = list.split(",");
+				for (String listNumber : listNumbers) {
+					if (listNumber.startsWith("-")) {
+						fromNumber = 0;
+						toNumber = Character.getNumericValue(listNumber.charAt(1));
+					} else if (listNumber.endsWith("-")) {
+						fromNumber = Character
+								.getNumericValue(listNumber.charAt(0));
+						toNumber = words.length;
+					} else {
+						String[] rangeNumbers = listNumber.split("-");
+						if (rangeNumbers.length == 2) {
+							fromNumber = Integer.parseInt(rangeNumbers[0]);
+							toNumber = Integer.parseInt(rangeNumbers[1]);
+						} else if (rangeNumbers.length == 1) {
+							fromNumber = Integer.parseInt(rangeNumbers[0]);
+							toNumber = Integer.parseInt(rangeNumbers[0]);
+						}
+					}
+
+					if (toNumber > words.length)
+						toNumber = words.length;
+
+					for (int i = fromNumber; i <= toNumber; i++) {
+						if (i > 0 && i < toNumber)
+							stringBuilder.append(words[i - 1] + delim);
+						else if (i == toNumber)
+							stringBuilder.append(words[i - 1]);
 					}
 				}
-
-				if (toNumber > words.length)
-					toNumber = words.length;
-
-				for (int i = fromNumber; i <= toNumber; i++) {
-					if (i > 0 && i < toNumber)
-						stringBuilder.append(words[i - 1] + delim);
-					else if (i == toNumber)
-						stringBuilder.append(words[i - 1]);
-				}
 			}
+			return stringBuilder.toString();
 		}
-		return stringBuilder.toString();
+		catch(Exception e)
+		{
+			setStatusCode(-1);
+			return "";	
+		}
 	}
 
 	/* Returns help contents*/
@@ -152,116 +177,132 @@ public class CUTTool extends ATool implements ICutTool {
 	/*Executes the command given the working directory path*/
 	@Override
 	public String execute(File workingDir, String stdin) {
-		input = "";
-		output = "";
-		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
-		ArgumentObject argumentObject = argumentObjectParser.parse(args,
-				command);
-		ArrayList<String> fileList = argumentObject.getFileList();
-		ArrayList<String> options = argumentObject.getOptions();
-		ArrayList<String> optionArguments = argumentObject.getOptionArguments();
+		
+//		CommandVerifier cv = new CommandVerifier();
+//		int validCode = cv.verifyCommand("cut", super.args);
+//
+//		if(validCode == -1){
+//		setStatusCode(-1);
+//		return "";
+//		}
+		
+		try{
+			input = "";
+			output = "";
+			ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
+			ArgumentObject argumentObject = argumentObjectParser.parse(args,
+					command);
+			ArrayList<String> fileList = argumentObject.getFileList();
+			ArrayList<String> options = argumentObject.getOptions();
+			ArrayList<String> optionArguments = argumentObject.getOptionArguments();
 
-		// assign input value (std input or input from file)
-		if (stdin != null) {
-			input += stdin + "\n";
-			stdInFlag = true;
-		}
-		if (fileList != null) {
-			for (String fileName : fileList) {
+			// assign input value (std input or input from file)
+			if (stdin != null) {
+				input += stdin + "\n";
+				stdInFlag = true;
+			}
+			if (fileList != null) {
+				for (String fileName : fileList) {
 
-				if (fileName != null) {
-					if (fileName.startsWith(File.separator)) {
-						// Do nothing
-					} else {
-						fileName = workingDir.toString() + File.separator
-								+ fileName;
-					}
-					File file = new File(fileName);
-					try {
-						input += readFile(file) + "\n";
-						fileInFlag = true;
-					} catch (Exception e) {
-						output += "File not found";
-						setStatusCode(-1);
-						return output;
-					}
-				}
-			}
-		}
-		for (int i = 0; i < options.size(); ) {
-			if (options.get(i).equalsIgnoreCase("-help"))
-			{
-				output = getHelp();
-				i++;
-			}
-			else if (options.get(i).equalsIgnoreCase("-c")) {
-				list = optionArguments.get(i);
-				StringBuilder stringBuilder = new StringBuilder();
-				String ls = "\n";
-				String[] inputLines = input.split("\n");
-				for (String inputLine : inputLines) {
-					stringBuilder
-					.append(cutSpecfiedCharacters(list, inputLine));
-					stringBuilder.append(ls);
-				}
-				output += stringBuilder.toString() + "\n";
-				i++;
-			}
-			else if (options.get(i).equalsIgnoreCase("-d")) {
-				if (i + 1 < options.size()) {
-					if (options.get(i + 1).equalsIgnoreCase("-f")) {
-						list = optionArguments.get(i + 1);
-						delim = optionArguments.get(i).replace("\"", "");
-						StringBuilder stringBuilder = new StringBuilder();
-						String ls = "\n";
-						String[] inputLines = input.split("\n");
-						for (String inputLine : inputLines) {
-							stringBuilder
-							.append(cutSpecifiedCharactersUseDelimiter(
-									list, delim, inputLine));
-							stringBuilder.append(ls);
+					if (fileName != null) {
+						if (fileName.startsWith(File.separator)) {
+							// Do nothing
+						} else {
+							fileName = workingDir.toString() + File.separator
+									+ fileName;
 						}
-						output += stringBuilder.toString() + "\n";
+						File file = new File(fileName);
+						try {
+							input += readFile(file) + "\n";
+							fileInFlag = true;
+						} catch (Exception e) {
+							output += "File not found";
+							setStatusCode(-1);
+							return output;
+						}
 					}
 				}
-				i++;
 			}
-		else if (options.get(i).equalsIgnoreCase("-f")) {
-			if (i + 1 < options.size()) {
-				if (options.get(i + 1).equalsIgnoreCase("-d")) {
+			for (int i = 0; i < options.size(); ) {
+				if (options.get(i).equalsIgnoreCase("-help"))
+				{
+					output = getHelp();
+					i++;
+				}
+				else if (options.get(i).equalsIgnoreCase("-c")) {
 					list = optionArguments.get(i);
-					delim = optionArguments.get(i + 1).replace("\"", "");
-						StringBuilder stringBuilder = new StringBuilder();
-						String ls = "\n";
-						String[] inputLines = input.split("\n");
-						for (String inputLine : inputLines) {
-							stringBuilder
-							.append(cutSpecifiedCharactersUseDelimiter(
-									list, delim, inputLine));
-							stringBuilder.append(ls);
-						}
-						output += stringBuilder.toString() + "\n";
+					StringBuilder stringBuilder = new StringBuilder();
+					String ls = "\n";
+					String[] inputLines = input.split("\n");
+					for (String inputLine : inputLines) {
+						stringBuilder
+						.append(cutSpecfiedCharacters(list, inputLine));
+						stringBuilder.append(ls);
 					}
+					output += stringBuilder.toString() + "\n";
+					i++;
 				}
-			i++;
+				else if (options.get(i).equalsIgnoreCase("-d")) {
+					if (i + 1 < options.size()) {
+						if (options.get(i + 1).equalsIgnoreCase("-f")) {
+							list = optionArguments.get(i + 1);
+							delim = optionArguments.get(i).replace("\"", "");
+							StringBuilder stringBuilder = new StringBuilder();
+							String ls = "\n";
+							String[] inputLines = input.split("\n");
+							for (String inputLine : inputLines) {
+								stringBuilder
+								.append(cutSpecifiedCharactersUseDelimiter(
+										list, delim, inputLine));
+								stringBuilder.append(ls);
+							}
+							output += stringBuilder.toString() + "\n";
+						}
+					}
+					i++;
+				}
+				else if (options.get(i).equalsIgnoreCase("-f")) {
+					if (i + 1 < options.size()) {
+						if (options.get(i + 1).equalsIgnoreCase("-d")) {
+							list = optionArguments.get(i);
+							delim = optionArguments.get(i + 1).replace("\"", "");
+							StringBuilder stringBuilder = new StringBuilder();
+							String ls = "\n";
+							String[] inputLines = input.split("\n");
+							for (String inputLine : inputLines) {
+								stringBuilder
+								.append(cutSpecifiedCharactersUseDelimiter(
+										list, delim, inputLine));
+								stringBuilder.append(ls);
+							}
+							output += stringBuilder.toString() + "\n";
+						}
+					}
+					i++;
+				}
 			}
+			return output;
+		}
+		catch(Exception e)
+		{
+			setStatusCode(-1);
+			return "";		
+		}
 	}
-	return output;
-}
 
 	/*Reads from the file specified and returns the contents of the file*/
 	private String readFile(File file) throws Exception {
-	// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 
-	String line = null;
-	BufferedReader reader = new BufferedReader(new FileReader(file));
-	StringBuilder stringBuilder = new StringBuilder();
-	String ls = "\n";
-	while ((line = reader.readLine()) != null) {
-		stringBuilder.append(line);
-		stringBuilder.append(ls);
+		String line = null;
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		StringBuilder stringBuilder = new StringBuilder();
+		String ls = "\n";
+		while ((line = reader.readLine()) != null) {
+			stringBuilder.append(line);
+			stringBuilder.append(ls);
+		}
+		reader.close();
+		return stringBuilder.toString();
 	}
-	reader.close();
-	return stringBuilder.toString();
-}
 }

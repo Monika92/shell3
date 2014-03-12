@@ -3,17 +3,17 @@ package sg.edu.nus.comp.cs4218.impl;
 public class ArgumentObjectParser {
 
 	ArgumentObject argumentObject ;
-	
+
 	public ArgumentObjectParser() {
 		argumentObject = new ArgumentObject();
 	}
-	
+
 	public ArgumentObject parseCut(String[] argument){
-		
+
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; )
 		{
-			
+
 			if(argument[i].equalsIgnoreCase("-c") || argument[i].equalsIgnoreCase("-d") || argument[i].equalsIgnoreCase("-f"))
 			{
 				argumentObject.options.add(argument[i]);
@@ -39,15 +39,15 @@ public class ArgumentObjectParser {
 				i+=1;
 			}
 		}
-		
+
 		return argumentObject;
 	}
-	
+
 	public ArgumentObject parsePaste(String[] argument){
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; )
 		{
-			
+
 			if(argument[i].equalsIgnoreCase("-d"))
 			{
 				argumentObject.options.add(argument[i]);
@@ -68,12 +68,12 @@ public class ArgumentObjectParser {
 		}
 		return argumentObject;
 	}
-	
+
 	public ArgumentObject parseComm(String[] argument){
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; )
 		{
-			
+
 			if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-c") || argument[i].equalsIgnoreCase("-d"))
 			{
 				argumentObject.options.add(argument[i]);
@@ -93,7 +93,7 @@ public class ArgumentObjectParser {
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; )
 		{
-			
+
 			if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-c"))
 			{
 				argumentObject.options.add(argument[i]);
@@ -106,7 +106,7 @@ public class ArgumentObjectParser {
 				i+=1;
 			}
 		}
-		
+
 		return argumentObject;
 	}
 
@@ -114,7 +114,7 @@ public class ArgumentObjectParser {
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; )
 		{
-			
+
 			if(argument[i].equalsIgnoreCase("-f"))
 			{
 				argumentObject.options.add(argument[i]);
@@ -135,12 +135,12 @@ public class ArgumentObjectParser {
 		}
 		return argumentObject;
 	}
-	
+
 	public ArgumentObject parseWc(String[] argument){
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; i++)
 		{
-			
+
 			if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-m") || argument[i].equalsIgnoreCase("-w") || argument[i].equalsIgnoreCase("-l"))
 			{
 				argument[i] = argument[i].toLowerCase();
@@ -149,13 +149,13 @@ public class ArgumentObjectParser {
 			}
 			else if(argument[i].equalsIgnoreCase("-"))
 			{
-				
+
 			}
 			else 
 			{
 				argumentObject.fileList.add(argument[i]);
 			}
-	
+
 		}
 		return argumentObject;
 	}
@@ -164,12 +164,12 @@ public class ArgumentObjectParser {
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; )
 		{
-			
-			if(argument[i].equalsIgnoreCase("-help") || argument[i].equalsIgnoreCase("-c") ||
+
+			if(argument[i].equalsIgnoreCase("-help") || argument[i].equals("-c") ||
 					argument[i].equalsIgnoreCase("-o") ||argument[i].equalsIgnoreCase("-v"))
 			{
 				argumentObject.options.add(argument[i]);
-				argumentObject.optionArguments.add(null);
+				argumentObject.optionArguments.add("0");
 				i+=1;
 			}
 			else if(argument[i].equalsIgnoreCase("-A") || argument[i].equalsIgnoreCase("-B") ||
@@ -187,29 +187,37 @@ public class ArgumentObjectParser {
 			else 
 			{
 				argumentObject.pattern = argument[i];
+
 				i+=1;
 				//the rest are considered as filenames
 				while(i <argumentSize)
 				{
-					argumentObject.fileList.add(argument[i]);
+					if(argument[i].equalsIgnoreCase("-"))
+					{
+						//do nothing for stdin
+					}
+					else
+						argumentObject.fileList.add(argument[i]);
 					i++;
 				}
+
 			}
 		}
-		return argumentObject;
+
+		return argumentObject;		
 	}
-	
+
 	public ArgumentObject parsePipe(String[] argument){
-		
+
 		int argumentLength = argument.length;
 		for( int i=0; i<argumentLength; i++){
-			
-			
+
+
 		}
-		
+
 		return argumentObject;
 	}
-	
+
 	public ArgumentObject parse(String[] argument,String command)
 	{
 		if(command.equalsIgnoreCase("cut")){
@@ -234,7 +242,7 @@ public class ArgumentObjectParser {
 			return parseGrep(argument);
 		}					
 		else if(command.equalsIgnoreCase("pipe")){
-				return parsePipe(argument);
+			return parsePipe(argument);
 		}
 		return argumentObject;		
 	}
