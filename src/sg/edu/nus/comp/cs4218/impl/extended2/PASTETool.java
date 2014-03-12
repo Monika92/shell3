@@ -254,7 +254,11 @@ public class PASTETool extends ATool implements IPasteTool{
 			setStatusCode(-1);
 			return "";
 		}
-		
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
 		if(!workingDir.exists()){
 			setStatusCode(-1);
 			return "";

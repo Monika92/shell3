@@ -125,7 +125,16 @@ public class SORTTool extends ATool implements ISortTool{
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);
 		ArrayList<String> fileList = argumentObject.getFileList();
 		ArrayList<String> options = argumentObject.getOptions();
-		
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+
+		}
 		if(!options.isEmpty())
 		{
 			for( int i = 0; i< options.size() ; i++)

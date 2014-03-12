@@ -349,6 +349,11 @@ public class GREPTool extends ATool implements IGrepTool {
 		String pattern = argumentObject.getPattern();
 		if(workingDir != null)
 		{
+			
+			if(!workingDir.exists()){
+				setStatusCode(-1);
+				return "";
+			}
 		if (stdin != null && !stdin.isEmpty()) {
 			input = stdin + "\n";
 			//prefixString = "Standard Input:";

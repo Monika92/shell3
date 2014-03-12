@@ -153,6 +153,16 @@ public class WCTool extends ATool implements IWcTool{
 		setStatusCode(-1);
 		return "";
 		}
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+
+		}
 		String outputString = "";
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);

@@ -55,7 +55,11 @@ public class COMMTool extends ATool implements ICommTool{
 			setStatusCode(-1);
 			return "";
 		}
-		
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
 		if(!workingDir.exists()){
 			setStatusCode(-1);
 			return "";

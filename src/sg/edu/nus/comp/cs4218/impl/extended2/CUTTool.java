@@ -197,6 +197,13 @@ public class CUTTool extends ATool implements ICutTool {
 			ArrayList<String> optionArguments = argumentObject.getOptionArguments();
 
 			// assign input value (std input or input from file)
+			if(workingDir!=null){
+				
+				if(!workingDir.exists()){
+					setStatusCode(-1);
+					return "";
+
+				}
 			if (stdin != null) {
 				input += stdin + "\n";
 				stdInFlag = true;
@@ -280,6 +287,7 @@ public class CUTTool extends ATool implements ICutTool {
 					}
 					i++;
 				}
+			}
 			}
 			return output;
 		}
