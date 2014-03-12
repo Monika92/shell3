@@ -34,7 +34,6 @@ public class PASTETool extends ATool implements IPasteTool{
 	private boolean fileError = false;
 	private static boolean executed;
 	private static String result;
-	private static int toggleBit; 
 
 /*
  * Constructor for PASTETool - initializes the super class's arguments 
@@ -43,7 +42,6 @@ public class PASTETool extends ATool implements IPasteTool{
 	public PASTETool(String[] arguments) {		
 		super(arguments);
 		fileError = false;
-		toggleBit = 0;
 		executed = false;
 		result = "";
 	}
@@ -54,6 +52,11 @@ public class PASTETool extends ATool implements IPasteTool{
 	@Override
 	public String pasteSerial(String[] input) {
 
+		if(input == null || input.length == 0){
+			setStatusCode(-1);
+			return "";
+		}
+		
 		String result = "";
 
 		for(int i=0; i<input.length; i++){
@@ -136,7 +139,15 @@ public class PASTETool extends ATool implements IPasteTool{
 		ArrayList<String> lines = new ArrayList<String>();
 
 		String line;
-		File f = new File(fname);
+		
+		if(fname == null || fname == ""){
+			return null;
+		}
+		
+		
+		
+		
+		File f = new File(fname);		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			line = br.readLine();
@@ -229,6 +240,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		String[] newArgs = new String[args.length -1];
 		
 		for(int i=0 ;i<args.length-1; i++){
+			//System.out.println(args[i]);
 			newArgs[i] = args[i];
 		}
 		
@@ -240,40 +252,38 @@ public class PASTETool extends ATool implements IPasteTool{
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
-
 		
 		String[] args = super.args;
 		setStatusCode(0);
 		result = "";
+	
+		if(executed == false){
+			CommandVerifier cv = new CommandVerifier();
+			int validCode = cv.verifyCommand("paste", super.args);
 		
-		CommandVerifier cv = new CommandVerifier();
-		int validCode = cv.verifyCommand("paste", super.args);
-		
-		if(validCode == -1){
-			setStatusCode(-1);
-			return "";
+			if(validCode == -1){
+				setStatusCode(-1);
+				return "";
+			}
+			
+			if(workingDir == null){
+				setStatusCode(-1);
+				return "";
+			}	
+			
+			if(!workingDir.exists()){
+				setStatusCode(-1);
+				return "";
+			}
 		}
-		if(workingDir == null)
-		{
-			setStatusCode(-1);
-			return "";
-		}	
-		if(!workingDir.exists()){
-			setStatusCode(-1);
-			return "";
+		
+		if(stdin != null && executed == true){
+			return stdin;
 		}
 		
-		/*
-		if(stdin != null && toggleBit == 0){
+		if(stdin != null){
 			args = removeStdinFromArg(super.args);
-			toggleBit = 1;
 		}
-		*/
-		if(stdin != null && executed == false){
-			args = removeStdinFromArg(super.args);
-		}
-		
-		
 		
 		ArgumentObjectParser aop = new ArgumentObjectParser();
 		ArgumentObject ao = aop.parse(args, "paste");
@@ -283,6 +293,7 @@ public class PASTETool extends ATool implements IPasteTool{
 
 		if(fileError){
 			setStatusCode(-1);
+			executed = true;
 			return fileNames.get(0);
 		}
 		
