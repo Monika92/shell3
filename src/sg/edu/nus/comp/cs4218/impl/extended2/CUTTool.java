@@ -178,13 +178,13 @@ public class CUTTool extends ATool implements ICutTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 		
-//		CommandVerifier cv = new CommandVerifier();
-//		int validCode = cv.verifyCommand("cut", super.args);
-//
-//		if(validCode == -1){
-//		setStatusCode(-1);
-//		return "";
-//		}
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("cut", super.args);
+
+		if(validCode == -1){
+		setStatusCode(-1);
+		return "";
+		}
 		
 		try{
 			input = "";

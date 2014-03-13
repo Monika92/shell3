@@ -330,13 +330,13 @@ public class GREPTool extends ATool implements IGrepTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 
-		// CommandVerifier cv = new CommandVerifier();
-		// int validCode = cv.verifyCommand("grep", super.args);
-		//
-		// if(validCode == -1){
-		// setStatusCode(-1);
-		// return "";
-		// }
+		 CommandVerifier cv = new CommandVerifier();
+		 int validCode = cv.verifyCommand("grep", super.args);
+		
+		 if(validCode == -1){
+		 setStatusCode(-1);
+		 return "";
+		 }
 
 		output = "";
 		String prefixString;
