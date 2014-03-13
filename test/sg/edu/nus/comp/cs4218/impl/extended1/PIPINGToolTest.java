@@ -314,7 +314,8 @@ public class PIPINGToolTest {
 		ISortTool sortTool = new SORTTool(leftToolArgs);
 		ICommTool commTool = new COMMTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(sortTool, commTool);
-		assertTrue(pipingTool.getStatusCode() != 0);
+		expectedOutput = "Apple\t \t \n \tBanana\t \n \t \tMelon\n \t \tOrange";
+		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
 	
 	//TODO: Madhu check 
@@ -328,9 +329,8 @@ public class PIPINGToolTest {
 		actualOutput = pipingTool.pipe(echoTool, wcTool);
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
+	*/
 	
-	//TODO:
-	/*
 	@Test
 	public void testPipeCatStdoutUniqTo() {
 		String[] catToolArgs = {"textFiles/testC.txt"};
@@ -340,10 +340,10 @@ public class PIPINGToolTest {
 		String stdout = catTool.execute(workingDir, null);
 		actualOutput = pipingTool.pipe(stdout, uniqTool);
 		System.out.println("OP:" + actualOutput);
-		expectedOutput = "a\nb\na\nc\n";
+		expectedOutput = "a\nb\na\nc";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-	*/
+	
 	@Test
 	public void testPipeCatStdoutEchoTo() {
 		String[] catToolArgs = {"a.txt"};
@@ -354,7 +354,7 @@ public class PIPINGToolTest {
 		System.out.println(stdout);
 		actualOutput = pipingTool.pipe(stdout, echoTool);
 		System.out.println("OP:" + actualOutput);
-		expectedOutput = "Apple\nMelon\nOrange\n";
+		expectedOutput = "Apple\nMelon\nOrange";
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
 	

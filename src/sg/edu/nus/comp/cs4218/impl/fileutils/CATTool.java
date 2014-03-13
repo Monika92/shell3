@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 
 public class CATTool extends ATool implements ICatTool {
@@ -64,18 +66,36 @@ public class CATTool extends ATool implements ICatTool {
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
-		
+						
 		File file, filePath;
 		int argsLength = args.length;
 		String output = "", outputMsg = "", fileName;
 		
-		//Check for stdin
+		//Priority for stdin
 		if(stdin!=null){
 			setStatusCode(0);
 			return stdin;
 		}
 		
+		//Verify command syntax
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("cat", super.args);
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		//Check for valid workingDir
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
+				
 		for(int i = 0; i < argsLength; i++){
 			try{
 				fileName = args[i];
