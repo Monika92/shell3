@@ -114,7 +114,7 @@ public class SORTToolTest {
 	}
     
     @Test
-    public void multipleOptionsTest1()
+    public void testExecuteMultipleOptionsC()
     {
     	String[] arguments = new String[]{"-c", "-c" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);
@@ -125,7 +125,7 @@ public class SORTToolTest {
     }
     
     @Test
-    public void sortMultipleFiles()
+    public void testExecuteSortMultipleFiles()
     {
     	String[] arguments = new String[]{"test1.txt","test2.txt"} ;
 		sorttool = new SORTTool(arguments);
@@ -140,7 +140,7 @@ public class SORTToolTest {
     }
     
     @Test
-    public void multipleOptionsTest2()
+    public void testExecuteMultipleOptionsCHelp()
     {
     	String[] arguments = new String[]{"-c", "-help" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);
@@ -151,7 +151,7 @@ public class SORTToolTest {
     }
     
     @Test
-    public void multipleOptionsTest3()
+    public void testExecuteMultipleOptionsHelpC()
     {
     	String[] arguments = new String[]{"-help", "-c" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);
@@ -163,7 +163,7 @@ public class SORTToolTest {
     
     //Options other than -c and -help are interpreted as file names
     @Test
-    public void invalidOptionsTest()
+    public void testExecuteInvalidOptions()
     {
     	String[] arguments = new String[]{"-t"} ;
 		sorttool = new SORTTool(arguments);
@@ -174,7 +174,7 @@ public class SORTToolTest {
     }
     //Stdin is considered as filename
     @Test
-    public void overallFunctionalityWithStdinTest()
+    public void testExecuteWithStdin()
     {
     	String[] arguments = new String[]{"-"} ;
 		sorttool = new SORTTool(arguments);
@@ -186,7 +186,7 @@ public class SORTToolTest {
     
     
     @Test
-    public void overallFunctionalityNonExistingFileTest()
+    public void testExecuteWithNonExistingFile()
     {
     	String[] arguments = new String[]{"-c", "-c" ,"file.txt"} ;
 		sorttool = new SORTTool(arguments);
@@ -197,7 +197,7 @@ public class SORTToolTest {
     }
     
     @Test
-    public void helpTest()
+    public void testExecuteHelp()
     {
     	String[] arguments = new String[]{"-help"} ;
 		sorttool = new SORTTool(arguments);
@@ -210,7 +210,7 @@ public class SORTToolTest {
     
     //help is always prioritized
     @Test
-    public void helpWithStdinTest()
+    public void testExecuteHelpWithStdin()
     {
     	String[] arguments = new String[]{"-help","-"} ;
 		sorttool = new SORTTool(arguments);
@@ -221,7 +221,7 @@ public class SORTToolTest {
     }
     
 	@Test
-	public void sortFileTest() 
+	public void testSortFile() 
 	{
 
 		String[] arguments = null ;
@@ -232,9 +232,53 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
 	
+	@Test
+	public void testSortFileNoInput() 
+	{
+
+		String[] arguments = null ;
+		sorttool = new SORTTool(arguments);		
+		actualOutput = sorttool.sortFile("");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);
+	}
 	
 	@Test
-	public void checkIfSortedUnsortedInputTest()
+	public void testSortFileNullParams() 
+	{
+
+		String[] arguments = null ;
+		sorttool = new SORTTool(arguments);		
+		actualOutput = sorttool.sortFile(null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);
+	}
+	
+	@Test
+	public void testCheckIfSortedNullParam()
+	{
+		String[] arguments = null ;
+		sorttool = new SORTTool(arguments);
+		actualOutput = sorttool.checkIfSorted(null);
+		expectedOutput = "Already sorted";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);	
+	}
+	@Test
+	public void testCheckIfSortedNoInput()
+	{
+		String[] arguments = null ;
+		sorttool = new SORTTool(arguments);
+		actualOutput = sorttool.checkIfSorted("");
+		expectedOutput = "Already sorted";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(sorttool.getStatusCode(), 0);
+	}
+	
+	@Test
+	public void testCheckIfSortedGivenUnsortedInput()
 	{
 		String[] arguments = null ;
 		sorttool = new SORTTool(arguments);
@@ -246,7 +290,7 @@ public class SORTToolTest {
 	}
 	
 	@Test
-	public void checkIfSortedSortedInputTest()
+	public void testCheckIfSortedGivenSortedInput()
 	{
 		String[] arguments = null ;
 		sorttool = new SORTTool(arguments);

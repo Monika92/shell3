@@ -14,6 +14,7 @@ import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 /**
  * Do not modify this file
  */
@@ -236,13 +237,32 @@ public class PASTETool extends ATool implements IPasteTool{
 	}
 
 /*
- * Executes the paste commad.
+ * Executes the paste command.
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
 
+		
 		String[] args = super.args;
 		setStatusCode(0);
+		result = "";
+		
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("paste", super.args);
+		
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
 		
 		/*
 		if(stdin != null && toggleBit == 0){
@@ -254,7 +274,7 @@ public class PASTETool extends ATool implements IPasteTool{
 			args = removeStdinFromArg(super.args);
 		}
 		
-		result = "";
+		
 		
 		ArgumentObjectParser aop = new ArgumentObjectParser();
 		ArgumentObject ao = aop.parse(args, "paste");
@@ -269,6 +289,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		
 		if(ao.getOptions().contains("-help")){
 			result = getHelp();
+			return result;
 		}
 
 		if(!fileNames.isEmpty() && executed == false){

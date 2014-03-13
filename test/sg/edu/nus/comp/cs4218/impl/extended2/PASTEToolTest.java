@@ -89,6 +89,68 @@ public class PASTEToolTest {
 
 	}
 
+	//TODO:
+	//paste with stdin - valid case
+	
+	@Test
+	//Check for invalid command : "paste" and no stdin
+	public void pasteTestInvalidCommands1(){
+		String[] arguments = new String[]{"-help"};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, null);
+		expectedOutput = helpOutput;
+		
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), 0);	
+	}
+	
+	@Test
+	//Check for invalid command: "paste -s" 
+	public void pasteTestInvalidCommands2(){
+		String[] arguments = new String[]{"-s"};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), -1);	
+	}
+	
+	@Test
+	//Check for invalid command: paste filename -s
+	public void pasteTestInvalidCommands3(){
+		String[] arguments = new String[]{"fname","-s"};
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), -1);	
+	}
+	
+	@Test
+	//Check for invalid option: paste -s -k fname
+	public void pasteTestInvalidCommands4(){
+		String[] arguments = new String[]{"-s","-k","fname"};		
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), -1);	
+	}
+	
+	//TODO
+	/*
+	@Test
+	//Positive case - valid command: paste -s -d fname
+	public void pasteTestValidCommand5(){
+		String[] arguments = new String[]{"-s","-d","em1.txt"};		
+		pasteTool = new PASTETool(arguments);
+		actualOutput = pasteTool.execute(workingDirectory, null);
+		expectedOutput = helpOutput;
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pasteTool.getStatusCode(), -1);	
+	}
+	*/
+	
 	@Test
 	//If only "-help", print help message
 	public void pasteGetHelpAsOnlyArgumentTest() {
@@ -96,6 +158,8 @@ public class PASTEToolTest {
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
+
+		
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);		
 	}
@@ -103,7 +167,7 @@ public class PASTEToolTest {
 	@Test
 	//Test -help is given priority
 	public void pasteGetHelpWithOtherArgumentsTest() {
-		String[] arguments = new String[]{"-s","-help","-d",":"};
+		String[] arguments = new String[]{"-s","-help","-d",":","a.txt"};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;

@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
 import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 
 /**
@@ -238,6 +240,23 @@ public class UNIQTool extends ATool implements IUniqTool{
 		
 		//Check for stdin
 		
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("uniq", super.args);
+
+		if(validCode == -1){
+		setStatusCode(-1);
+		return "";
+		}
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+
+		}
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, "uniq");
 		ArrayList<String> fileList = argumentObject.getFileList();
