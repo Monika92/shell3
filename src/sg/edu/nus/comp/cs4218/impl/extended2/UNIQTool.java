@@ -34,43 +34,43 @@ import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 public class UNIQTool extends ATool implements IUniqTool{
 
 	static String cachedline = "";
-	
-/*
- * Constructor for UNIQTool - intialises the super class's arguments with the passed 
- * arguments.
- */
+
+	/*
+	 * Constructor for UNIQTool - intialises the super class's arguments with the passed 
+	 * arguments.
+	 */
 	public UNIQTool(String[] arguments) {
 		super(arguments);
 		cachedline = "";
 		// TODO Auto-generated constructor stub
 	}
 
-/*
- * Returns the unique lines in the given input, ignoring case depending on the checkCase
- * argument
- */
+	/*
+	 * Returns the unique lines in the given input, ignoring case depending on the checkCase
+	 * argument
+	 */
 	@Override
 	public String getUnique(boolean checkCase, String input) {
 		// TODO Auto-generated method stub
-		
+
 		//1. Separate input by \n
 		//2. For each line, except the first and last, compare that line with its predecessor and successor
 		//3. If similar to even one of them, remove it from the result (or both checks must be false for line to be in output)
-		
+
 		ArrayList<String> output = new ArrayList<String>();
 		ArrayList<String> lines = new ArrayList<String>(); 
 		String[] tempLines = input.split("\n");
 		for(int i = 0; i < tempLines.length; i++){
 			lines.add(tempLines[i]);
 		}
-		
+
 		int ctr = 0; 
 		String pred;
 		String succ;
 		String curr; 
 		boolean predCheck = true; 
 		boolean succCheck = true;
-		
+
 		if(lines.size() == 1)
 			output.add(lines.get(0)+"\n"); 
 		else if(lines.size()>1){
@@ -92,7 +92,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 					pred = lines.get(ctr-1);
 					succ = lines.get(ctr+1);
 				}
-				
+
 				if(checkCase){											//Checking the case
 					if(pred != null){
 						predCheck = curr.equals(pred);
@@ -109,45 +109,45 @@ public class UNIQTool extends ATool implements IUniqTool{
 						succCheck = curr.equalsIgnoreCase(succ);
 					}
 				}
-				
+
 				//Both check false, then add.
 				//If only succ_check is true, then also add curr. 
 				//If only pred_check is true, dont add.
 				if((succCheck && !predCheck) || (!predCheck && !succCheck)){
 					output.add(curr+"\n");
 				}
-				
+
 				ctr++;
-		
+
 			}
 		}
-		
+
 		String result = "";
 		for(String s : output)
 			result += s;
 		return result;
-		
+
 	}
 
-/*
- * Returns the unique lines in the given input after skipping NUM fields in every line
- * of the input. Case check is done depending on the checkCase argument.
- */
+	/*
+	 * Returns the unique lines in the given input after skipping NUM fields in every line
+	 * of the input. Case check is done depending on the checkCase argument.
+	 */
 	@Override
 	public String getUniqueSkipNum(int NUM, boolean checkCase, String input) {
 		// TODO Auto-generated method stub
-		
+
 		//1. Split the input by \n into lines
 		//2. For each line, split by delimiter " " or "\t"
 		//3. Initialize argument for getUnique() by skipping NUM elements in the list of words in every line
-		
+
 		String result = "";
 		String[] tempLines = input.split("\n");
 		ArrayList<String> lines = new ArrayList<String>();
 		for(int i = 0; i < tempLines.length; i++){
 			lines.add(tempLines[i]);
 		}
-		
+
 		for(int j = 0; j < lines.size(); j++){
 			String[] tempWords = lines.get(j).split(" ");
 			ArrayList<String> words = new ArrayList<String>();
@@ -163,7 +163,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 				word += s + " ";
 			lines.set(j, word.trim());
 		}
-		
+
 		String str = "";
 		for(String s : lines){
 			if(s.equalsIgnoreCase(""))
@@ -175,9 +175,9 @@ public class UNIQTool extends ATool implements IUniqTool{
 		return result;
 	}
 
-/*
- * Returns the help message for Uniq command
- */
+	/*
+	 * Returns the help message for Uniq command
+	 */
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
@@ -186,17 +186,17 @@ public class UNIQTool extends ATool implements IUniqTool{
 		helpMsg += "\nOPTIONS\n\t-f NUM : Skips NUM fields on each line before checking for uniqueness. Fields are sequences of non-space non-tab characters that are separated from each other by at least one space or tab.";
 		helpMsg += "\n\t-i : Ignore differences in case when comparing lines.";
 		helpMsg += "\n\t-help : Brief information about supported options";
-				 
+
 		return helpMsg;
 	}
 
-/*
- * Reads the lines in the file passed as argument and returns the information as a string
- */
+	/*
+	 * Reads the lines in the file passed as argument and returns the information as a string
+	 */
 	public String readFromFile(File toRead){
 		FileReader fr;
 		String output = "";
-		
+
 		try{
 			fr = new FileReader(toRead);
 		} catch(FileNotFoundException e){
@@ -231,21 +231,21 @@ public class UNIQTool extends ATool implements IUniqTool{
 		return output;
 	}
 
-/*
- * Executes the uniq command for the given input - either stdin or input file
- */
+	/*
+	 * Executes the uniq command for the given input - either stdin or input file
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
-		
+
 		//Check for stdin
-		
+
 		CommandVerifier cv = new CommandVerifier();
 		int validCode = cv.verifyCommand("uniq", super.args);
 
 		if(validCode == -1){
-		setStatusCode(-1);
-		return "";
+			setStatusCode(-1);
+			return "";
 		}
 		if(workingDir == null)
 		{
@@ -262,18 +262,18 @@ public class UNIQTool extends ATool implements IUniqTool{
 		ArrayList<String> fileList = argumentObject.getFileList();
 		ArrayList<String> options = argumentObject.getOptions();
 		ArrayList<String> optionArguments = argumentObject.getOptionArguments();
-		
+
 		String result = "" ; 
 		String input = "";
 		boolean checkCase = true;
-	
+
 		//Getting input from stdin or file
 		if (stdin != null){
 			if(cachedline.equalsIgnoreCase(stdin))
-					return "";
+				return "";
 			else{
-					cachedline = stdin;
-					return cachedline;
+				cachedline = stdin;
+				return cachedline;
 			}
 		}
 		else{
@@ -309,36 +309,28 @@ public class UNIQTool extends ATool implements IUniqTool{
 						return result+"\nNo such file";
 				}
 				input = readFromFile(file);
-				
+
 				//Applying uniq to every file
 				if (options!=null){
-					
+
 					int i = 0; Integer numArg;
-					
+
 					//Check for --help first
 					if (options!=null){
 						if(options.contains("-help")){
-						result = getHelp();
-						return result;
+							result = getHelp();
+							return result;
 						}
 					}
-					
+
 					if(options.contains("-i"))
 						checkCase = false;
 					if(options.contains("-f")){
 						while(i < options.size()){
-								if(options.get(i).equalsIgnoreCase("-f")){
-									try{
-										numArg = Integer.decode(optionArguments.get(i));
-										if(numArg < 0){
-											if (result.equalsIgnoreCase(""))
-												return "Invalid argument for -f";
-											else if(result.endsWith("\n"))
-												return result + "Invalid argument for -f";
-											else
-												return result + "\nInvalid argument for -f";
-										}
-									}catch(NumberFormatException e){
+							if(options.get(i).equalsIgnoreCase("-f")){
+								try{
+									numArg = Integer.decode(optionArguments.get(i));
+									if(numArg < 0){
 										if (result.equalsIgnoreCase(""))
 											return "Invalid argument for -f";
 										else if(result.endsWith("\n"))
@@ -346,9 +338,17 @@ public class UNIQTool extends ATool implements IUniqTool{
 										else
 											return result + "\nInvalid argument for -f";
 									}
-									result += getUniqueSkipNum(numArg, checkCase, input);
+								}catch(NumberFormatException e){
+									if (result.equalsIgnoreCase(""))
+										return "Invalid argument for -f";
+									else if(result.endsWith("\n"))
+										return result + "Invalid argument for -f";
+									else
+										return result + "\nInvalid argument for -f";
 								}
-								i++;
+								result += getUniqueSkipNum(numArg, checkCase, input);
+							}
+							i++;
 						}
 					}
 					else
@@ -360,7 +360,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 				j++;
 			}
 		}
-		
+
 		return result.trim();
 	}
 
