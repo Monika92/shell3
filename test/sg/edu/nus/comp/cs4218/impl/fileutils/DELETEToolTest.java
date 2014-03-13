@@ -161,4 +161,29 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), 0);
     }
 
+    @Test
+    public void deleteInterfaceInvalidFileTest(){
+    	String[] arguments = new String[]{"InvalidFile.txt",} ;
+		deletetool = new DELETETool(arguments);
+		File toDelete = new File("InvalidFile.txt");
+		deletetool.delete(toDelete);
+		assertTrue(deletetool.getStatusCode() != 0);
+    }
+    
+    @Test
+    public void deleteNullTest(){
+    	String[] arguments = null ;
+		deletetool = new DELETETool(arguments);
+		deletetool.delete(null);
+		assertTrue(deletetool.getStatusCode() != 0);
+    }
+    
+    @Test
+    public void deleteExecuteNullTest(){
+    	String[] arguments = null ;
+		deletetool = new DELETETool(arguments);
+		actualOutput = deletetool.execute(null, null);
+		assertTrue(deletetool.getStatusCode() != 0);
+    }
+    
 }
