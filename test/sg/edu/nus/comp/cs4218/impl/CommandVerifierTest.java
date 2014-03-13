@@ -197,12 +197,34 @@ public class CommandVerifierTest {
     }
     
     @Test
-    //Positive case: command has no options but with correct num default file args
-    //command: uniq file1 file2
     public void verifyTextutilNoOptionsRightArgumentsTest(){
        	ArrayList<String> args = new ArrayList<String>();
     	String cmd = "uniq";
     	args.add("file1"); args.add("file2");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    public void verifyWcCommandNoOptions(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "wc";
+    	args.add("fname");// args.add("1");args.add("-i");args.add("hello");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    //Positive case: command has no options but with correct num default file args
+    //command: uniq -f 1 -i hello
+    public void verifyTextutilTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "uniq";
+    	args.add("-f"); args.add("1");args.add("-i");args.add("hello");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
     	expectedResultCode = 1;    	

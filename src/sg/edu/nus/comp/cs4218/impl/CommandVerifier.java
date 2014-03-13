@@ -117,7 +117,7 @@ public class CommandVerifier {
 		wcMap.put("defMax",INF);
 
 		uniqMap = new LinkedHashMap<String, Integer>();
-		uniqMap.put("-f",0);
+		uniqMap.put("-f",1);
 		uniqMap.put("-i",0);
 		uniqMap.put("-help",0);
 		uniqMap.put("defMin",1);
