@@ -279,7 +279,7 @@ public class CommandVerifier {
 			int numArgs = 0,idx = 0;
 			if(argToCheck.length() ==2  && argToCheck.charAt(0) == '-' 
 					|| argToCheck.equalsIgnoreCase("-help")){
-				if(map.containsKey(argToCheck)){
+				if(map.containsKey(argToCheck) || map.containsKey(argToCheck.toLowerCase())){
 					
 					numArgs = map.get(argToCheck);
 					idx = i;
@@ -384,22 +384,26 @@ public class CommandVerifier {
 
 
 		if(args != null){
+			
 			for(int i = 0; i<args.length; i++){
 				if(args[i] == null){
 					return -1;
+					
 				}
 				argList.add(args[i]);
 			}
-
+			
+			
 			//get list of args without ">" and after
 			if(argList.contains(">")){
-				if (argList.indexOf(">") == argList.size()-2){
+			if (argList.indexOf(">") == argList.size()-2){
 					argList.subList(0,argList.indexOf(">")); //removing > filename from check
 				}
 				else{
 					return -1; // case where ">" not followed by fileName
 				}
 			}
+		
 		}
 		else{
 			return -1;
@@ -413,6 +417,7 @@ public class CommandVerifier {
 			resultCode = verifyTextUtil(cmd, argList);
 			return resultCode;
 		}				
+		
 		return resultCode;
 	}
 }

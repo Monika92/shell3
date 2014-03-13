@@ -166,7 +166,7 @@ public class Shell extends Thread implements IShell {
 		// TODO Implement
 
 		String stdin = null;
-
+		
 		if (argsList != null) {
 			//Checks if there is a need to get standard input from user
 			if (argsList[argsList.length - 1].equalsIgnoreCase("-")

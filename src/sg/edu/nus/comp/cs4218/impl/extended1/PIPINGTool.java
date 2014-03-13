@@ -147,7 +147,7 @@ public class PIPINGTool extends ATool implements IPipingTool {
 					
 					//if error in executing these tools.
 					if(getStatusCode() != 0){
-						return "";
+						return "pipe break at " + pipeCmd;
 					}
 				}
 			}			
@@ -240,8 +240,8 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			rightToolResult = pipe(leftToolResult,to);	
 		}
 		
-		System.out.println("left Tool result: " + leftToolResult);	
-		System.out.println("right tool resutl: " + rightToolResult);
+		//System.out.println("left Tool result: " + leftToolResult);	
+		//System.out.println("right tool resutl: " + rightToolResult);
 		
 		return rightToolResult;
 	}
@@ -261,7 +261,12 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			return result;
 		}
 		
-		result = to.execute(workingDir, stdout);		
+		result = to.execute(workingDir, stdout);	
+		if(to.getStatusCode() != 0){
+			setStatusCode(-1);
+			return result;
+		}
+		
 		return result;
 	}
 	
