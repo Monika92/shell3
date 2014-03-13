@@ -344,6 +344,7 @@ public class PIPINGToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	*/
+	
 	@Test
 	public void testPipeCatStdoutEchoTo() {
 		String[] catToolArgs = {"a.txt"};
@@ -358,22 +359,27 @@ public class PIPINGToolTest {
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
 	
-	/*
-	//TODO: Check with Swetha about \n for cut
 	@Test
+	/*
+	 * Valid test case
+	 * Testing 2 pipes
+	 * command: cat filename | cut -c 1-4 | paste
+	 * 
+	 */
 	public void testExecuteCatCutPaste() {
 		String[] args1 = {"cat", "a.txt", "|", "cut", "-c", "1-4", "|", "paste"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		expectedOutput = "Appl\nMelo\nOran";
-		System.out.println("OP: \n" + actualOutput);
+		expectedOutput = "Appl\nMelo\nOran\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-	*/
-	
-	
+		
 	@Test
+	/* Valid testcase
+	 * Testing 2 pipes
+	 * command: uniq filename | cat | paste
+	 */
 	public void testExecuteWcUniqCat() {
 		String[] args1 = {"uniq", "textFiles/testC.txt", "|", "cat", "|", "paste"};
 		String[] args2 = {};
