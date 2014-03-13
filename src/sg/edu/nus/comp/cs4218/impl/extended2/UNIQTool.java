@@ -1,9 +1,11 @@
 package sg.edu.nus.comp.cs4218.impl.extended2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -232,31 +234,39 @@ public class UNIQTool extends ATool implements IUniqTool{
 	}
 
 /*
+ * Method to write to an output file
+ */
+	public boolean writeOutputToFile(File outputFile, String input){
+    	//Check for output file
+		try{
+			if(outputFile.exists())
+				outputFile.delete();
+			outputFile.createNewFile();
+			FileWriter fw = new FileWriter(outputFile.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			char[] temp = input.toCharArray(); int i = 0;
+			while(i<temp.length){
+				while(temp[i]!='\n'){
+					bw.write(temp[i]);
+					i++;
+					if(i>=temp.length)
+						break;
+				}
+				bw.newLine(); i++;
+			}
+			bw.close();
+		} catch (IOException e){
+		}
+		return true;	    
+    }
+
+	
+/*
  * Executes the uniq command for the given input - either stdin or input file
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
-		
-		//Check for stdin
-		
-		CommandVerifier cv = new CommandVerifier();
-		int validCode = cv.verifyCommand("uniq", super.args);
-
-		if(validCode == -1){
-		setStatusCode(-1);
-		return "";
-		}
-		if(workingDir == null)
-		{
-			setStatusCode(-1);
-			return "";
-		}	
-		if(!workingDir.exists()){
-			setStatusCode(-1);
-			return "";
-
-		}
+					
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, "uniq");
 		ArrayList<String> fileList = argumentObject.getFileList();
@@ -269,76 +279,98 @@ public class UNIQTool extends ATool implements IUniqTool{
 	
 		//Getting input from stdin or file
 		if (stdin != null){
-			if(cachedline.equalsIgnoreCase(stdin))
-					return "";
+			//Check for \n
+			if(!(stdin.contains("\n"))){
+				if(cachedline.equalsIgnoreCase(stdin))
+						return "";
+				else{
+						cachedline = stdin;
+						return cachedline;
+				}
+			}
 			else{
-					cachedline = stdin;
-					return cachedline;
+				File uniq_input_file = new File("uniq_temp_input_file.txt");
+				writeOutputToFile(uniq_input_file, stdin);
+				String[] temp_args = {"uniq_temp_input_file.txt"};
+				super.args = temp_args;
+				fileList.add("uniq_temp_input_file.txt");
 			}
 		}
-		else{
-			int j = 0; File file, filePath; String fileName;
-			while(j < fileList.size()){
-				try{
-					fileName = fileList.get(j);
-					filePath = new File(fileName);
-					if(filePath.isAbsolute()){
-						file = new File(filePath.getPath());
-					}
-					else{
-						file = new File(workingDir.toString()+File.separator+fileName);
-					}
-				} catch(Exception e){
-					//System.out.println("Invalid file name");
-					setStatusCode(-1);
-					if (result.equalsIgnoreCase(""))
-						return "Invalid file name";
-					else if (result.endsWith("\n"))
-						return result + "Invalid file name";
-					else
-						return result+"\nInvalid file name";
+		
+		//Verify command syntax
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("uniq", super.args);
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		//Check for valid workingDir
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		
+		int j = 0; File file, filePath; String fileName;
+		while(j < fileList.size()){
+			try{
+				fileName = fileList.get(j);
+				filePath = new File(fileName);
+				if(filePath.isAbsolute()){
+					file = new File(filePath.getPath());
 				}
-				if (!file.exists()){
-					setStatusCode(-1);
-					//System.out.println("No such file");
-					if (result.equalsIgnoreCase(""))
-						return "No such file";
-					else if(result.endsWith("\n"))
-						return result + "No such file";
-					else
-						return result+"\nNo such file";
+				else{
+					file = new File(workingDir.toString()+File.separator+fileName);
 				}
-				input = readFromFile(file);
+			} catch(Exception e){
+				//System.out.println("Invalid file name");
+				setStatusCode(-1);
+				if (result.equalsIgnoreCase(""))
+					return "Invalid file name";
+				else if (result.endsWith("\n"))
+					return result + "Invalid file name";
+				else
+					return result+"\nInvalid file name";
+			}
+			if (!file.exists()){
+				setStatusCode(-1);
+				//System.out.println("No such file");
+				if (result.equalsIgnoreCase(""))
+					return "No such file";
+				else if(result.endsWith("\n"))
+					return result + "No such file";
+				else
+					return result+"\nNo such file";
+			}
+			input = readFromFile(file);
+			
+			//Applying uniq to every file
+			if (options!=null){
 				
-				//Applying uniq to every file
+				int i = 0; Integer numArg;
+				
+				//Check for --help first
 				if (options!=null){
-					
-					int i = 0; Integer numArg;
-					
-					//Check for --help first
-					if (options!=null){
-						if(options.contains("-help")){
-						result = getHelp();
-						return result;
-						}
+					if(options.contains("-help")){
+					result = getHelp();
+					return result;
 					}
-					
-					if(options.contains("-i"))
-						checkCase = false;
-					if(options.contains("-f")){
-						while(i < options.size()){
-								if(options.get(i).equalsIgnoreCase("-f")){
-									try{
-										numArg = Integer.decode(optionArguments.get(i));
-										if(numArg < 0){
-											if (result.equalsIgnoreCase(""))
-												return "Invalid argument for -f";
-											else if(result.endsWith("\n"))
-												return result + "Invalid argument for -f";
-											else
-												return result + "\nInvalid argument for -f";
-										}
-									}catch(NumberFormatException e){
+				}
+				
+				if(options.contains("-i"))
+					checkCase = false;
+				if(options.contains("-f")){
+					while(i < options.size()){
+							if(options.get(i).equalsIgnoreCase("-f")){
+								try{
+									numArg = Integer.decode(optionArguments.get(i));
+									if(numArg < 0){
 										if (result.equalsIgnoreCase(""))
 											return "Invalid argument for -f";
 										else if(result.endsWith("\n"))
@@ -346,19 +378,26 @@ public class UNIQTool extends ATool implements IUniqTool{
 										else
 											return result + "\nInvalid argument for -f";
 									}
-									result += getUniqueSkipNum(numArg, checkCase, input);
+								}catch(NumberFormatException e){
+									if (result.equalsIgnoreCase(""))
+										return "Invalid argument for -f";
+									else if(result.endsWith("\n"))
+										return result + "Invalid argument for -f";
+									else
+										return result + "\nInvalid argument for -f";
 								}
-								i++;
-						}
+								result += getUniqueSkipNum(numArg, checkCase, input);
+							}
+							i++;
 					}
-					else
-						result += getUnique(checkCase, input);
 				}
 				else
 					result += getUnique(checkCase, input);
-				result = result.trim(); result = result + "\n";
-				j++;
 			}
+			else
+				result += getUnique(checkCase, input);
+			result = result.trim(); result = result + "\n";
+			j++;
 		}
 		
 		return result.trim();
