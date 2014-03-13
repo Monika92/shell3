@@ -148,7 +148,6 @@ public class WCTool extends ATool implements IWcTool{
 	public String execute(File workingDir, String stdin) {
 		CommandVerifier cv = new CommandVerifier();
 		int validCode = cv.verifyCommand("wc", super.args);
-
 		if(validCode == -1)
 		{
 		setStatusCode(-1);
