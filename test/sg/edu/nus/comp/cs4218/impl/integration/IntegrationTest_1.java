@@ -2,9 +2,12 @@ package sg.edu.nus.comp.cs4218.impl.integration;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -108,6 +111,97 @@ public class IntegrationTest_1 {
 	@Test
 	public void testExecuteGrepCut() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "a.txt", "|", "cut", "-c", "1-2"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "a.\nMe\nOr\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	
+	@Test
+	public void testExecuteGrepCutFileNotFound() {
+		String[] args1 = {"grep","(App|Mel|Ora)", "filenotfound.txt", "|", "cut", "-c", "1-2"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	
+	public String readFromFile(File inputFile){
+		String output = ""; FileReader fr = null;
+		try{
+			fr = new FileReader(inputFile);
+		} catch(FileNotFoundException e){
+			e.printStackTrace();
+			return "File not found";
+		}
+		BufferedReader br = new BufferedReader(fr);
+		try{
+			String line = br.readLine();
+			while(line != null){
+				if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
+					output+="\n";
+				else
+					output += line + "\n";
+				line = br.readLine();
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+			return "Unable to read file";
+		} finally{
+			try {
+				br.close();
+				fr.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return output;
+	}
+    
+	@Test
+	public void testExecuteGrepSort() {
+		String[] args1 = {"grep","(B|C)", "d.txt", "|", "sort"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		pipingTool.execute(workingDir, "");
+		actualOutput = readFromFile(new File("stdin.txt"));
+		expectedOutput = "Bat\nd.txt:Cat\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	@Test
+	public void testExecuteGrepSortEmptyOutput() {
+		String[] args1 = {"grep","1234", "d.txt", "|", "sort"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		pipingTool.execute(workingDir, "");
+		actualOutput = readFromFile(new File("stdin.txt"));
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	@Test
+	public void testExecuteGrepSortCheck() {
+		String[] args1 = {"grep","A|M|O", "a.txt", "|", "sort","-c"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "a.txt:Apple is out of order";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	@Test
+	public void testExecuteGrepWc() {
+		String[] args1 = {"grep","(App|Mel|Ora)", "a.txt", "|", "wc", "-m"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "a.\nMe\nOr\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	@Test
+	public void testExecuteGrepWcFileNotFound() {
+		String[] args1 = {"grep","(App|Mel|Ora)", "InvalidFile.txt", "|", "wc", "-m"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");

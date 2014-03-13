@@ -167,21 +167,20 @@ public class SORTToolTest {
     {
     	String[] arguments = new String[]{"-t"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, null);
-		expectedOutput = "";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		sorttool.execute(workingDirectory, null);
 		assertEquals(sorttool.getStatusCode(), -1);
     }
-    //Stdin is considered as filename
     @Test
     public void testExecuteWithStdin()
     {
     	String[] arguments = new String[]{"-"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, "abcd");
-		expectedOutput = "File not found";
+		sorttool.execute(workingDirectory, "abcd");
+		actualOutput = readFromFile(new File("stdin.txt"));
+		expectedOutput = "abcd";
+		actualOutput = actualOutput.replace("\n", "");
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(sorttool.getStatusCode(), -1);
+		assertEquals(sorttool.getStatusCode(), 0);
     }
     
     
@@ -207,8 +206,7 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
-    
-    //help is always prioritized
+    //help prioritized
     @Test
     public void testExecuteHelpWithStdin()
     {
