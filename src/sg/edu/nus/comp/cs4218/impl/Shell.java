@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.impl.extended1.GREPTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.PIPINGTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.COMMTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.PASTETool;
@@ -28,117 +30,130 @@ public class Shell extends Thread implements IShell {
 
 	String command;
 	String[] argsList, rawArgs;
-	int commandVerifyFlag;
-	static CommandVerifier verifier;
 
 	@Override
 	public ITool parse(String commandline) {
+			
+			Boolean pipeFlag = false;
+			command = null;
+			int argsLength;
 
-		verifier = new CommandVerifier();
-		command = null;
-		int argsLength;
+			ArrayList<String> list = new ArrayList<String>();
+			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
+					commandline);
+			while (m.find())
+			{
+				list.add(m.group(1));
+				if(m.group(1).equalsIgnoreCase("|"))
+					pipeFlag = true;
+			}
 
-		// This code parses the input and
-		ArrayList<String> list = new ArrayList<String>();
-		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
-				commandline);
-		while (m.find())
-			list.add(m.group(1));
+			if (list.size() >= 1) {
+				String[] cmdWords = new String[list.size()];
+				cmdWords = list.toArray(cmdWords);
 
-		if (list.size() >= 1) {
-			String[] cmdWords = new String[list.size()];
-			cmdWords = list.toArray(cmdWords);
-
-			if (cmdWords.length > 1)
-				rawArgs = new String[cmdWords.length - 1];
-			else
-				rawArgs = null;
-
-			if (cmdWords.length > 1)
-				argsList = new String[cmdWords.length - 1];
-			else
-				argsList = null;
-
-			if (cmdWords != null) {
-
-				command = cmdWords[0];
-				for (int i = 1; i < cmdWords.length; i++) {
-					argsList[i - 1] = cmdWords[i];
-					rawArgs[i - 1] = cmdWords[i];
+				if (cmdWords.length > 1 && !pipeFlag)
+				{
+					rawArgs = new String[cmdWords.length - 1];
+					argsList = new String[cmdWords.length - 1];
 				}
-
-				// -1 incorrect
-				// 0 show help
-				// 1 execute normally
-				
-				commandVerifyFlag = verifier.verifyCommand(command, argsList);
-				if (commandVerifyFlag == 0) {
-					argsList = new String[1];
-					argsList[0] = "-help";
+				else if(cmdWords.length > 1 && pipeFlag)
+				{
+					rawArgs = new String[cmdWords.length];
+					argsList = new String[cmdWords.length];
 				}
-
-				// Check for redirection
-				if (rawArgs != null && commandVerifyFlag != 0) {
-					argsLength = rawArgs.length;
-					if (argsLength > 2
-							&& rawArgs[argsLength - 2].equalsIgnoreCase(">"))
-						argsLength -= 2;
-					argsList = Arrays.copyOfRange(rawArgs, 0, argsLength);
+				else
+				{
+					rawArgs = null;
+					argsList = null;
 				}
+				if (cmdWords != null) {
 
-				//Basic utilities
-				if (command.equalsIgnoreCase("pwd"))
-					return new PWDTool();
-				else if (command.equalsIgnoreCase("cd"))
-					return new CDTool(argsList);
-				else if (command.equalsIgnoreCase("ls"))
-					return new LSTool(argsList);
-				else if (command.equalsIgnoreCase("copy"))
-					return new COPYTool(argsList);
-				else if (command.equalsIgnoreCase("move"))
-					return new MOVETool(argsList);
-				else if (command.equalsIgnoreCase("delete"))
-					return new DELETETool(argsList);
-				else if (command.equalsIgnoreCase("cat"))
-					return new CATTool(argsList);
-				else if (command.equalsIgnoreCase("echo"))
-					return new ECHOTool(argsList);
-
-				// text utilities
-				else if (command.equalsIgnoreCase("cut"))
-					return new CUTTool(argsList);
-				else if (command.equalsIgnoreCase("comm"))
-					return new COMMTool(argsList);
-				else if (command.equalsIgnoreCase("paste"))
-					return new PASTETool(argsList);
-				else if (command.equalsIgnoreCase("sort"))
-					return new SORTTool(argsList);
-				else if (command.equalsIgnoreCase("uniq"))
-					return new UNIQTool(argsList);
-				else if (command.equalsIgnoreCase("wc"))
-					return new WCTool(argsList);
-
-				else if (command.equalsIgnoreCase("Ctrl-Z")) {
-					return new ITool() {
-
-						@Override
-						public int getStatusCode() {
-							// TODO Auto-generated method stub
-							return 0;
+					if(!pipeFlag)
+					{
+						command = cmdWords[0];
+						for (int i = 1; i < cmdWords.length; i++) {
+							argsList[i - 1] = cmdWords[i];
+							rawArgs[i - 1] = cmdWords[i];
 						}
-
-						@Override
-						public String execute(File workingDir, String stdin) {
-							// TODO Auto-generated method stub
-							return null;
+					}
+					else
+					{
+						for (int i = 0; i < cmdWords.length; i++) {
+							argsList[i] = cmdWords[i];
+							rawArgs[i] = cmdWords[i];
 						}
-					};
+					}
+					// Check for redirection
+					if (rawArgs != null) {
+						argsLength = rawArgs.length;
+						if (argsLength > 2 && rawArgs[argsLength - 2].equalsIgnoreCase(">"))
+							argsLength -= 2;
+						argsList = Arrays.copyOfRange(rawArgs, 0, argsLength);
+					}
+					//Pipe
+					
+					if(pipeFlag)
+						return new PIPINGTool(argsList, null);
+					//Basic utilities
+					if (command.equalsIgnoreCase("pwd"))
+						return new PWDTool();
+					else if (command.equalsIgnoreCase("cd"))
+						return new CDTool(argsList);
+					else if (command.equalsIgnoreCase("ls"))
+						return new LSTool(argsList);
+					else if (command.equalsIgnoreCase("copy"))
+						return new COPYTool(argsList);
+					else if (command.equalsIgnoreCase("move"))
+						return new MOVETool(argsList);
+					else if (command.equalsIgnoreCase("delete"))
+						return new DELETETool(argsList);
+					else if (command.equalsIgnoreCase("cat"))
+						return new CATTool(argsList);
+					else if (command.equalsIgnoreCase("echo"))
+						return new ECHOTool(argsList);
+
+					// text utilities : extended 1
+					else if (command.equalsIgnoreCase("cut"))
+						return new CUTTool(argsList);
+					else if (command.equalsIgnoreCase("comm"))
+						return new COMMTool(argsList);
+					else if (command.equalsIgnoreCase("paste"))
+						return new PASTETool(argsList);
+					else if (command.equalsIgnoreCase("sort"))
+						return new SORTTool(argsList);
+					else if (command.equalsIgnoreCase("uniq"))
+						return new UNIQTool(argsList);
+					else if (command.equalsIgnoreCase("wc"))
+						return new WCTool(argsList);	
+
+					//text utilities : extended 2
+					else if (command.equalsIgnoreCase("grep"))
+						return new GREPTool(argsList);
+					else if (command.equalsIgnoreCase("Ctrl-Z")) {
+						return new ITool() {
+
+							@Override
+							public int getStatusCode() {
+								// TODO Auto-generated method stub
+								return 0;
+							}
+
+							@Override
+							public String execute(File workingDir, String stdin) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+						};
+					}
 				}
 			}
+			System.err.println("Command Syntax InCorrect!");
+			return null;
 		}
-		System.err.println("Command Syntax InCorrect!");
-		return null;
-	}
+
+
+
 
 	/**
 	 * Executes the tool, starts a new thread, and returns the thread handle.
