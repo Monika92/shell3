@@ -215,17 +215,14 @@ public class CommandVerifier {
 	}
 
 	private int textUtilCheck(String cmd,LinkedHashMap<String, Integer> map, 
-			ArrayList<String> args){
-
+			ArrayList<String> args){		
 		ArrayList<Integer> indexUsed = new ArrayList<Integer>();
 		int numOptions = map.size() - 2;
-
 
 		//if options contain -help return only help
 		if(args.size() == 1 && args.get(0).equalsIgnoreCase("-help")){
 			return 1;
 		}
-
 
 		//Check if arguments are valid options
 		for( int j=0; j<args.size(); j++){	
@@ -351,6 +348,9 @@ public class CommandVerifier {
 
 		if(args != null){
 			for(int i = 0; i<args.length; i++){
+				if(args[i] == null){
+					return -1;
+				}
 				argList.add(args[i]);
 			}
 
@@ -364,6 +364,10 @@ public class CommandVerifier {
 				}
 			}
 		}
+		else{
+			return -1;
+		}
+		
 		if(basCmds.contains(cmd)){
 			resultCode = verifyBasic(cmd, argList);
 			return resultCode;

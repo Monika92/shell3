@@ -38,7 +38,7 @@ public class COMMTool extends ATool implements ICommTool{
 	* Constructor for COMMTool - initializes the super class's arguments 
 	* with the passed arguments.
 	*/
-	public COMMTool(String[] arguments) {		
+	public COMMTool(String[] arguments) {	
 		super(arguments);
 	}
 
@@ -54,8 +54,7 @@ public class COMMTool extends ATool implements ICommTool{
 			return "";
 		}
 
-		if(workingDir == null)
-		{
+		if(workingDir == null){
 			setStatusCode(-1);
 			return "";
 		}	
@@ -243,20 +242,17 @@ public class COMMTool extends ATool implements ICommTool{
 	 */
 	private ArrayList<String> loadFile(String fname){
 		ArrayList<String> lines = new ArrayList<String>();
-
 		String line;
+
 		File f = new File(fname);
 		
-		//handles empty string or spec characters case
+		//handles empty string or special characters case
 		if(!f.exists()){
 			return null;
 		}
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			line = br.readLine();
-			
-			
-
 			while(line!=null){
 				lines.add(line);
 				line = br.readLine();

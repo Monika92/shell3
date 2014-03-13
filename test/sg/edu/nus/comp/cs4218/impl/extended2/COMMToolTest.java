@@ -302,6 +302,19 @@ public class COMMToolTest {
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+	
+	}
+	
+	@Test
+	public void checkExecuteWithNullArgs(){
+		String[] arguments = new String[]{"-c",null,"d.txt"};
+		
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.execute(workingDirectory, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);
 	}
 	
 	@Test
