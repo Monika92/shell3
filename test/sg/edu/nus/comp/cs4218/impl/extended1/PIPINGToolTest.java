@@ -1,5 +1,15 @@
 /*
- * Assumption while unit testing pipe.
+ * ASSUMPTION 1: 
+ * When tools in pipe command have their own arguments, 
+ * they are prioritized over stdin from previous tool
+ * 
+ * For example:
+ * 	cut -c 1-2 fname1 | paste fname2
+ * 	shows output of paste fname2 
+ * 
+ * 
+ * ASSUMPTIOn 2:
+ * While unit testing pipe.
  * When calling pipe(), in case of just command and no arguments
  * the tool needs to be initialized with {-} in arguments
  * 
@@ -209,19 +219,16 @@ public class PIPINGToolTest {
 	/**
 	 * Test for interface method pipe(ITool from, ITool to) where both tools are
 	 * valid but "from" (GREPTool) has an invalid argument. Checks for empty
-	 * result and correct error message.
+	 * result
 	 */
 	@Test
 	public void testPipeLeftInvalidGrep() {
 		String[] leftToolArgs = { "-p" };
-		String[] rightToolArgs = {};
+		String[] rightToolArgs = {"-"};
 		IGrepTool leftTool = new GREPTool(leftToolArgs);
 		ICatTool rightTool = new CATTool(rightToolArgs);
 		String pipeResult = pipingTool.pipe(leftTool, rightTool);
-		String errorMessage = errContent.toString();
 		assertTrue("".equals(pipeResult));
-	//	assertTrue(GREPTool.GREP_ERR_MSG.equals(errorMessage));
-		// because rightTool executes fine
 		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 
@@ -308,17 +315,28 @@ public class PIPINGToolTest {
 	*/
 	
 	@Test
+	/*
+	 * Valid command:
+	 * command: sort a.txt | comm a.txt b.txt
+	 * comm works without stdin and with its own args
+	 */
 	public void testPipeSortFromCommTo() {
 		String[] leftToolArgs = {"a.txt"};
 		String[] rightToolArgs = {"a.txt", "b.txt"};
 		ISortTool sortTool = new SORTTool(leftToolArgs);
 		ICommTool commTool = new COMMTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(sortTool, commTool);
-		assertTrue(pipingTool.getStatusCode() != 0);
+		assertEquals(pipingTool.getStatusCode(),0);
 	}
 	
-	//TODO: Madhu check 
 	/*
+	 * Non standard pipe response as pipe tool validity check is bypassed
+	 * by calling interface function instead of "execute".
+	 * Assumption1 stated at the top of this file becomes invalid
+	 * 
+	 * Thus the below output
+	 * 
+	 */
 	@Test
 	public void testPipeEchoFromWcTo() {
 		String[] leftToolArgs = {};
@@ -326,11 +344,15 @@ public class PIPINGToolTest {
 		IEchoTool echoTool = new ECHOTool(leftToolArgs);
 		IWcTool wcTool = new WCTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(echoTool, wcTool);
-		assertTrue(pipingTool.getStatusCode() != 0);
+		expectedOutput = workingDir + "//a.txt : -m  16 , -w  3 , -l 3" + "\n" 
+		+  " : error - Invalid Input. ";
+		System.out.println("OP:" + actualOutput);
+		//assertEquals(expectedOutput, actualOutput);
+		assertNotEquals(pipingTool.getStatusCode(), 0);
 	}
 	
-	//TODO:
 	/*
+	//TODO: Monika
 	@Test
 	public void testPipeCatStdoutUniqTo() {
 		String[] catToolArgs = {"textFiles/testC.txt"};
@@ -343,20 +365,23 @@ public class PIPINGToolTest {
 		expectedOutput = "a\nb\na\nc\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
+	*
 	*/
 	
 	@Test
+	/*
+	 * Valid Test case
+	 * command: cat a.txt | echo
+	 */
 	public void testPipeCatStdoutEchoTo() {
 		String[] catToolArgs = {"a.txt"};
 		String[] rightToolArgs = {};
 		ICatTool catTool = new CATTool(catToolArgs);
 		IEchoTool echoTool = new ECHOTool(rightToolArgs);
 		String stdout = catTool.execute(workingDir, null);
-		System.out.println(stdout);
 		actualOutput = pipingTool.pipe(stdout, echoTool);
-		System.out.println("OP:" + actualOutput);
-		expectedOutput = "Apple\nMelon\nOrange\n";
-		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
+		expectedOutput = "Apple\nMelon\nOrange";
+		assertTrue(actualOutput.equals(expectedOutput));
 	}
 	
 	@Test

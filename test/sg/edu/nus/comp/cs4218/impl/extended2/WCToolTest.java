@@ -281,7 +281,7 @@ public class WCToolTest {
 	@Test
     public void noOptionsStdinInputTest()
     {
-    	String[] arguments = new String[]{} ;
+    	String[] arguments = new String[]{"-"} ;
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, "input2.txt");
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input2.txt : -m  0 , -w  0 , -l 0\n";
