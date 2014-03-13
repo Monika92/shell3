@@ -98,18 +98,18 @@ public class WCTool extends ATool implements IWcTool{
 	 * 4. wc -m - -l file1 : ignores the - in the middle and executes normally
 	 * 5. wc -m -l -w file1 - : executes numbers for file1 and takes stdin
 	 */
-	public String implementWC(String file, ArrayList<String> options)
+	public String implementWC(String fileName, String fileContent, ArrayList<String> options)
 	{
 		String outputString = "";
 		if(options.isEmpty())
 		{
-			outputString += file +" : -m  "+  getCharacterCount(readFile(file, StandardCharsets.UTF_8))
-					        + " , -w  " +  getWordCount(readFile(file, StandardCharsets.UTF_8))
-					        + " , -l " +  getNewLineCount(readFile(file, StandardCharsets.UTF_8)) ;
+			outputString += fileName +" : -m  "+  getCharacterCount(fileContent)
+					        + " , -w  " +  getWordCount(fileContent)
+					        + " , -l " +  getNewLineCount(fileContent) ;
 		}
 		else
 		{
-			outputString += file + " : ";
+			outputString += fileName + " : ";
 			
 			if(options.contains("-help"))
 			{
@@ -119,15 +119,15 @@ public class WCTool extends ATool implements IWcTool{
 			{
 				if(options.contains("-m"))
 				{
-					outputString += " -m  "+  getCharacterCount(readFile(file, StandardCharsets.UTF_8));
+					outputString += " -m  "+  getCharacterCount(fileContent);
 				}
 				if(options.contains("-w"))
 				{
-					outputString += " -w  "+  getWordCount(readFile(file, StandardCharsets.UTF_8));
+					outputString += " -w  "+  getWordCount(fileContent);
 				}
 				if(options.contains("-l"))
 				{
-					outputString += " -l  "+  getNewLineCount(readFile(file, StandardCharsets.UTF_8));
+					outputString += " -l  "+  getNewLineCount(fileContent);
 				}	
 			}
 					        
@@ -179,7 +179,7 @@ public class WCTool extends ATool implements IWcTool{
 				File filePath = new File(getFilePath(fileList.get(i) , workingDir));
 				if(filePath.isFile())
 				{
-					outputString += implementWC(filePath.getAbsolutePath(),options);
+					outputString += implementWC(filePath.getAbsolutePath(),readFile(filePath.getAbsolutePath(), StandardCharsets.UTF_8),options);
 				}
 				else
 				{
@@ -192,22 +192,14 @@ public class WCTool extends ATool implements IWcTool{
 			{
 				if(outputString == "")
 				{
-					outputString += "No filename given.";
+					outputString += "No standard input given.";
 					setStatusCode(-1);
 				}
 			}
 			else
 			{
-				File filePath = new File(getFilePath(stdin , workingDir));
-				if(filePath.isFile())
-				{
-				outputString += implementWC(filePath.getAbsolutePath(),options);
-				}
-				else
-				{
-					outputString += stdin + " : error - Invalid Input. \n";
-					setStatusCode(-1);
-				}
+				outputString += implementWC("Stdin",stdin,options);
+				
 			}
 		}
 		return outputString;
