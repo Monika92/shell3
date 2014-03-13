@@ -29,6 +29,7 @@ public class WCToolTest {
 	public void before(){
 		
 		WorkingDirectory.changeWorkingDirectory(new File(System.getProperty("user.dir")));
+		workingDirectory = WorkingDirectory.workingDirectory;
 		inputFile1 = new File("input1.txt");
 		inputFile2 = new File("input2.txt");
 		writeToFile(inputFile1, "abc\nb d\n---\n");

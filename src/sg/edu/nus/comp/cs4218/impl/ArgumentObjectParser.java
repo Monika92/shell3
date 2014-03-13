@@ -155,8 +155,9 @@ public class ArgumentObjectParser {
 			{
 				argumentObject.fileList.add(argument[i]);
 			}
-
+			
 		}
+		
 		return argumentObject;
 	}
 
@@ -208,7 +209,7 @@ public class ArgumentObjectParser {
 	}
 
 	public ArgumentObject parse(String[] argument,String command)
-	{
+	{	
 		if(command.equalsIgnoreCase("cut")){
 			return parseCut(argument);
 		}
