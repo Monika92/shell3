@@ -384,6 +384,11 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
+	/*
+	 * Valid test case
+	 * command : echo filename | wc -m -l
+	 * wc with no filename args
+	 */
 	public void testExecuteEchoWc() {
 		String[] args1 = {"echo", "textFiles/testC.txt", "|", "wc", "-m", "-l"};
 		String[] args2 = {};
@@ -394,38 +399,73 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
+	/* Negative
+	 * Invalid case for comm:
+	 * No args given for comm
+	 */
 	public void testExecuteWcComm() {
 		String[] args1 = {"wc", "textFiles/testC.txt", "|", "comm"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		assertTrue(pipingTool.getStatusCode() != 0);
+		assertNotEquals(pipingTool.getStatusCode(),0);
 	}
 	
 	@Test
+	/*
+	 * Positive case: Valid command
+	 * Command: echo hello | comm a.txt b.txt
+	 * To show that comm works when both args are present
+	 */
 	public void testExecuteEchoCommWithArgs() {
 		String[] args1 = {"echo", "hello", "|", "comm", "a.txt", "b.txt"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		/*expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewLine +
+		expectedOutput = "Apple" + testTab + testDash + testTab + testDash + testNewLine +
 				testDash + testTab + "Banana" + testTab +testDash + testNewLine +
 				testDash + testTab + testDash + testTab + "Melon" + testNewLine +
-				testDash + testTab + testDash + testTab + "Orange";*/
-		//assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertTrue(pipingTool.getStatusCode() != 0);
+				testDash + testTab + testDash + testTab + "Orange";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pipingTool.getStatusCode(), 0);
 	}
 	
 	@Test
+	/*
+	 * Negative case: invalid command
+	 * Command: echo hello | comm a.txt
+	 * To show that comm doesnt work when both args arent present
+	 */
+	public void testExecuteEchoCommWithInvalidArgs() {
+		String[] args1 = {"echo", "hello", "|", "comm", "a.txt"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, null);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(pipingTool.getStatusCode(), 0);
+	}
+	
+	@Test
+	/*
+	 * Positive case: Valid command
+	 * command: "cat a.txt | echo hello"
+	 */
 	public void testExecuteCatEchoWithArgs() {
 		String[] args1 = {"cat", "a.txt", "|", "echo", "hello"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
+		String expectedOutput = "hello";
+		assertEquals(expectedOutput, actualOutput);
 		assertEquals(pipingTool.getStatusCode(), 0);
 	}
 	
 	@Test
+	/*
+	 * Negative case: Invalid command:
+	 * command: echo hello |
+	 */
 	public void testExecuteEchoWithArgsEndingWithPipe() {
 		String[] args1 = {"echo", "hello", "|"};
 		String[] args2 = {};

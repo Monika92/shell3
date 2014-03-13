@@ -445,11 +445,12 @@ public class CommandVerifierTest {
     
     @Test
     //Checking cut
+    //cut -d " " -d ":" -f 1-3 -
     public void verifyCut(){
     	ArrayList<String> args = new ArrayList<String>();
-    	args.add("-help");args.add("-c");
-    	args.add("1-2"); args.add("-f");args.add("jj");args.add("-d");args.add("gg");
-    	args.add("hello");
+    	args.add("-d");args.add(" ");
+    	args.add("-d"); args.add(":");args.add("-f");args.add("1-2");args.add("-");
+    	//args.add("hello");
     	
     	String cmd = "cut";
     	
