@@ -10,6 +10,10 @@ public class WorkingDirectory {
 	 * Called by cdtool to change shell's current working directory
 	 * @param newDirectory
 	 */
+	public File getWorkingDirectory()
+	{
+		return workingDirectory;
+	}
 	public static void changeWorkingDirectory(File newDirectory)
 	{
 		workingDirectory = newDirectory ;

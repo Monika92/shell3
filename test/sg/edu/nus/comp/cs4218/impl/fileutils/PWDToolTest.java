@@ -55,5 +55,11 @@ public class PWDToolTest {
 		assertTrue(pwdtool.getStatusCode()!= 0);
 		
 	}
+	
+	@Test
+	public void executeTest()
+	{
+		pwdtool.execute(new File("Users"+File.separator), null);
+	}
 
 }

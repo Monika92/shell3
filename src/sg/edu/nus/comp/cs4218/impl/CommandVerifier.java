@@ -84,6 +84,7 @@ public class CommandVerifier {
 		cutMap = new LinkedHashMap<String, Integer>();
 		cutMap.put("-c", 1);
 		cutMap.put("-d", 1);
+		cutMap.put("-f", 1);
 		cutMap.put("-help", 0);
 		cutMap.put("defMin", 1);
 		cutMap.put("defMax", INF);
@@ -189,12 +190,53 @@ public class CommandVerifier {
 		}
 		return -1;
 	}
-
+	
+	public int checkPriorCut(ArrayList<String> args){
+		int valid = 1;
+		
+		int count = 0;
+		ArrayList<String> optFromArgs = new ArrayList<String>();
+		for( int i = 0; i < args.size(); i++){
+			if(args.get(i).charAt(0) == '-'){
+				optFromArgs.add(args.get(i));
+				count++;
+			}
+			
+		}
+		
+		//if no args, wrong
+		if(count == 0){
+			return -1;
+		}
+		
+		boolean atleastOne = false;
+		if(optFromArgs.contains("-c")){
+			atleastOne = true;
+		}
+		else if(optFromArgs.contains("-f")){
+			if(!optFromArgs.contains("-d")){
+				return -1;
+			}
+			else{
+				atleastOne = true;
+			}
+		}
+		else if(optFromArgs.contains("-help")){
+			atleastOne = true;
+		}
+		
+		if(atleastOne == false){
+			return -1;
+		}
+		
+		return valid;
+	}
+	
 	public int verifyTextUtil(String cmd, ArrayList<String> args){
 
 		if(cmd.equals("cut")){
 			//should contain "-c"
-			if(args.contains("-c")){
+			if(checkPriorCut(args) == 1){
 				return textUtilCheck(cmd,cutMap, args);
 			}
 		}

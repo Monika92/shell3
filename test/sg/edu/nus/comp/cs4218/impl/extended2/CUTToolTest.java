@@ -88,8 +88,17 @@ public class CUTToolTest {
 		} catch (IOException e){
 		}
 	}
-    
     @Test
+    public void testGetHelp()
+    {
+    	String[] arguments = null ;
+		cuttool = new CUTTool(arguments);	
+		String expectedOutput = helpOutput;
+		String actualOutput = cuttool.getHelp();
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+    }
+
+	@Test
     public void testExecuteCOption()
     {
     	String[] arguments = new String[]{"-c", "1-2","-"} ;

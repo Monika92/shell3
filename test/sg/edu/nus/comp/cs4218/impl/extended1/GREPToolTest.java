@@ -229,7 +229,7 @@ public class GREPToolTest {
 	public void testExecuteOOptionStdinMultipleFiles() {
 		
 		String[] cmdArgs = { "-o", "[a-z]*", "-", "textFiles"+File.separator+"testA.txt",
-		"textFiles/testB.txt" };
+		"textFiles"+File.separator+"testB.txt" };
 		String expected = "\ne\nr\ni\ntextFiles"+File.separator+"testA.txt:\nhe\nquick\nbrown\nfox\njumped\nover\nthe\nlazy\ndog\n"
 				+ "textFiles"+File.separator+"testB.txt:\needs\nare\nflowers\ntoo\nonce\nyou\nget\nto\nknow\nthem\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
@@ -288,6 +288,7 @@ public class GREPToolTest {
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue(expected.equals(tool.execute(workingDir,
 				"hello\ni am here for you\n")));
+		assertTrue(expected.equals(tool.execute(workingDir,"hello\ni am here for you\n")));
 		assertEquals(tool.getStatusCode(), 0);
 	}
 
@@ -300,8 +301,8 @@ public class GREPToolTest {
 	public void testExecuteAOptionExtraOptionsMultipleFiles() {
 		String[] cmdArgs = { "-A", "2", "-o", "-v", "k", "textFiles"+File.separator+"testA.txt",
 				"textFiles"+File.separator+"testB.txt" };
-		String expected = "textFiles/testA.txt:The quick\nbrown fox\njumped over\nk\nbrown fox\njumped over\nthe "
-				+ "lazy \ndog.\ntextFiles/testB.txt:  once you get to know them.\nk\nWeeds are flowers,\n too,\n";
+		String expected = "textFiles"+File.separator+"testA.txt:The quick\nbrown fox\njumped over\nk\nbrown fox\njumped over\nthe "
+				+ "lazy \ndog.\ntextFiles"+File.separator+"testB.txt:  once you get to know them.\nk\nWeeds are flowers,\n too,\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
 		String actual = tool.execute(workingDir, "");
 		actual = actual.replace("\n", "");
