@@ -83,4 +83,20 @@ public class ECHOToolTest {
 		assertEquals(echotool.getStatusCode(), 0);
     }
     
+    @Test
+    public void echoNullTest(){
+    	String[] arguments = null ;
+		echotool = new ECHOTool(arguments);
+		actualOutput = echotool.echo(null);
+		assertTrue(echotool.getStatusCode() != 0);
+    }
+    
+    @Test
+    public void echoExecuteNullTest(){
+    	String[] arguments = null ;
+		echotool = new ECHOTool(arguments);
+		actualOutput = echotool.execute(null, null);
+		assertTrue(echotool.getStatusCode() != 0);
+    }
+    
 }
