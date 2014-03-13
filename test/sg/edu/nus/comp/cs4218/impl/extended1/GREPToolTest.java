@@ -286,10 +286,9 @@ public class GREPToolTest {
 		String[] cmdArgs = { "-v", " " };
 		String expected = "hello\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
-		System.out.println(tool.execute(workingDir,
-				"hello\ni am here for you\n"));
 		assertTrue(expected.equals(tool.execute(workingDir,
 				"hello\ni am here for you\n")));
+		assertTrue(expected.equals(tool.execute(workingDir,"hello\ni am here for you\n")));
 		assertEquals(tool.getStatusCode(), 0);
 	}
 

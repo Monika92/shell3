@@ -81,16 +81,6 @@ public class ShellTest {
 		assertEquals("CDTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());		
 	}
-	
-	@Test
-	public void parseCutCommandRandomArgumentsTest()
-	{
-		String commandline = "cut 3432!@#@ fdsf";
-		String[] expectedArgsList = {"-help"};
-		assertEquals("CUTTool",shell.parse(commandline).getClass().getSimpleName());
-		assertArrayEquals(expectedArgsList,shell.getArgumentList());		
-	}
-	
 	@Test
 	public void parseEchoCommandTest()
 	{
@@ -123,7 +113,12 @@ public class ShellTest {
 		ITool itool = shell.parse(commandline);
 		assertNull(itool);
 	}
-	
+	@Test
+	public void stopTest()
+	{
+		Thread r = new Thread();
+		shell.stop(r);
+	}
 	@Test
 	public void executeTest()
 	{

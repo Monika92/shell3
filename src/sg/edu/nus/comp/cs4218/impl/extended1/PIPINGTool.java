@@ -1,6 +1,3 @@
-/**
- * 
- */
 package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import java.io.File;
@@ -10,155 +7,140 @@ import java.util.List;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-import sg.edu.nus.comp.cs4218.impl.ArgumentObject;
-import sg.edu.nus.comp.cs4218.impl.ArgumentObjectParser;
 import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
-import sg.edu.nus.comp.cs4218.impl.extended2.COMMTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.PASTETool;
-import sg.edu.nus.comp.cs4218.impl.extended2.SORTTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.UNIQTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.WCTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.CATTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.CDTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.COPYTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.DELETETool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.ECHOTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.LSTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.MOVETool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.*;
+import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
-/**
- * @author Admin
- *
- */
 public class PIPINGTool extends ATool implements IPipingTool {
 	
 	private File workingDir = null;
 	String pipeArgs[];
-	
+	List<String> args;
 	
 	private boolean isFirstTool,toolWithStdin;
 	ArrayList<String> invalidPipeTool;
 	ArrayList<String> validFirstTools;
 	ArrayList<String> validTools;
-	
-	
+		
 	public PIPINGTool (String[] args, String[] args2){
 		super(args);
 		pipeArgs = args;
+		toolWithStdin = true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see sg.edu.nus.comp.cs4218.ITool#execute(java.io.File, java.lang.String)
-	 */
-	@Override
-	public String execute(File workingDir, String stdin) {		
-		this.workingDir = workingDir;
-		String result = "";
-		
-		if(!workingDir.exists()){
-			setStatusCode(-1);
-			return "";
-		}
-				
-		setStatusCode(0); 
-	
+	private int getNumberOfToolsInPipe(){
 		int numPipe = 0;
-		List<String> args = new ArrayList<String>();
+		args = new ArrayList<String>();
 		for(int i=0; i<pipeArgs.length; i++){
 			args.add(pipeArgs[i]);
 			
 			if(args.get(i).compareToIgnoreCase("|") == 0){
 				numPipe++;
 			}
+		}	
+		return numPipe;
+	}
+	
+	public String[] appendHyphenToArgs(String[] toolArguments){
+		String[] temp = new String[toolArguments.length + 1];
+		int i = 0;
+		for(; i<toolArguments.length; i++){
+			temp[i] = toolArguments[i];
 		}
+		temp[i] = "-";
+		return temp;
+	}
+	
+	@Override
+	public String execute(File workingDir, String stdin) {		
+		this.workingDir = workingDir;
+		String result = "";
+		
+		if(workingDir == null){
+			setStatusCode(-1);
+			return "";
+		}		
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		String[] argsCopy = super.args;
+		if(argsCopy == null){
+			setStatusCode(-1);
+			return "";
+		}
+		if(argsCopy[argsCopy.length -1].compareTo("|") == 0){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		setStatusCode(0); 
+	
+		int numPipe = getNumberOfToolsInPipe();
 			
-		boolean firstCmd = true,secondCmd = true,firstPipeExecuted = false;
+		boolean firstTool = true,secondTool = true,firstPipeExecuted = false;
 		int begIdx, endIdx = 0;
-		String pipeCmd = "";
-		String intermedResult = "";
-		for( int i = 0; i<numPipe; i++){
+		String pipeCmd = "", intermedResult = "";
+		ITool from = null, to = null, temp = null;
+		for( int i = 0; i< numPipe + 1; i++){		
 			
-			ITool from = null, to = null;
+			pipeCmd = args.get(0); begIdx = 1;
 			
-			if(firstCmd){
-				pipeCmd = args.get(0);
-				begIdx = 1;
-				endIdx = (args.indexOf("|")) - 1;
-				
-				String[] toolArguments = getToolArguments(args,begIdx,endIdx);
-				
-				if(checkTool(toolArguments, pipeCmd) == false){
-					setStatusCode(-1);
-					return "";
-				}
-				
-				from = getToolType(pipeCmd,toolArguments);
-				
-				if(from == null){
-					setStatusCode(-1);
-					return "";
-				}
-				printAll(pipeCmd,toolArguments);
-				
-				firstCmd = false;
-				args = args.subList(endIdx + 2,args.size());
-			}
-			else if(secondCmd){
-				pipeCmd = args.get(0);
-				begIdx = 1;
-				endIdx = (args.indexOf("|")) - 1;
-				
-				String[] toolArguments = getToolArguments(args,begIdx,endIdx);	
-				
-				if(checkTool(toolArguments, pipeCmd) == false){
-					setStatusCode(-1);
-					return "";
-				}
-							
-				to = getToolType(pipeCmd,toolArguments);
-				
-				if(to == null){
-					setStatusCode(-1);
-					return "";
-				}
-				printAll(pipeCmd,toolArguments);
-				secondCmd = false;
-				args = args.subList(endIdx + 2,args.size());
-
+			if(i == numPipe){
+				endIdx = args.size()-1;
 			}
 			else{
-				pipeCmd = args.get(0);
-				begIdx = 1;
-				endIdx = (args.indexOf("|")) - 1;
-				
-				String[] toolArguments = getToolArguments(args,begIdx,endIdx);	
-				
-				if(checkTool(toolArguments, pipeCmd) == false){
-					setStatusCode(-1);
-					return "";
+				endIdx = (args.indexOf("|")) - 1;			
+			}
+			
+			String[] toolArguments = getToolArguments(args,begIdx,endIdx);						
+			if(checkTool(toolArguments, pipeCmd) == false){
+				setStatusCode(-1);
+				return "";
+			}
+			else if(!firstTool){
+				//added for command verifier to pass syntax check for
+				//command when called from within the tool
+				toolArguments = appendHyphenToArgs(toolArguments);
+			}
+			
+			temp = getToolType(pipeCmd,toolArguments);				
+			if(temp == null){
+				setStatusCode(-1);
+				return "";
+			}
+			
+			if(firstTool){				
+				from = temp;
+				printAll(pipeCmd,toolArguments);			
+				firstTool = false;
+				args = args.subList(endIdx + 2,args.size());
+			}
+			else if(secondTool){		
+				to = temp;
+				printAll(pipeCmd,toolArguments);
+				secondTool = false;
+				if(i != numPipe){
+					args = args.subList(endIdx + 2,args.size());
 				}
-				
-				to = getToolType(pipeCmd,toolArguments);
-				
-				if(to == null){
-					setStatusCode(-1);
-					return "";
-				}
-				
+			}
+			else{
+				to = temp;		
 				printAll(pipeCmd,toolArguments);
 				intermedResult = pipe(intermedResult,to);
-				args = args.subList(endIdx + 2,args.size());
+				if(i != numPipe){
+					args = args.subList(endIdx + 2,args.size());
+				}
 			}
 			
 			if(!firstPipeExecuted){
-				if(from != null && to != null);
-				intermedResult = pipe(from, to);
-				firstPipeExecuted = true;
+				if(from != null && to != null){
+					intermedResult = pipe(from, to);
+					firstPipeExecuted = true;
+				}
 			}			
-		}
-			
+		}			
 		return intermedResult;
 	}
 	
@@ -172,12 +154,10 @@ public class PIPINGTool extends ATool implements IPipingTool {
 	}
 	
 	public String[] getToolArguments(List<String> list,int beg, int end){
-		String[] args = new String[end - beg + 1];
-		
+		String[] args = new String[end - beg + 1];	
 		for( int i = beg,j=0; i<=end; i++,j++){
 			args[j] = list.get(i);
-		}
-		
+		}		
 		return args;
 	}
 	
@@ -213,18 +193,11 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			return new UNIQTool(args);
 		else if (command.equalsIgnoreCase("wc"))
 			return new WCTool(args);
-		
 		else if (command.equalsIgnoreCase("grep"))
 			return new GREPTool(args);
-		
 		else return null;
-
 	}
-	
-	
-	/* (non-Javadoc)
-	 * @see sg.edu.nus.comp.cs4218.extended1.IPipingTool#pipe(sg.edu.nus.comp.cs4218.ITool, sg.edu.nus.comp.cs4218.ITool)
-	 */
+
 	@Override
 	public String pipe(ITool from, ITool to) {
 		
@@ -239,12 +212,20 @@ public class PIPINGTool extends ATool implements IPipingTool {
 		if(from == null){
 			leftToolResult = "";
 		}
-		else{		
+		else{	
+					
 			leftToolResult = from.execute(workingDir, null); 
 			if(from.getStatusCode() != 0){
-				leftToolResult = "";			
+				leftToolResult = "";
+				setStatusCode(-1);
+				return "";
 			}		
-				
+			
+			if(to == null){
+				setStatusCode(-1);
+				return leftToolResult + " " + "pipe error";
+			}
+			
 			rightToolResult = pipe(leftToolResult,to);	
 		}
 		
@@ -254,10 +235,6 @@ public class PIPINGTool extends ATool implements IPipingTool {
 		return rightToolResult;
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see sg.edu.nus.comp.cs4218.extended1.IPipingTool#pipe(java.lang.String, sg.edu.nus.comp.cs4218.ITool)
-	 */
 	@Override
 	public String pipe(String stdout, ITool to) {
 		
@@ -277,22 +254,27 @@ public class PIPINGTool extends ATool implements IPipingTool {
 		return result;
 	}
 	
-	public void initializeCheckerStructures(){
-		isFirstTool = true;
+	public void initializeCheckerStructures(){		
+		if(invalidPipeTool == null){
+			isFirstTool = true;// so that initialized to true only once
+			invalidPipeTool = new ArrayList<String>();
+			invalidPipeTool.add("copy");invalidPipeTool.add("move");
+			invalidPipeTool.add("delete");invalidPipeTool.add("cd");
+		}
 		
-		invalidPipeTool = new ArrayList<String>();
-		invalidPipeTool.add("copy");invalidPipeTool.add("move");
-		invalidPipeTool.add("delete");invalidPipeTool.add("cd");
+		if(validTools == null){
+			validTools = new ArrayList<String>();
+			validTools.add("grep");validTools.add("uniq");validTools.add("wc");
+			validTools.add("echo");validTools.add("cat");validTools.add("cut");
+			validTools.add("paste");validTools.add("sort");
+		}
 		
-		validTools = new ArrayList<String>();
-		validTools.add("grep");validTools.add("uniq");validTools.add("wc");
-		validTools.add("echo");validTools.add("cat");validTools.add("cut");
-		validTools.add("paste");validTools.add("sort");
-		
-		validFirstTools = new ArrayList<String>();
-		validFirstTools.add("pwd");
-		validFirstTools.add("ls");
-		validFirstTools.add("comm");
+		if(validFirstTools == null){
+			validFirstTools = new ArrayList<String>();
+			validFirstTools.add("pwd");
+			validFirstTools.add("ls");
+			validFirstTools.add("comm");
+		}
 	}
 
 	public boolean checkTool(String[] args, String cmd){
@@ -315,19 +297,20 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			}
 			else{
 				valid = true;
-			}
-			
+			}	
 		}
 		else{
 			
 			//these tools cannot be anything but the first tool in the pipe
 			if(validFirstTools.contains(cmd)){
 				valid = false;
-			}		
+			}
+			//or if these dont belong to valid pipe tools
 			else if(!validTools.contains(cmd)){
 				valid = false;
 			}
 			else{
+				//this command verifier is invoked for pipe tool checking
 				CommandVerifier cv = new CommandVerifier(true);			
 				int validCode = cv.verifyCommand(cmd, args);
 				

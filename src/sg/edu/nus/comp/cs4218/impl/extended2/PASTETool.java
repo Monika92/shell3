@@ -307,37 +307,47 @@ public class PASTETool extends ATool implements IPasteTool{
 				setStatusCode(-1);
 				return "";
 			}
-
 			if(workingDir == null){
 				setStatusCode(-1);
 				return "";
 			}	
-
 			if(!workingDir.exists()){
 				setStatusCode(-1);
 				return "";
 			}
 		}
 
+		// if stdin is not null and no prior execution has occured
+		// remove "-" from args list
+		if(stdin != null && executed == false){
+			args = removeStdinFromArg(super.args);
+		}	
+		
+		ArgumentObjectParser aop = new ArgumentObjectParser();
+		ArgumentObject ao = aop.parse(args, "paste");
+		ArrayList<String> fileNames = ao.getFileList();
+		
+		//handling case of only stdin and no input
+		if(executed == false && (fileNames == null || fileNames.size() == 0) ){
+			executed = true;
+		}
+		
+		//considering 2 cases
+		//case 1: only stdin and no input files
+		//case 2: stdin and prior input files have been printed already
 		if(stdin != null && executed == true){
 			return stdin;
 		}
-
-		if(stdin != null){
-			args = removeStdinFromArg(super.args);
-		}
-
-		ArgumentObjectParser aop = new ArgumentObjectParser();
-		ArgumentObject ao = aop.parse(args, "paste");
-
-		ArrayList<String> fileNames = ao.getFileList();
+		
 		fileNames = getCorrectFileNames(workingDir,fileNames);
 		
+		//Only when either workingDir/fileNames passed are null
 		if(fileNames == null){
 			setStatusCode(-1);
 			return "";
 		}
 		
+		//when a file doesnt exist
 		if(fileError){
 			setStatusCode(-1);
 			executed = true;
@@ -349,6 +359,7 @@ public class PASTETool extends ATool implements IPasteTool{
 			return result;
 		}
 
+		//if there are files to paste and they havent been pasted
 		if(!fileNames.isEmpty() && executed == false){
 
 			String[] fNames = new String[fileNames.size()];
@@ -369,9 +380,9 @@ public class PASTETool extends ATool implements IPasteTool{
 				//No options
 				result = pasteUseDelimiter("\t", fNames);				
 			}
-
+			
+			//after pasting files from file list, if stdin is not null
 			executed = true;
-
 			if(stdin != null){
 				result += "\n" + stdin;
 			}

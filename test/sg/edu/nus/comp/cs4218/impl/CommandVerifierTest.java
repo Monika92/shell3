@@ -65,7 +65,7 @@ public class CommandVerifierTest {
     	cmd = "wci";
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
 
@@ -165,7 +165,7 @@ public class CommandVerifierTest {
     	String cmd = "cut";
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
 
     }
@@ -179,7 +179,7 @@ public class CommandVerifierTest {
     	String cmd = "wc";
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
     
@@ -192,17 +192,39 @@ public class CommandVerifierTest {
     	args.add("file1");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    public void verifyTextutilNoOptionsRightArgumentsTest(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "uniq";
+    	args.add("file1"); args.add("file2");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    public void verifyWcCommandNoOptions(){
+       	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "wc";
+    	args.add("fname");// args.add("1");args.add("-i");args.add("hello");
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
     
     @Test
     //Positive case: command has no options but with correct num default file args
-    //command: uniq file1 file2
-    public void verifyTextutilNoOptionsRightArgumentsTest(){
+    //command: uniq -f 1 -i hello
+    public void verifyTextutilTest(){
        	ArrayList<String> args = new ArrayList<String>();
     	String cmd = "uniq";
-    	args.add("file1"); args.add("file2");
+    	args.add("-f"); args.add("1");args.add("-i");args.add("hello");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
     	expectedResultCode = 1;    	
@@ -218,7 +240,7 @@ public class CommandVerifierTest {
     	args.add("1-2"); args.add("file");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
     
@@ -244,7 +266,7 @@ public class CommandVerifierTest {
     	args.add("-l"); args.add("0"); args.add("-m"); args.add("file");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
     
@@ -270,7 +292,7 @@ public class CommandVerifierTest {
     	args.add("-d"); args.add("-s");args.add("file");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
 
     	assertEquals(expectedResultCode, actualResultCode);	
     }
@@ -297,7 +319,7 @@ public class CommandVerifierTest {
     	args.add("file"); args.add("file2"); args.add("-i");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    
+    	expectedResultCode = -1;    
     	assertEquals(expectedResultCode, actualResultCode);
     	
     	cmd = "paste"; 
@@ -305,7 +327,7 @@ public class CommandVerifierTest {
     	args.add("file1"); args.add("file2"); args.add("-s");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    
+    	expectedResultCode = -1;    
     	assertEquals(expectedResultCode, actualResultCode);
     	
     }
@@ -332,7 +354,7 @@ public class CommandVerifierTest {
     	args.add("-l"); args.add("-p"); args.add("file");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;   
+    	expectedResultCode = -1;   
 
     	assertEquals(expectedResultCode, actualResultCode);
     }
@@ -346,7 +368,7 @@ public class CommandVerifierTest {
     	args.add("-s"); args.add("-d");args.add("file");
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
     
@@ -380,7 +402,7 @@ public class CommandVerifierTest {
     	args[0] = ("-c"); args[1] = ("1-2"); args[2] = ("file");args[3] = (">");
     	
     	actualResultCode = verifier.verifyCommand(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
     	assertEquals(expectedResultCode, actualResultCode);
     	
     	args = new String[5];
@@ -416,7 +438,23 @@ public class CommandVerifierTest {
     	String cmd = "sort";
     	
     	actualResultCode = verifier.verifyTextUtil(cmd, args);
-    	expectedResultCode = 0;    	
+    	expectedResultCode = -1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+
+    }
+    
+    @Test
+    //Checking cut
+    public void verifyCut(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	args.add("-help");args.add("-c");
+    	args.add("1-2"); args.add("-f");args.add("jj");args.add("-d");args.add("gg");
+    	args.add("hello");
+    	
+    	String cmd = "cut";
+    	
+    	actualResultCode = verifier.verifyTextUtil(cmd, args);
+    	expectedResultCode = 1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
 
     }

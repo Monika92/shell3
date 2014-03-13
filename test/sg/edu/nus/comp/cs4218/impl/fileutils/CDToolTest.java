@@ -53,7 +53,13 @@ public void after(){
 }
 
 
-
+@Test
+public void changeDirectoryTest()
+{
+	String[] arguments = new String[]{} ;
+	cdtool = new CDTool(arguments);
+	assertNull(cdtool.changeDirectory("new directory"));
+}
 @Test
 public void cdNoArgumentTest(){
 	String[] arguments = new String[]{} ;

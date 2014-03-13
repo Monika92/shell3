@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 public class CommandVerifier {
 
 	private boolean pipeCommand;
-	
+
 	//Upper bound for number of arguments
 	private final int INF = 10000;
 
@@ -40,7 +40,7 @@ public class CommandVerifier {
 		initializeTextUtil();
 		pipeCommand = true;
 	}
-	
+
 	private void initializeCommandList(){
 		basCmds = new ArrayList<String>();
 		basCmds.add("pwd");
@@ -84,6 +84,7 @@ public class CommandVerifier {
 		cutMap = new LinkedHashMap<String, Integer>();
 		cutMap.put("-c", 1);
 		cutMap.put("-d", 1);
+		cutMap.put("-f", 1);
 		cutMap.put("-help", 0);
 		cutMap.put("defMin", 1);
 		cutMap.put("defMax", INF);
@@ -117,12 +118,12 @@ public class CommandVerifier {
 		wcMap.put("defMax",INF);
 
 		uniqMap = new LinkedHashMap<String, Integer>();
-		uniqMap.put("-f",0);
+		uniqMap.put("-f",1);
 		uniqMap.put("-i",0);
 		uniqMap.put("-help",0);
 		uniqMap.put("defMin",1);
 		uniqMap.put("defMax",INF);
-		
+
 		grepMap = new LinkedHashMap<String, Integer>();
 		grepMap.put("-A",1);
 		grepMap.put("-B",1);
@@ -133,18 +134,24 @@ public class CommandVerifier {
 		grepMap.put("-help",0);
 		grepMap.put("defMin",2); //include 1 pattern and atleast 1 (file or "-")
 		grepMap.put("defMax",INF);
-		
+
 	}
 
 	public int verifyBasic(String cmd, ArrayList<String> args){
-		
+
 		//if command is from pipe, then either with or w/o args are both valid
 		if(pipeCommand){
 			if(cmd.equalsIgnoreCase("cat") ||cmd.equalsIgnoreCase("echo")){
+				if(args.size() == 0){
+					return 2;
+				}
+				else if(args.size() == 1 && args.get(0).compareTo("-") == 0){
+					return 2;
+				}
 				return 1;
 			}
 		}
-		
+
 		int numArgs = args.size();
 
 		if(cmd.equals("pwd")){
@@ -183,12 +190,53 @@ public class CommandVerifier {
 		}
 		return -1;
 	}
-
+	
+	public int checkPriorCut(ArrayList<String> args){
+		int valid = 1;
+		
+		int count = 0;
+		ArrayList<String> optFromArgs = new ArrayList<String>();
+		for( int i = 0; i < args.size(); i++){
+			if(args.get(i).charAt(0) == '-'){
+				optFromArgs.add(args.get(i));
+				count++;
+			}
+			
+		}
+		
+		//if no args, wrong
+		if(count == 0){
+			return -1;
+		}
+		
+		boolean atleastOne = false;
+		if(optFromArgs.contains("-c")){
+			atleastOne = true;
+		}
+		else if(optFromArgs.contains("-f")){
+			if(!optFromArgs.contains("-d")){
+				return -1;
+			}
+			else{
+				atleastOne = true;
+			}
+		}
+		else if(optFromArgs.contains("-help")){
+			atleastOne = true;
+		}
+		
+		if(atleastOne == false){
+			return -1;
+		}
+		
+		return valid;
+	}
+	
 	public int verifyTextUtil(String cmd, ArrayList<String> args){
 
 		if(cmd.equals("cut")){
 			//should contain "-c"
-			if(args.contains("-c")){
+			if(checkPriorCut(args) == 1){
 				return textUtilCheck(cmd,cutMap, args);
 			}
 		}
@@ -282,39 +330,43 @@ public class CommandVerifier {
 				countDefaultArgs++;
 			}
 		}
-		
-		//in case verifier is called from pipe
-		if(pipeCommand){
-			if(!cmd.equalsIgnoreCase("grep")){
-				if(countDefaultArgs == 0){
-					return 2;//code to enable stdin
-				}
-				else{
-					return 1;
-				}
-			}		
-			else if(cmd.equalsIgnoreCase("grep")){
-				if(countDefaultArgs == 1){
-					return 2;
-				}
-				else{
-					return 1;
-				}				
-			}	
-			return -1;
-		}
 
-		//default check from the tool
-		if(countDefaultArgs < map.get("defMin")){
+		//verifer called from within each tool
+		if(!pipeCommand && (countDefaultArgs < map.get("defMin"))){
 			return -1;
 		}
-		if(map.get("defMax") != INF){
+		if(!pipeCommand && (map.get("defMax") != INF)){
 			if(countDefaultArgs != map.get("defMax")){
 				return -1;
 			}
 		}	
+		if(!pipeCommand && areOptionsBeforeFilenames(defaultArgIdxList, indexUsed) == 0){
+			return -1;
+		}
 
-		if(areOptionsBeforeFilenames(defaultArgIdxList, indexUsed) == 0){
+		//in case verifier is called from pipe
+		if(pipeCommand){
+			if(!cmd.equalsIgnoreCase("grep")){
+				if(countDefaultArgs == 0){
+					return 2;//code to enable stdin since no def args 
+				}
+				else{
+					return 1;//if not 0, these are valid commands
+							 //with min def args present. Stdin disabled
+				}
+			}		
+			else if(cmd.equalsIgnoreCase("grep")){
+				if(countDefaultArgs == 0){
+					return -1; //invalid since grep needs "pattern"
+				}
+				if(countDefaultArgs == 1){
+					return 2; //case where only pattern and no other args
+							  //enable stdin.
+				}
+				else{
+					return 1; //disable stdin since it already has args 
+				}				
+			}	
 			return -1;
 		}
 
@@ -367,7 +419,7 @@ public class CommandVerifier {
 		else{
 			return -1;
 		}
-		
+
 		if(basCmds.contains(cmd)){
 			resultCode = verifyBasic(cmd, argList);
 			return resultCode;
