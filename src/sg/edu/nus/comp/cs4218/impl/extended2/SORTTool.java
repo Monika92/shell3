@@ -110,13 +110,13 @@ public class SORTTool extends ATool implements ISortTool{
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-//		CommandVerifier cv = new CommandVerifier();
-//		int validCode = cv.verifyCommand("sort", super.args);
-//
-//		if(validCode == -1){
-//		setStatusCode(-1);
-//		return "";
-//		}
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("sort", super.args);
+
+		if(validCode == -1){
+		setStatusCode(-1);
+		return "";
+		}
 		
 		try{
 		input = "";

@@ -207,17 +207,6 @@ public class ArgumentObjectParser {
 		return argumentObject;		
 	}
 
-	public ArgumentObject parsePipe(String[] argument){
-
-		int argumentLength = argument.length;
-		for( int i=0; i<argumentLength; i++){
-
-
-		}
-
-		return argumentObject;
-	}
-
 	public ArgumentObject parse(String[] argument,String command)
 	{
 		if(command.equalsIgnoreCase("cut")){
@@ -241,9 +230,7 @@ public class ArgumentObjectParser {
 		else if(command.equalsIgnoreCase("grep")){
 			return parseGrep(argument);
 		}					
-		else if(command.equalsIgnoreCase("pipe")){
-			return parsePipe(argument);
-		}
+
 		return argumentObject;		
 	}
 }

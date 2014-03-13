@@ -15,6 +15,10 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.extended2.ICommTool;
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 
+/*
+ * Test Suite for COMM Tool 
+ */
+
 public class COMMToolTest {
 	
 	private ICommTool commTool;
@@ -25,6 +29,13 @@ public class COMMToolTest {
 	String fileContentA,fileContentB,fileContentC,fileContentD,fileContentE;
 	String testTab, testNewLine, testDash;
 	
+	
+	/*
+	 * Setup
+	 * Create sample files used for testing in the Test Suite
+	 * Write content into files.
+	 * Initialize other vars.
+	 */
 	@Before
 	public void before() throws Exception {
 		workingDirectory = new File(System.getProperty("user.dir"));
@@ -68,6 +79,9 @@ public class COMMToolTest {
 
 	}
 
+	/*
+	 * Helper method to write string into file
+	 */
 	private void writeToFile(File f, String fContent){
 		BufferedWriter bw;
 		try {
@@ -85,6 +99,10 @@ public class COMMToolTest {
 
 	}
 	
+	/*
+	 * After
+	 * To delete the files created in the Test Suite
+	 */
 	@After
 	public void after() throws Exception {
 		commTool = null;
@@ -98,7 +116,10 @@ public class COMMToolTest {
 	}
 
 	@Test
-	//Test if overall control flow is correct
+	/*
+	 * Test if overall control flow is correct
+	 * Call execute function
+	 */
 	public void overallTest() {
 		String[] arguments = new String[]{"a.txt","b.txt"};
 
@@ -114,11 +135,13 @@ public class COMMToolTest {
 	}
 	
 	@Test
-	//File doesn't exist
+	/*
+	 * Check with file names pointing to paths that dont exist
+	 */
 	public void compareFilesInvalidFileArgsTest(){
 		String fileName1 = "C:\\Users\\Dale\\a.txt";
 		String fileName2 = "./b.txt";
-		String[] arguments = new String[]{"C:\\Users\\Dale\\a.txt","./b.txt"};
+		String[] arguments = new String[]{fileName1,fileName2};
 		commTool = new COMMTool(arguments);		
 		actualOutput = commTool.execute(workingDirectory, null);
 
@@ -128,7 +151,10 @@ public class COMMToolTest {
 	}
 	
 	@Test
-	//comm -c -help file1 file2
+	/*
+	 * comm -c -help file1 file2
+	 * Command to give priority to help()
+	 */
 	public void compareFilesGiveHelpPriorityTest(){
 		String[] arguments = new String[]{"-c","-help","file1","file2"};
 		commTool = new COMMTool(arguments);
@@ -139,8 +165,10 @@ public class COMMToolTest {
 	}
 	
 	@Test
-	//Both file arguments are empty files
-	//comm em1.txt em2.txt
+	/*
+	 * Both file arguments are empty files
+	 * comm em1.txt em2.txt
+	 */
 	public void compareFilesNoOptionsBothFilesEmptyTest(){
 		String[] arguments = new String[]{"em1.txt","em2.txt"};
 		String input1 = "em1.txt";
@@ -154,7 +182,9 @@ public class COMMToolTest {
 	}
 	
 	@Test
-	//All lines in both files are unique. Column 3 should be empty
+	/*
+	 * All lines in both files are unique. Column 3 should be empty
+	 */
 	public void compareFilesNoOptionsAllUniqueTest(){
 		String[] arguments = new String[]{"a.txt","c.txt"};
 		String input1 = "a.txt";
@@ -174,7 +204,9 @@ public class COMMToolTest {
 	}
 	
 	@Test
-	//Some common lines. All three columns have items
+	/*
+	 * Some common lines. All three columns have items
+	 */
 	public void compareFilesNoOptionsSomeUniqueTest(){
 		String[] arguments = new String[]{"a.txt","b.txt"};
 		String input1 = "a.txt";
@@ -191,7 +223,9 @@ public class COMMToolTest {
 	}
 	
 	@Test
-	//No unique lines at all. Col1 and Col2 are empty
+	/*
+	 * No unique lines at all. Col1 and Col2 are empty
+	 */
 	public void compareFilesNoOptionsNoneUniqueTest(){
 		String[] arguments = new String[]{"a.txt","a.txt"};
 		String input1 = "a.txt";
@@ -208,7 +242,10 @@ public class COMMToolTest {
 	}
 
 	@Test
-	//Positive case: Files are sorted
+	/*
+	 * Positive case: Files are sorted
+	 * Call compareFilesCheckSortStatus
+	 */
 	public void compareFilesCheckSortStatusTest1(){
 		String[] arguments = new String[]{"-c","a.txt","b.txt"};
 		String input1 = "a.txt";
@@ -226,7 +263,10 @@ public class COMMToolTest {
 	
 
 	@Test
-	//Negative case: File 2 not sorted
+	/*
+	 * Negative case: File 2 not sorted
+	 * call compareFilesCheckSortStatus
+	 */
 	public void compareFilesCheckSortStatusTest2(){
 		String[] arguments = new String[]{"-c","a.txt","d.txt"};
 		String input1 = "a.txt";
@@ -238,4 +278,158 @@ public class COMMToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(commTool.getStatusCode(), 0);	
 	}
+	
+	@Test
+	/*
+	 * Null input against all interface methods
+	 */
+	public void compareFilesCheckNullInput(){
+		String[] arguments = new String[]{"-c","a.txt","d.txt"};
+		String input1 = null;
+		String input2 = null;
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.compareFilesCheckSortStatus(input1, input2);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+		actualOutput = commTool.compareFiles(input1, input2);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+		actualOutput = commTool.compareFilesDoNotCheckSortStatus(input1, input2);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+	
+	}
+	
+	@Test
+	public void checkExecuteWithNullArgs(){
+		String[] arguments = new String[]{"-c",null,"d.txt"};
+		
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.execute(workingDirectory, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);
+	}
+	
+	@Test
+	/*
+	 * Empty filename input against all interface methods
+	 */
+	public void compareFilesCheckEmptyFileNameStringInput(){
+		String[] arguments = new String[]{"-c","","d.txt"};
+		
+		String input1 = "";
+		String input2 = "d.txt";
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.compareFilesCheckSortStatus(input1, input2);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+		actualOutput = commTool.compareFiles(input1, input2);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+		actualOutput = commTool.compareFilesDoNotCheckSortStatus(input1, input2);
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+	}
+	
+	@Test
+	/*
+	 * testing COMM after initializing constructor with
+	 * null for args
+	 */
+	public void testConstructor(){
+		String[] args = null;
+		commTool = new COMMTool(args);
+		actualOutput = commTool.execute(workingDirectory, "");
+		expectedOutput = "";
+		
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+	}
+	
+	@Test
+	/*
+	 * Testing command syntax : invalid options
+	 */
+	public void testWithInvalidArgumentOptions(){
+		String[] arguments = new String[]{"-k","a.txt","d.txt"};
+
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.execute(workingDirectory, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+	}
+	
+	@Test
+	/*
+	 * Testing command syntax: wrong number of arguments
+	 * case: lesser than required (i.e < 2)
+	 */
+	public void testWithInvalidArguments1(){
+		String[] arguments = new String[]{"-c","a.txt"};
+
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.execute(workingDirectory, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+		
+	}
+	
+	@Test
+	/*
+	 * Testing command syntax: wrong number of arguments
+	 * case: more than required (i.e > 2)
+	 */
+	public void testWithInvalidArguments2(){
+		String[] arguments = new String[]{"-c","a.txt","b.txt","c.txt"};
+
+		commTool = new COMMTool(arguments);
+		actualOutput = commTool.execute(workingDirectory, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(commTool.getStatusCode(), 0);	
+	}
+	
+	@Test
+	/*
+	 * Testing command with non textfiles
+	 * compare .gif and .zip
+	 */
+	public void testCompareFilesWithNonTextFile(){
+		String[] arguments = new String[]{"textFiles/test1.zip","textFiles/picture.gif"};
+		commTool = new COMMTool(arguments);
+		String input1 = "textFiles/test1.zip";
+		String input2 = "textFiles/picture.gif";		
+		actualOutput = commTool.compareFiles(input1, input2);
+		assertEquals(commTool.getStatusCode(), 0);	
+	}
+	
+	
+	@Test
+	/*
+	 * Testing command with non textfiles with -c option
+	 * compare .gif and .zip
+	 */
+	public void testCompareFilesCheckSortStatusWithNonTextFile(){
+		String[] arguments = new String[]{"-c","textFiles/test1.zip","textFiles/picture.gif"};
+		commTool = new COMMTool(arguments);	
+		actualOutput = commTool.execute(workingDirectory, "");
+		assertEquals(commTool.getStatusCode(), 0);	
+	}
+	
 }
