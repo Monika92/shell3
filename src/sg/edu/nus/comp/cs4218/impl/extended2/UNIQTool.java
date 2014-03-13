@@ -293,6 +293,9 @@ public class UNIQTool extends ATool implements IUniqTool{
 				writeOutputToFile(uniq_input_file, stdin);
 				String[] temp_args = {"uniq_temp_input_file.txt"};
 				super.args = temp_args;
+				if (fileList.contains("-"))
+					fileList.remove("-");
+				
 				fileList.add("uniq_temp_input_file.txt");
 			}
 		}

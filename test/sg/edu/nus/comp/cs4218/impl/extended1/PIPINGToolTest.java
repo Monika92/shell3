@@ -180,24 +180,15 @@ public class PIPINGToolTest {
 	 * result and correct error message.
 	 */
 	@Test
+	//@corrected
 	public void testPipeLeftInvalidLS() {
 		String[] leftToolArgs = { "filenotfound" };
 		String[] rightToolArgs = {"-"};
 		ILsTool leftTool = new LSTool(leftToolArgs);
 		ICatTool rightTool = new CATTool(rightToolArgs);
 		String pipeResult = pipingTool.pipe(leftTool, rightTool);
-		
-		
-		String errorMessage = errContent.toString();
 		assertTrue("".equals(pipeResult));
-		//	assertTrue(String.format(LSTool.LS_ERROR_MSG, "filenotfound").equals(
-		//			errorMessage));
-		// because rightTool executes fine
-		
-		//System.out.println("pipe result:" + pipeResult + "end");
-		//System.out.println("code:" + pipingTool.getStatusCode());
-		assertTrue(pipingTool.getStatusCode() == 0);
-		
+		assertNotEquals(pipingTool.getStatusCode(),0);	
 	}
 
 	/**
@@ -221,7 +212,9 @@ public class PIPINGToolTest {
 	 * valid but "from" (GREPTool) has an invalid argument. Checks for empty
 	 * result
 	 */
+	
 	@Test
+	//@corrected
 	public void testPipeLeftInvalidGrep() {
 		String[] leftToolArgs = { "-p" };
 		String[] rightToolArgs = {"-"};
@@ -229,7 +222,7 @@ public class PIPINGToolTest {
 		ICatTool rightTool = new CATTool(rightToolArgs);
 		String pipeResult = pipingTool.pipe(leftTool, rightTool);
 		assertTrue("".equals(pipeResult));
-		assertTrue(pipingTool.getStatusCode() == 0);
+		assertNotEquals(pipingTool.getStatusCode(),0);
 	}
 
 	/**
@@ -271,10 +264,7 @@ public class PIPINGToolTest {
 		ICatTool leftTool = new CATTool(leftToolArgs);
 		ITool rightTool = null;
 		String pipeResult = pipingTool.pipe(leftTool, rightTool);
-		String errorMessage = errContent.toString();
 		assertTrue("".equals(pipeResult));
-	//	assertTrue(String.format(CATTool.CAT_FILE_ERROR_MSG, "filenotfound")
-	//			.equals(errorMessage));
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 
@@ -289,7 +279,7 @@ public class PIPINGToolTest {
 		IPasteTool pasteTool = new PASTETool(rightToolArgs);
 		String actualOutput = pipingTool.pipe(wcTool, pasteTool);
 		String expectedOutput = workingDir + "\\textFiles\\testA.txt :  -m  37 -l  5\n";
-		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
+		assertTrue(actualOutput.equals(expectedOutput));
 	}
 	
 	//TODO: Swetha removes trailing \n
@@ -327,6 +317,8 @@ public class PIPINGToolTest {
 		ICommTool commTool = new COMMTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(sortTool, commTool);
 		assertEquals(pipingTool.getStatusCode(),0);
+		expectedOutput = "Apple\t \t \n \tBanana\t \n \t \tMelon\n \t \tOrange";
+		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
 	
 	/*
@@ -337,6 +329,7 @@ public class PIPINGToolTest {
 	 * Thus the below output
 	 * 
 	 */
+	//TODO: get expected op to match
 	@Test
 	public void testPipeEchoFromWcTo() {
 		String[] leftToolArgs = {};
@@ -350,9 +343,7 @@ public class PIPINGToolTest {
 		//assertEquals(expectedOutput, actualOutput);
 		assertNotEquals(pipingTool.getStatusCode(), 0);
 	}
-	
-	/*
-	//TODO: Monika
+
 	@Test
 	public void testPipeCatStdoutUniqTo() {
 		String[] catToolArgs = {"textFiles/testC.txt"};
@@ -362,11 +353,10 @@ public class PIPINGToolTest {
 		String stdout = catTool.execute(workingDir, null);
 		actualOutput = pipingTool.pipe(stdout, uniqTool);
 		System.out.println("OP:" + actualOutput);
-		expectedOutput = "a\nb\na\nc\n";
+		expectedOutput = "a\nb\na\nc";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-	*
-	*/
+
 	
 	@Test
 	/*
