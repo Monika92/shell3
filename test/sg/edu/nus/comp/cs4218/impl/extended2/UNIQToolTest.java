@@ -324,4 +324,17 @@ public class UNIQToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(uniqtool.getStatusCode(), 0);
     }
+	
+	@Test
+	public void uniqStdinWithNewlineExecuteTest(){
+    	String[] arguments = new String[]{} ;
+		uniqtool = new UNIQTool(arguments);
+		stdin = "a\na\na\nb\nb\nc";
+		actualOutput = uniqtool.execute(workingDirectory, stdin);
+		expectedOutput = "a\nb\nc";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(uniqtool.getStatusCode(), 0);
+    }
+	
+	
 }

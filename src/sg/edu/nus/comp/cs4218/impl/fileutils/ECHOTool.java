@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 public class ECHOTool extends ATool implements IEchoTool {
 
@@ -32,8 +33,32 @@ public class ECHOTool extends ATool implements IEchoTool {
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
+			
+		//Prioritizing stdin over commandline args
+		if(stdin != null){
+			setStatusCode(0);
+			return stdin;
+		}
 		
+		//Verify command syntax
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("echo", super.args);
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		//Check for valid workingDir
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
+				
 		StringBuilder sb = new StringBuilder();
 		for(String s : args){
 			sb.append(s);
