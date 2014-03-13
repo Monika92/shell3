@@ -282,27 +282,20 @@ public class PIPINGToolTest {
 		assertTrue(actualOutput.equals(expectedOutput));
 	}
 	
-	//TODO: Swetha removes trailing \n
-	/*
 	@Test
 	public void testPipeCommFromCutTo() {
 		String[] leftToolArgs = {"a.txt","b.txt"};
-		String[] rightToolArgs = {"-c", "1-3"};
+		String[] rightToolArgs = {"-c", "1-3","-"};
 		ICutTool cutTool = new CUTTool(rightToolArgs);
 		ICommTool commTool = new COMMTool(leftToolArgs);
 		actualOutput = pipingTool.pipe(commTool, cutTool);
 		expectedOutput = "App" + testNewLine +
 				testDash + testTab + "B" + testNewLine +
 				testDash + testTab + testDash + testNewLine +
-				testDash + testTab + testDash;
-		System.out.println("Size:" + testDash.length());
-		actualOutput.replaceAll("\n", "newline");
-		actualOutput.replaceAll("\t", "tab");
-		actualOutput.replaceAll(" ", "space");
+				testDash + testTab + testDash + testNewLine;
 		System.out.println("op:\n" + actualOutput);
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
-	*/
 	
 	@Test
 	/*
@@ -352,7 +345,6 @@ public class PIPINGToolTest {
 		IUniqTool uniqTool = new UNIQTool(rightToolArgs);
 		String stdout = catTool.execute(workingDir, null);
 		actualOutput = pipingTool.pipe(stdout, uniqTool);
-		System.out.println("OP:" + actualOutput);
 		expectedOutput = "a\nb\na\nc";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}

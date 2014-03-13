@@ -240,8 +240,8 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			rightToolResult = pipe(leftToolResult,to);	
 		}
 		
-		System.out.println("left Tool result: " + leftToolResult);	
-		System.out.println("right tool resutl: " + rightToolResult);
+		//System.out.println("left Tool result: " + leftToolResult);	
+		//System.out.println("right tool resutl: " + rightToolResult);
 		
 		return rightToolResult;
 	}
