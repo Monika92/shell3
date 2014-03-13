@@ -149,7 +149,8 @@ public class WCTool extends ATool implements IWcTool{
 		CommandVerifier cv = new CommandVerifier();
 		int validCode = cv.verifyCommand("wc", super.args);
 
-		if(validCode == -1){
+		if(validCode == -1)
+		{
 		setStatusCode(-1);
 		return "";
 		}
@@ -161,7 +162,6 @@ public class WCTool extends ATool implements IWcTool{
 		if(!workingDir.exists()){
 			setStatusCode(-1);
 			return "";
-
 		}
 		String outputString = "";
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();

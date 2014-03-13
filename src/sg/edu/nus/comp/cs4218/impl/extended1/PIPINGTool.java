@@ -101,8 +101,10 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			}
 			else if(!firstTool){
 				//added for command verifier to pass syntax check for
-				//command when called from within the tool
-				toolArguments = appendHyphenToArgs(toolArguments);
+				//command when called from within the tool			
+				if(!pipeCmd.equalsIgnoreCase("comm") && !pipeCmd.equalsIgnoreCase("echo")){				
+					toolArguments = appendHyphenToArgs(toolArguments);
+				}
 			}
 			
 			temp = getToolType(pipeCmd,toolArguments);				
@@ -129,6 +131,10 @@ public class PIPINGTool extends ATool implements IPipingTool {
 				to = temp;		
 				printAll(pipeCmd,toolArguments);
 				intermedResult = pipe(intermedResult,to);
+				if(getStatusCode() != 0){
+					return "";
+				}
+				
 				if(i != numPipe){
 					args = args.subList(endIdx + 2,args.size());
 				}
@@ -138,6 +144,11 @@ public class PIPINGTool extends ATool implements IPipingTool {
 				if(from != null && to != null){
 					intermedResult = pipe(from, to);
 					firstPipeExecuted = true;
+					
+					//if error in executing these tools.
+					if(getStatusCode() != 0){
+						return "";
+					}
 				}
 			}			
 		}			
@@ -267,13 +278,14 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			validTools.add("grep");validTools.add("uniq");validTools.add("wc");
 			validTools.add("echo");validTools.add("cat");validTools.add("cut");
 			validTools.add("paste");validTools.add("sort");
+			validTools.add("comm");
 		}
 		
 		if(validFirstTools == null){
 			validFirstTools = new ArrayList<String>();
 			validFirstTools.add("pwd");
 			validFirstTools.add("ls");
-			validFirstTools.add("comm");
+			//validFirstTools.add("comm");
 		}
 	}
 
@@ -308,6 +320,17 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			//or if these dont belong to valid pipe tools
 			else if(!validTools.contains(cmd)){
 				valid = false;
+			}
+			else if(cmd.equalsIgnoreCase("comm")){
+				CommandVerifier cv = new CommandVerifier();			
+				int validCode = cv.verifyCommand("comm", args);
+				
+				if(validCode == -1){
+					valid = false;
+				}
+				else{
+					valid = true;
+				}	
 			}
 			else{
 				//this command verifier is invoked for pipe tool checking
