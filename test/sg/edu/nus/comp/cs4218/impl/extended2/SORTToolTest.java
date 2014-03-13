@@ -161,14 +161,14 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
-    //Options other than -c and -help are interpreted as file names
+    
     @Test
     public void testExecuteInvalidOptions()
     {
     	String[] arguments = new String[]{"-t"} ;
 		sorttool = new SORTTool(arguments);
 		actualOutput = sorttool.execute(workingDirectory, null);
-		expectedOutput = "File not found";
+		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), -1);
     }
