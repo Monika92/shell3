@@ -235,4 +235,20 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    @Test
+    public void catGetStringForFileNullTest(){
+    	String[] arguments = null ;
+		cattool = new CATTool(arguments);
+		actualOutput = cattool.getStringForFile(null);
+		assertTrue(cattool.getStatusCode() != 0);
+    }
+    
+    @Test
+    public void catExecuteNullTest(){
+    	String[] arguments = null ;
+		cattool = new CATTool(arguments);
+		actualOutput = cattool.execute(null, null);
+		assertTrue(cattool.getStatusCode() != 0);
+    }
+    
 }
