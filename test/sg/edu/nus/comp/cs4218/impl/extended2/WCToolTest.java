@@ -124,8 +124,6 @@ public class WCToolTest {
     	String[] arguments = new String[]{"-m", "-w", "-l"} ;
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(workingDirectory, null);
-		expectedOutput =  "No filename given.";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), -1);
     }
 	
@@ -135,8 +133,6 @@ public class WCToolTest {
     	String[] arguments = new String[]{} ;
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(workingDirectory, null);
-		expectedOutput =  "No filename given.";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), -1);
     }
 	
@@ -158,8 +154,8 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
+		assertFalse(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(wctool.getStatusCode(), -1);
     }
 	
 	@Test
@@ -270,7 +266,7 @@ public class WCToolTest {
 	@Test
     public void onlyStdinInputTest()
     {
-    	String[] arguments = new String[]{"-w", "-m"} ;
+    	String[] arguments = new String[]{"-w", "-m", "-"} ;
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, "input2.txt");
 		expectedOutput = WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0\n";
@@ -281,7 +277,7 @@ public class WCToolTest {
 	@Test
     public void noOptionsStdinInputTest()
     {
-    	String[] arguments = new String[]{} ;
+    	String[] arguments = new String[]{"-"} ;
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, "input2.txt");
 		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input2.txt : -m  0 , -w  0 , -l 0\n";
@@ -292,7 +288,7 @@ public class WCToolTest {
 	@Test
     public void onlyAbsoluteStdinInputTest()
     {
-    	String[] arguments = new String[]{"-w", "-m"} ;
+    	String[] arguments = new String[]{"-w", "-m","-"} ;
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, WorkingDirectory.workingDirectory + File.separator + "input2.txt");
 		expectedOutput = WorkingDirectory.workingDirectory + File.separator + "input2.txt :  -m  0 -w  0\n";

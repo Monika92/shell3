@@ -393,6 +393,7 @@ public class CommandVerifier {
 				argList.add(args[i]);
 			}
 			
+			
 			//get list of args without ">" and after
 			if(argList.contains(">")){
 			if (argList.indexOf(">") == argList.size()-2){
