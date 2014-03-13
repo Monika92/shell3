@@ -129,6 +129,10 @@ public class PIPINGTool extends ATool implements IPipingTool {
 				to = temp;		
 				printAll(pipeCmd,toolArguments);
 				intermedResult = pipe(intermedResult,to);
+				if(getStatusCode() != 0){
+					return "";
+				}
+				
 				if(i != numPipe){
 					args = args.subList(endIdx + 2,args.size());
 				}
@@ -138,6 +142,11 @@ public class PIPINGTool extends ATool implements IPipingTool {
 				if(from != null && to != null){
 					intermedResult = pipe(from, to);
 					firstPipeExecuted = true;
+					
+					//if error in executing these tools.
+					if(getStatusCode() != 0){
+						return "";
+					}
 				}
 			}			
 		}			
