@@ -124,10 +124,27 @@ public class IntegrationTest_1 {
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-	
+	@Test
+	public void testExecuteGrepSort() {
+		String[] args1 = {"grep","(B|C)", "d.txt", "|", "sort"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
 	@Test
 	public void testExecuteGrepWc() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "a.txt", "|", "wc", "-m"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "a.\nMe\nOr\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	@Test
+	public void testExecuteGrepWcFileNotFound() {
+		String[] args1 = {"grep","(App|Mel|Ora)", "InvalidFile.txt", "|", "wc", "-m"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");

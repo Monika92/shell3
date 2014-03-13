@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -106,17 +107,38 @@ public class SORTTool extends ATool implements ISortTool{
 		return helpOutput;
 	}
 
+	public void writeToFile(File file, String input){
+		try{
+			if(!file.exists())
+				file.createNewFile();
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			char[] temp = input.toCharArray(); int i = 0;
+			while(i<temp.length){
+				while(temp[i]!='\n'){
+					bw.write(temp[i]);
+					i++;
+					if(i>=temp.length)
+						break;
+				}
+				bw.newLine(); i++;
+			}
+			bw.close();
+		} catch (IOException e){
+		}
+	}
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		
-		CommandVerifier cv = new CommandVerifier();
-		int validCode = cv.verifyCommand("sort", super.args);
-
-		if(validCode == -1){
-		setStatusCode(-1);
-		return "";
-		}
+//		CommandVerifier cv = new CommandVerifier();
+//		int validCode = cv.verifyCommand("sort", super.args);
+//
+//		if(validCode == -1){
+//		setStatusCode(-1);
+//		return "";
+//		}
+		
 		
 		try{
 		input = "";
@@ -125,6 +147,13 @@ public class SORTTool extends ATool implements ISortTool{
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, command);
 		ArrayList<String> fileList = argumentObject.getFileList();
 		ArrayList<String> options = argumentObject.getOptions();
+		
+		if(stdin!=null)
+		{
+			String fileName = "stdin.txt";
+			writeToFile(new File(fileName), stdin);
+			fileList.add(fileName);
+		}
 		if(workingDir == null)
 		{
 			setStatusCode(-1);
