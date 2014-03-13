@@ -1,8 +1,10 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
+
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 
 public class DELETETool extends ATool implements IDeleteTool{
 
@@ -29,8 +31,26 @@ public class DELETETool extends ATool implements IDeleteTool{
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
 		
+		//Verify command syntax
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("delete", super.args);
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		
+		//Check for valid workingDir
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
+				
 		File file, filePath;
 		int argsLength = args.length;
 		String output = "", outputMsg = "", fileName;

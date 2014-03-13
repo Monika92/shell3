@@ -197,7 +197,7 @@ public class CommandVerifier {
 		int count = 0;
 		ArrayList<String> optFromArgs = new ArrayList<String>();
 		for( int i = 0; i < args.size(); i++){
-			if(args.get(i).charAt(0) == '-'){
+			if(args.get(i).length() >1 && args.get(i).charAt(0) == '-'){
 				optFromArgs.add(args.get(i));
 				count++;
 			}
@@ -273,53 +273,39 @@ public class CommandVerifier {
 		}
 
 		//Check if arguments are valid options
-		for( int j=0; j<args.size(); j++){	
-			String argToCheck = args.get(j);
+		for( int i=0; i<args.size(); i++){	
+			String argToCheck = args.get(i);
 
-			//if its not help
-			if(!argToCheck.equalsIgnoreCase("-help")){
+			int numArgs = 0,idx = 0;
+			if(argToCheck.length() ==2  && argToCheck.charAt(0) == '-' 
+					|| argToCheck.equalsIgnoreCase("-help")){
+				if(map.containsKey(argToCheck)){
+					
+					numArgs = map.get(argToCheck);
+					idx = i;
+					indexUsed.add(i);
+		
+					//check if num of args for option after its idx is correct
+					for(int j=1; j<=numArgs; j++){
+						if(idx + j >= args.size()){
+							break;			
+						}
 
-				//if any option of the form "-x" and is valid for the command
-				if(argToCheck.length() == 2 
-						&& argToCheck.charAt(0) == '-' 
-						&& !map.containsKey(argToCheck)){				
+						String arg = args.get(idx + j);
+						//if immediately followed arguments are other options					
+						if(map.keySet().contains(arg)){
+							return -1;
+						}
+						indexUsed.add(idx + j);					
+					}
+					
+				}
+				else{
 					return -1;
 				}
 			}
-
 		}
-
-		//Iterate thro possible options for given command
-		for(int i = 0; i<numOptions; i++){
-
-			String value = (new ArrayList<String>(map.keySet())).get(i);
-			int numArgs = 0, idx = 0;
-
-			//if option exists in args
-			if(args.contains(value)){
-
-				numArgs = map.get(value);
-				idx = args.indexOf(value);
-				indexUsed.add(idx);
-
-				//check if num of args for option after its idx is correct
-				for(int j=1; j<=numArgs; j++){
-
-					if(idx + j >= args.size()){
-						break;			
-					}
-
-					String arg = args.get(idx + j);
-					//if immediately followed arguments are other options					
-					if(map.keySet().contains(arg)){
-						return -1;
-					}
-
-					indexUsed.add(idx + j);					
-				}				
-			}
-		}
-
+	
 		ArrayList<Integer> defaultArgIdxList = new ArrayList<Integer>();
 
 		//check for default option args
@@ -369,7 +355,6 @@ public class CommandVerifier {
 			}	
 			return -1;
 		}
-
 		return 1;
 	}
 
