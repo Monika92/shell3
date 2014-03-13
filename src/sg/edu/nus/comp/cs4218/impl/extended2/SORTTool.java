@@ -153,6 +153,9 @@ public class SORTTool extends ATool implements ISortTool{
 			String fileName = "stdin.txt";
 			writeToFile(new File(fileName), stdin);
 			fileList.add(fileName);
+			if (fileList.contains("-"))
+				fileList.remove("-");
+			
 		}
 		if(workingDir == null)
 		{
