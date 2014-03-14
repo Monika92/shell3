@@ -105,7 +105,6 @@ public class CATTool extends ATool implements ICatTool {
 		
 		for(int i = 0; i < argsLength; i++){
 			if(args[i].equalsIgnoreCase("-")){
-				i++;
 				continue;
 			}
 			try{

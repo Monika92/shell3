@@ -39,7 +39,7 @@ public class Shell extends Thread implements IShell {
 			int argsLength;
 
 			ArrayList<String> list = new ArrayList<String>();
-			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*||").matcher(
+			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
 					commandline);
 			while (m.find())
 			{

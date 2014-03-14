@@ -127,32 +127,37 @@ public class IntegrationTest_2 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 
-	
 	@Test
-	public void testFnHyphenErrPipeExecuteUniqCatSort() {
+	public void testFnHyphenPipeExecuteUniqCatSort() {
 		String[] args1 = {"uniq", "a.txt", "-", "|", "cat", "|", "sort"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		assertTrue(pipingTool.getStatusCode() != 0);
+		expectedOutput = "Apple\r\nMelon\r\nOrange\r\n";
+		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
+		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 	
 	@Test
-	public void testHyphenFnHyphenErrPipeExecutePasteUniqEcho() {
+	public void testHyphenFnHyphenPipeExecutePasteUniqEcho() {
 		String[] args1 = {"paste", "-", "a.txt", "-", "|", "uniq", "|", "echo"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		assertTrue(pipingTool.getStatusCode() != 0);
+		expectedOutput = fileContentA;
+		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
+		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 	
 	@Test
-	public void testFnHyphenFnErrPipeExecuteCatCommCut() {
-		String[] args1 = {"cat", "a.txt", "-", "b.txt", "|", "comm", "c.txt", "d.txt", "|", "cut"};
+	public void testFnHyphenFnPipeExecuteCatCommCut() {
+		String[] args1 = {"comm", "c.txt", "d.txt", "|", "cat", "a.txt", "-", "b.txt", "|", "cut", "-c", "1-3"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		assertTrue(pipingTool.getStatusCode() != 0);
+		expectedOutput = "App\nMel\nOra\nBan\nMel\nOra\n";
+		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
+		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 	
 	/*
@@ -186,12 +191,14 @@ public class IntegrationTest_2 {
 	}
 	
 	@Test
-	public void testHypenPipeExecuteCutWcCat() {
+	public void testHypenErrPipeExecuteCutWcCat() {
 		String[] args1 = {"cut", "-c", "1-5", "-", "|", "wc", "|", "cat"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		assertTrue(pipingTool.getStatusCode() != 0);
+		expectedOutput = "Stdin : -m  0 , -w  0 , -l 0\n";
+		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
+		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 	
 	@Test
@@ -223,7 +230,7 @@ public class IntegrationTest_2 {
 	
 	@Test
 	public void testCdErrPipeExecuteUniqCdEcho() {
-		String[] args1 = {"uniq", "a.txt", "-", "|", "cd", "../", "|", "echo"};
+		String[] args1 = {"uniq", "a.txt", "|", "cd", "../", "|", "echo"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
@@ -232,7 +239,7 @@ public class IntegrationTest_2 {
 	
 	@Test
 	public void testCopyErrPipeExecuteUniqCdEcho() {
-		String[] args1 = {"uniq", "a.txt", "-", "|", "copy", "b.txt", "../", "|", "echo"};
+		String[] args1 = {"uniq", "a.txt", "|", "copy", "b.txt", "../", "|", "echo"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
@@ -241,7 +248,7 @@ public class IntegrationTest_2 {
 	
 	@Test
 	public void testMoveErrPipeExecuteUniqCdEcho() {
-		String[] args1 = {"uniq", "a.txt", "-", "|", "echo", "|", "move", "d.txt", "../"};
+		String[] args1 = {"uniq", "a.txt", "|", "echo", "|", "move", "d.txt", "../"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");

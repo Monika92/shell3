@@ -76,7 +76,6 @@ public class DELETETool extends ATool implements IDeleteTool{
 		
 		for(int i = 0; i < argsLength; i++){
 			if(args[i].equalsIgnoreCase("-")){
-				i++;
 				continue;
 			}
 			try{
