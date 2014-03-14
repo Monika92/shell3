@@ -354,6 +354,11 @@ public class PASTETool extends ATool implements IPasteTool{
 		ArgumentObject ao = aop.parse(args, "paste");
 		ArrayList<String> fileNames = ao.getFileList();
 		
+		//handling case of "paste -help"
+		if(ao.getOptions().size() == 1 && ao.getOptions().get(0).compareToIgnoreCase("-help") == 0){
+			return getHelp();
+		}
+		
 		//handling case of only stdin and no input
 		if(executed == false && (fileNames == null || fileNames.size() == 0) ){
 			executed = true;
@@ -369,7 +374,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		fileNames = getCorrectFileNames(workingDir,fileNames);
 		
 		//Only when either workingDir/fileNames passed are null
-		if(fileNames == null){
+		if(fileNames == null || fileNames.size() == 0){
 			setStatusCode(-1);
 			return "";
 		}

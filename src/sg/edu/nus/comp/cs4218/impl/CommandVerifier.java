@@ -276,6 +276,7 @@ public class CommandVerifier {
 			String argToCheck = args.get(i);
 
 			int numArgs = 0,idx = 0;
+			argToCheck = argToCheck.toLowerCase();
 			if(argToCheck.length() ==2  && argToCheck.charAt(0) == '-' 
 					|| argToCheck.equalsIgnoreCase("-help")){
 				if(map.containsKey(argToCheck) || map.containsKey(argToCheck.toLowerCase())){
