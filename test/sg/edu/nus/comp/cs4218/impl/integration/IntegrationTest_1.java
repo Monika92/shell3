@@ -16,29 +16,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import sg.edu.nus.comp.cs4218.ITool;
-import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
-import sg.edu.nus.comp.cs4218.extended2.ICommTool;
-import sg.edu.nus.comp.cs4218.extended2.ICutTool;
-import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
-import sg.edu.nus.comp.cs4218.extended2.ISortTool;
-import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
-import sg.edu.nus.comp.cs4218.extended2.IWcTool;
-import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
-import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
-import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
-import sg.edu.nus.comp.cs4218.impl.extended1.GREPTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PIPINGTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.COMMTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.PASTETool;
-import sg.edu.nus.comp.cs4218.impl.extended2.SORTTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.UNIQTool;
-import sg.edu.nus.comp.cs4218.impl.extended2.WCTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.CATTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.ECHOTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.LSTool;
+
 
 public class IntegrationTest_1 {
 	private IPipingTool pipingTool;
@@ -91,6 +71,12 @@ public class IntegrationTest_1 {
 		fileEM1.delete();
 		fileEM2.delete();
 	}
+	
+	/**
+	 * This method takes in the file directory path and returns the contents of the file
+	 * @param file
+	 * @throws Exception
+	 */
 	public String readFromFile(File inputFile){
 		String output = ""; FileReader fr = null;
 		try{
@@ -123,6 +109,12 @@ public class IntegrationTest_1 {
 		}
 		return output;
 	}
+	
+	/**
+	 * This method writes the given input to a file
+	 * @param file
+	 * @param input
+	 */
 	private void writeToFile(File f, String fContent){
 		BufferedWriter bw;
 		try {
@@ -139,6 +131,12 @@ public class IntegrationTest_1 {
 		}
 
 	}
+	
+	/*
+	 * Integrate Grep with Cut
+	 * Positive Case
+	 * grep (App|Mel|Ora) a.txt | cut -c 1-2
+	 */
 	@Test
 	public void testExecuteGrepCut() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "a.txt", "|", "cut", "-c", "1-2"};
@@ -149,6 +147,11 @@ public class IntegrationTest_1 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 
+	/*
+	 * Integrate Grep with Cut
+	 * Negative Case
+	 * grep (App|Mel|Ora) filenotfound.txt | cut -c 1-2
+	 */
 	@Test
 	public void testExecuteGrepCutFileNotFound() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "filenotfound.txt", "|", "cut", "-c", "1-2"};
@@ -158,6 +161,11 @@ public class IntegrationTest_1 {
 		assertEquals(pipingTool.getStatusCode(), -1);
 	}
 
+	/*
+	 * Integrate Grep with Sort
+	 * Positive Case
+	 * grep (B|C) d.txt | sort
+	 */
 	@Test
 	public void testExecuteGrepSort() {
 		String[] args1 = {"grep","(B|C)", "d.txt", "|", "sort"};
@@ -169,6 +177,11 @@ public class IntegrationTest_1 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	@Test
+	/*
+	 * Integrate Grep with Sort
+	 * Positive Case
+	 * grep 1234 d.txt | sort
+	 */
 	public void testExecuteGrepSortEmptyOutput() {
 		String[] args1 = {"grep","1234", "d.txt", "|", "sort"};
 		String[] args2 = {};
@@ -178,6 +191,26 @@ public class IntegrationTest_1 {
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
+	
+	@Test
+	/*
+	 * Integrate Grep with Sort
+	 * Negative Case
+	 * grep | sort
+	 */
+	public void testExecuteGrepSortNullParams() {
+		String[] args1 = {"grep","|","sort"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		pipingTool.execute(workingDir, "");
+		actualOutput = readFromFile(new File("stdin.txt"));
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	/*
+	 * Positive Case
+	 * command : grep A|M|O a.txt | sort -c
+	 */
 	@Test
 	public void testExecuteGrepSortCheck() {
 		String[] args1 = {"grep","A|M|O", "a.txt", "|", "sort","-c"};
@@ -187,6 +220,10 @@ public class IntegrationTest_1 {
 		expectedOutput = "a.txt:Apple is out of order";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
+	/*
+	 * Positive Case
+	 * command : grep (App|Mel|Ora) a.txt | wc -m
+	 */
 	@Test
 	public void testExecuteGrepWc() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "a.txt", "|", "wc", "-m"};
@@ -196,6 +233,11 @@ public class IntegrationTest_1 {
 		expectedOutput = "Stdin :  -m  22\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
+	
+	/*
+	 * Negative Case
+	 * command : grep (App|Mel|Ora) InvalidFile.txt | wc -m
+	 */
 	@Test
 	public void testExecuteGrepWcFileNotFound() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "InvalidFile.txt", "|", "wc", "-m"};
@@ -204,6 +246,11 @@ public class IntegrationTest_1 {
 		pipingTool.execute(workingDir, "");
 		assertEquals(pipingTool.getStatusCode(), -1);
 	}
+	
+	/*
+	 * Positive Case
+	 * command : grep (A|M) a.txt | echo
+	 */
 	@Test
 	public void testExecuteGrepEcho() {
 
@@ -216,6 +263,10 @@ public class IntegrationTest_1 {
 	}
 
 	@Test
+	/*
+	 * Negative Case
+	 * command : grep invalid arguments | echo
+	 */
 	public void testExecuteGrepEchoInvalidParams() {
 
 		String[] args1 = {"grep","", "", "|", "echo"};
@@ -226,13 +277,17 @@ public class IntegrationTest_1 {
 	}
 
 	@Test
+	/*
+	 * Positive Case
+	 * command : cat a.txt| grep (A|M)
+	 */
 	public void testExecuteCatGrep() {
 
 		String[] args1 = {"Cat", "a.txt", "|","grep", "(A|M)"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		expectedOutput = "";
+		expectedOutput = "Apple\nMelon\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
@@ -253,8 +308,7 @@ public class IntegrationTest_1 {
 
 	/*
 	 * Negative case
-	 * command: comm a.txt invalidFile | grep patt
-	 * 
+	 * command: comm a.txt invalidFile | grep patt 
 	 */
 	@Test
 	public void testExecuteCommGrepInvalidInput()
@@ -265,6 +319,11 @@ public class IntegrationTest_1 {
 		actualOutput = pipingTool.execute(workingDir, "");
 		assertNotEquals(pipingTool.getStatusCode(),0);
 	}
+	/*
+	 * Positive Case
+	 * Integrate grep and uniq
+	 * grep (A|M) a.txt | uniq
+	 */
 	@Test
 	public void testExecuteGrepUniq()
 	{
@@ -276,6 +335,11 @@ public class IntegrationTest_1 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		
 	}
+	/*
+	 * Negative Case
+	 * Integrate grep and uniq
+	 * grep pattern invalidfilename | uniq
+	 */
 	@Test
 	public void testExecuteGrepUniqInvalidInput()
 	{
@@ -289,7 +353,7 @@ public class IntegrationTest_1 {
 	@Test
 	/*
 	 * Positive command
-	 * command: grep patt filename | paste
+	 * command: grep pattern filename | paste
 	 */
 	public void testExecuteGrepPaste1()
 	{
