@@ -261,10 +261,15 @@ public class PASTETool extends ATool implements IPasteTool{
 				names.add(name);
 			}
 			else{
+				/*
 				fileError = true;
 				names=new ArrayList<String>();
 				names.add(fileName + ": No such file or directory!");
 				return names;
+				*/
+				
+				setStatusCode(-1);
+				return null;
 			}
 		}
 		return names;
@@ -284,6 +289,23 @@ public class PASTETool extends ATool implements IPasteTool{
 		return newArgs;
 	}
 
+	private String[] removeHyphenFromArgs(String[] args){
+		ArrayList<String> list = new ArrayList<String>();
+		
+		for( int i = 0; i < args.length; i++){
+			if(args[i].compareToIgnoreCase("-") != 0){
+				list.add(args[i]);
+			}			
+		}
+		
+		String[] newArgs = new String[list.size()];
+		for(int i = 0; i<list.size(); i++){
+			newArgs[i] = list.get(i);
+		}
+		
+		return newArgs;
+	}
+	
 	/*
 	 * Executes the paste command.
 	 */
@@ -317,11 +339,16 @@ public class PASTETool extends ATool implements IPasteTool{
 			}
 		}
 
+		/*
 		// if stdin is not null and no prior execution has occured
 		// remove "-" from args list
 		if(stdin != null && executed == false){
 			args = removeStdinFromArg(super.args);
 		}	
+		*/
+		
+		args = removeHyphenFromArgs(super.args);
+		
 		
 		ArgumentObjectParser aop = new ArgumentObjectParser();
 		ArgumentObject ao = aop.parse(args, "paste");

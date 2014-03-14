@@ -543,4 +543,19 @@ public class CommandVerifierTest {
     	expectedResultCode = 1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
+    
+    @Test
+    /*
+     * Test case for command: Sort -
+     * 
+     */
+    public void verifySort(){
+    	
+    	String cmd = "sort";
+    	String[] args = {"-"};
+    	
+    	actualResultCode = verifier.verifyCommand(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
 }

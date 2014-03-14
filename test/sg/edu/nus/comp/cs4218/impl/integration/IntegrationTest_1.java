@@ -54,7 +54,7 @@ public class IntegrationTest_1 {
 		pipingTool = new PIPINGTool(null, null);
 		//pipingTool.execute(workingDir, "");
 		System.setErr(new PrintStream(errContent)); // to test error output
-		
+
 		fileA = new File("a.txt");
 		fileB = new File("b.txt");
 		fileC = new File("c.txt");
@@ -63,18 +63,18 @@ public class IntegrationTest_1 {
 		fileEM2 = new File("em2.txt");
 		fileEM1.createNewFile();
 		fileEM2.createNewFile();
-		
+
 		fileContentA = "Apple\nMelon\nOrange";
 		fileContentB = "Banana\nMelon\nOrange";
 		fileContentC = "Batman\nSpiderman\nSuperman";
 		fileContentD = "Cat\nBat";
 		fileContentE = "";
-		
+
 		writeToFile(fileA, fileContentA);
 		writeToFile(fileB, fileContentB);
 		writeToFile(fileC, fileContentC);
 		writeToFile(fileD,fileContentD);
-		
+
 		testTab = "\t";
 		testNewLine = "\n";
 		testDash = " ";
@@ -83,7 +83,7 @@ public class IntegrationTest_1 {
 	@After
 	public void tearDown() throws Exception {
 		pipingTool = null;
-		
+
 		fileA.delete();
 		fileB.delete();
 		fileC.delete();
@@ -148,7 +148,7 @@ public class IntegrationTest_1 {
 		expectedOutput = "a.\nMe\nOr\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-	
+
 	@Test
 	public void testExecuteGrepCutFileNotFound() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "filenotfound.txt", "|", "cut", "-c", "1-2"};
@@ -158,7 +158,7 @@ public class IntegrationTest_1 {
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-    
+
 	@Test
 	public void testExecuteGrepSort() {
 		String[] args1 = {"grep","(B|C)", "d.txt", "|", "sort"};
@@ -208,7 +208,7 @@ public class IntegrationTest_1 {
 	}
 	@Test
 	public void testExecuteGrepEcho() {
-		
+
 		String[] args1 = {"grep","(A|M)", "a.txt", "|", "echo"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
@@ -216,10 +216,10 @@ public class IntegrationTest_1 {
 		expectedOutput = "a.txt:Apple\nMelon\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-	
+
 	@Test
 	public void testExecuteGrepEchoInvalidParams() {
-		
+
 		String[] args1 = {"grep","", "", "|", "echo"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
@@ -227,10 +227,10 @@ public class IntegrationTest_1 {
 		expectedOutput = "pipe break at echo";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-	
+
 	@Test
 	public void testExecuteCatGrep() {
-		
+
 		String[] args1 = {"Cat", "a.txt", "|","grep", "(A|M)"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
@@ -238,21 +238,35 @@ public class IntegrationTest_1 {
 		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
+	
 	@Test
-	public void testExecuteCommGrep()
-	{
-		//TODO dale
+	/*
+	 * Positive case
+	 * command: comm a.txt b.txt | grep (A|M)
+	 */
+	public void testExecuteCommGrep(){
 		String[] args1 = {"Comm", "a.txt", "b.txt","|","grep", "(A|M)"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		expectedOutput = "";
+		expectedOutput = "Apple\t \t \n \t \tMelon\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(pipingTool.getStatusCode(), 0);
 	}
+
+	/*
+	 * Negative case
+	 * command: comm a.txt invalidFile | grep patt
+	 * 
+	 */
 	@Test
 	public void testExecuteCommGrepInvalidInput()
 	{
-		//TODO dale
+		String[] args1 = {"Comm", "a.txt", "noFile","|","grep", "(A|M)"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		assertNotEquals(pipingTool.getStatusCode(),0);
 	}
 	@Test
 	public void testExecuteGrepUniq()
@@ -264,15 +278,54 @@ public class IntegrationTest_1 {
 	{
 		//TODO monika
 	}
+
 	@Test
-	public void testExecuteGrepPaste()
+	/*
+	 * Positive command
+	 * command: grep patt filename | paste
+	 */
+	public void testExecuteGrepPaste1()
 	{
-		//TODO dale
+		String[] args1 = {"grep", "(A|M)", "a.txt","|","paste"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "a.txt:Apple\nMelon\n";
+		assertEquals(expectedOutput, actualOutput);
+		assertEquals(pipingTool.getStatusCode(),0);
 	}
+
 	@Test
+	/* 
+	 * Positive case
+	 * command: grep patt filename | paste file1 file2 file3
+	 */
+	public void testExecuteGrepPaste2(){
+		String[] args1 = {"grep", "(A|M)", "a.txt","|","paste","a.txt","b.txt","c.txt"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "Apple\tBanana\tBatman" + "\n" + 
+		"Melon\tMelon\tSpiderman" + "\n" + 
+				"Orange\tOrange" +"\tSuperman";
+		System.out.println("AO:\n" + actualOutput);
+		assertEquals(expectedOutput, actualOutput);
+		assertEquals(pipingTool.getStatusCode(),0);
+	}
+
+	@Test
+	/*
+	 * Negative case
+	 * grep pattern invalidFile | paste
+	 * 
+	 */
 	public void testExecuteGrepPasteInvalidInput()
 	{
-		//TODO dale
+		String[] args1 = {"grep", "(A|M)", "invFile","|","paste"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		assertNotEquals(pipingTool.getStatusCode(),0);
 	}
-	
+
 }

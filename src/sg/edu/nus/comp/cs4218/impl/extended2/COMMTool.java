@@ -95,15 +95,18 @@ public class COMMTool extends ATool implements ICommTool{
 		String filePath2 = getCorrectPathFromArg(workingDir,fileName2);
 
 		if(filePath1 == null && filePath2 == null){
-			return "File 1 and File 2 both don't exist!";
+			setStatusCode(-1);
+			return "";
 		}
 		else if(filePath1 == null){
-			result = "File 1 doesn't exist!";
+			result = "";
+			setStatusCode(-1);
 			return result;
 
 		}
 		else if (filePath2 == null){
-			result = "File 1 doesn't exist!";
+			result = "";
+			setStatusCode(-1);
 			return result;
 		}
 

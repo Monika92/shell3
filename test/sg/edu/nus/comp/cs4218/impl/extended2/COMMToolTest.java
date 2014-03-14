@@ -145,7 +145,7 @@ public class COMMToolTest {
 		commTool = new COMMTool(arguments);		
 		actualOutput = commTool.execute(workingDirectory, null);
 
-		expectedOutput = "File 1 doesn't exist!";
+		expectedOutput = "";
 		assertEquals(expectedOutput, actualOutput);	
 
 	}
