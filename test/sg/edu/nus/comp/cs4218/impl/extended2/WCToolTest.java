@@ -16,8 +16,21 @@ import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 import sg.edu.nus.comp.cs4218.impl.extended2.CUTTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WCTool;
 
+
 public class WCToolTest {
 
+
+	/*
+	 * Few assumptions :
+	 * 1. wc file1.txt file2.txt - abcde : In case where there are file name arguments and a stdin input, priority 
+	 * is given to the result of the filename input arguments. 
+	 * 2. No options in the arguments implies the results of all options are displayed
+	 * 3. For a command wc -m -w -l input1.txt, the output format is as follows : 
+	 *    "<input1.txt's absolute pathname> :  -m  8 -w  4 -l  3\n"
+	 * 4. If the arguments contain multiple options with -help as one of them, all other options are disregarded
+	 * 	  and helpOutput string is returned.
+	 */
+	
 	private IWcTool wctool; 
 	private WCTool wc; 
 	String actualOutput,expectedOutput,helpOutput;
@@ -74,8 +87,11 @@ public class WCToolTest {
 		
 	}
 	
+	/*
+	 * Test case to check the functionality of getHelp function
+	 * */
 	@Test
-    public void constructorTest()
+    public void getHelpTest()
     {
     	String[] arguments = new String[]{} ;
 		wctool = new WCTool(arguments);
@@ -85,6 +101,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 
+	/*
+	 * Test case to check the behaviour of WC with only -help option 
+	 * */
 	@Test
     public void helpTest()
     {
@@ -98,6 +117,10 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with -help option coupled with few oher options.
+	 * The -help option must be given priority and the othr options must not be executed. 
+	 * */
 	@Test
     public void helpPriorityTest()
     {
@@ -105,11 +128,15 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput = helpOutput ;
+		String incorrectOutput = WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8\n";
+		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
     
-
+	/*
+	 * Test case to check the behaviour of WC with invalid file argument.
+	 * */
 	@Test
     public void invalidFilenameInputTest()
     {
@@ -117,10 +144,15 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput =  "idontexisthaha.txt : error - Invalid Input. \n";
+		String incorrectOutput = "idontexisthaha.txt :  -m  0 , -w 0 , -l 0\n";
+		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), -1);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with no file argument.
+	 * */
 	@Test
     public void noFilenameOrStdinInputTest()
     {
@@ -130,6 +162,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), -1);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with no file argument and no options.
+	 * */
 	@Test
     public void noFilenameOrStdinOrOptionsInputTest()
     {
@@ -139,6 +174,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), -1);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with valid file argument with.
+	 * */
 	@Test
     public void allOptionsInputTest()
     {
@@ -150,17 +188,23 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with an extra minus. The WC tool must flag error.
+	 * */
 	@Test
     public void ignoreTheAccidentalMinusInputTest()
     {
     	String[] arguments = new String[]{"-m", "-" , "-w", "-l", "input1.txt"} ;
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
-		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
-		assertFalse(expectedOutput.equalsIgnoreCase(actualOutput));
+		String incorrectOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
+		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), -1);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with valid file argument and 2 options.
+	 * */
 	@Test
     public void fewOptionsInputTest()
     {
@@ -172,17 +216,10 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
-	@Test
-    public void capsOptionsInputTest()
-    {
-    	String[] arguments = new String[]{"-W", "-M", "-L", "input1.txt"} ;
-		wctool = new WCTool(arguments);
-		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
-		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
-    }
 	
+	/*
+	 * Test case to check the behaviour of WC with valid file name which is in absolute path.
+	 * */
 	@Test
     public void absoluteFilenameInputTest()
     {
@@ -194,6 +231,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with valid file name but empty content.
+	 * */
 	@Test
     public void emptyFileInputTest()
     {
@@ -205,6 +245,10 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with valid file name but no options. 
+	 * This must give result for all 3 options.
+	 * */
 	@Test
     public void noOptionsValidFilenameInputTest()
     {
@@ -216,6 +260,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
     
+	/*
+	 * Test case to check the behaviour of WC with valid but multiple file names.
+	 * */
 	@Test
     public void multipleFilenamesInputTest()
     {
@@ -228,6 +275,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with one valid file name and one invalid file name.
+	 * */
 	@Test
     public void oneValidOneInvalidFilenamesInputTest()
     {
@@ -238,8 +288,16 @@ public class WCToolTest {
 				         + "input3.txt : error - Invalid Input. \n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), -1);
+		
+		String incorrectOutput =  "input1.txt : error - Invalid Input. \n"
+		         + "input3.txt : error - Invalid Input. \n";
+		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
+		assertNotEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with one valid file name and one invalid file name and stdin input.
+	 * */
 	@Test
     public void stdinAndFilenameInputTest()
     {
@@ -253,6 +311,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), -1);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with two valid file name arguments.
+	 * */
 	@Test
     public void twoValidFilenameInputsTest()
     {
@@ -266,6 +327,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with only stdin input.
+	 * */
 	@Test
     public void onlyStdinInputTest()
     {
@@ -277,6 +341,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with only stdin input and no options.
+	 * */
 	@Test
     public void noOptionsStdinInputTest()
     {
@@ -287,7 +354,10 @@ public class WCToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
-		
+	
+	/*
+	 * Test case to check the getCharacterCount() interface function
+	 * */
 	@Test
     public void getCharacterCountTest()
     {
@@ -299,6 +369,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the getCharacterCount() interface function with empty input.
+	 * */
 	@Test
     public void getCharacterCountEmptyInputTest()
     {
@@ -308,8 +381,14 @@ public class WCToolTest {
 		expectedOutput = "0";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
+		
+		assertFalse("1".equalsIgnoreCase(actualOutput));
+		assertNotEquals(wctool.getStatusCode(), -1);
     }
 	
+	/*
+	 * Test case to check the getCharacterCount() interface function with newline input.
+	 * */
 	@Test
     public void getCharacterCountNewlineInputTest()
     {
@@ -319,8 +398,15 @@ public class WCToolTest {
 		expectedOutput = "0";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
+		
+		assertFalse("1".equalsIgnoreCase(actualOutput));
+		assertNotEquals(wctool.getStatusCode(), -1);
+    
     }
 	
+	/*
+	 * Test case to check the getCharacterCount() interface function with special character input.
+	 * */
 	@Test
     public void getCharacterCountSplCharInputTest()
     {
@@ -332,7 +418,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
-	
+	/*
+	 * Test case to check the getWordCount() interface function.
+	 * */
 	@Test
     public void getWordCountTest()
     {
@@ -344,17 +432,26 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the getWordCount() interface function with multiline inputs.
+	 * */
 	@Test
     public void getWordCountCrazyInputWithNewLinesTest()
     {
     	String[] arguments = new String[]{" "} ;
 		wctool = new WCTool(arguments);
-		actualOutput = wctool.getWordCount("lol\n\n    lol\n2 . lollll");
+		actualOutput = wctool.getWordCount("lol\n \n    lol\n2 . lollll");
 		expectedOutput = "5";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
+		
+		assertFalse("6".equalsIgnoreCase(actualOutput)); // Should not count the space between the first and second newline 
+		assertNotEquals(wctool.getStatusCode(), -1);
     }
 	
+	/*
+	 * Test case to check the getNewLineCount() interface function with multiline inputs.
+	 * */
 	@Test
     public void getNewLineCountTest()
     {
@@ -366,6 +463,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the getWordCount() interface function with empty multiline inputs.
+	 * */
 	@Test
     public void getNewLineCountEmptylinesTest()
     {
