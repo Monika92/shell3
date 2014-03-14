@@ -103,7 +103,7 @@ public class PIPINGTool extends ATool implements IPipingTool {
 				//added for command verifier to pass syntax check for
 				//command when called from within the tool			
 				if(!pipeCmd.equalsIgnoreCase("comm") && !pipeCmd.equalsIgnoreCase("echo")){				
-					toolArguments = appendHyphenToArgs(toolArguments);
+					toolArguments = appendHyphenToArgs(toolArguments);					
 				}
 			}
 			

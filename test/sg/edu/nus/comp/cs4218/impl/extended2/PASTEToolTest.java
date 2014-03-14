@@ -213,8 +213,8 @@ public class PASTEToolTest {
 	 * Check for invalid files
 	 */
 	public void pasteNoOptionsInvalidFilesTest(){
-		String[] arguments = new String[]{"C:\\Users\\Dale\\a.txt","./b.txt"};
-		String fileName1 = "C:\\Users\\Dale\\a.txt";
+		String[] arguments = new String[]{"../../a.txt","./b.txt"};
+		String fileName1 = "../../a.txt";
 		String fileName2 = "./b.txt";
 		ArrayList<String> fNames = new ArrayList<String>();
 		fNames.add(fileName1);fNames.add(fileName2);
@@ -222,7 +222,7 @@ public class PASTEToolTest {
 		pasteTool = new PASTETool(arguments);		
 		actualOutput = pasteTool.execute(workingDirectory, null);
 
-		expectedOutput = "a.txt: No such file or directory!";
+		expectedOutput = "../../a.txt: No such file or directory!";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));	
 
 	}

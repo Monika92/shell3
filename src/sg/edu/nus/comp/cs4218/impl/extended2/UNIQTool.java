@@ -55,6 +55,12 @@ public class UNIQTool extends ATool implements IUniqTool{
 	public String getUnique(boolean checkCase, String input) {
 		// TODO Auto-generated method stub
 		
+		//Check for null input
+		if (input == null){
+			setStatusCode(-1);
+			return "";
+		}
+		
 		//1. Separate input by \n
 		//2. For each line, except the first and last, compare that line with its predecessor and successor
 		//3. If similar to even one of them, remove it from the result (or both checks must be false for line to be in output)
@@ -139,6 +145,12 @@ public class UNIQTool extends ATool implements IUniqTool{
 	public String getUniqueSkipNum(int NUM, boolean checkCase, String input) {
 		// TODO Auto-generated method stub
 		
+		//Check for null input
+		if (input == null){
+			setStatusCode(-1);
+			return "";
+		}
+				
 		//1. Split the input by \n into lines
 		//2. For each line, split by delimiter " " or "\t"
 		//3. Initialize argument for getUnique() by skipping NUM elements in the list of words in every line
@@ -374,6 +386,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 								try{
 									numArg = Integer.decode(optionArguments.get(i));
 									if(numArg < 0){
+										setStatusCode(-1);
 										if (result.equalsIgnoreCase(""))
 											return "Invalid argument for -f";
 										else if(result.endsWith("\n"))
@@ -382,6 +395,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 											return result + "\nInvalid argument for -f";
 									}
 								}catch(NumberFormatException e){
+									setStatusCode(-1);
 									if (result.equalsIgnoreCase(""))
 										return "Invalid argument for -f";
 									else if(result.endsWith("\n"))

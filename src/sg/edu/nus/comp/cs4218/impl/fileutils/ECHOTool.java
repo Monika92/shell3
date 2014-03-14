@@ -25,6 +25,12 @@ public class ECHOTool extends ATool implements IEchoTool {
 	@Override
 	public String echo(String toEcho) {
 		// TODO Auto-generated method stub
+		
+		//Check for null input
+		if(toEcho == null){
+			setStatusCode(-1);
+			return "";
+		}
 		return toEcho;
 	}
 

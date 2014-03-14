@@ -292,7 +292,7 @@ public class UNIQToolTest {
 		actualOutput = uniqtool.execute(workingDirectory, stdin);
 		expectedOutput = "Invalid argument for -f";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(uniqtool.getStatusCode(), 0);
+		assertTrue(uniqtool.getStatusCode() != 0);
     }
 	
 	@Test
@@ -302,7 +302,7 @@ public class UNIQToolTest {
 		actualOutput = uniqtool.execute(workingDirectory, stdin);
 		expectedOutput = "hi\nhello\nhi\nabc\nInvalid argument for -f";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(uniqtool.getStatusCode(), 0);
+		assertTrue(uniqtool.getStatusCode() != 0);
     }
 	
 	@Test
@@ -310,9 +310,9 @@ public class UNIQToolTest {
     	String[] arguments = new String[]{"-f", "-1", "Test_Output.txt"} ;
 		uniqtool = new UNIQTool(arguments);
 		actualOutput = uniqtool.execute(workingDirectory, stdin);
-		expectedOutput = "Invalid argument for -f";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(uniqtool.getStatusCode(), 0);
+		//expectedOutput = "Invalid argument for -f";
+		//assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertTrue(uniqtool.getStatusCode() != 0);
     }
 	
 	@Test
@@ -322,7 +322,7 @@ public class UNIQToolTest {
 		actualOutput = uniqtool.execute(workingDirectory, stdin);
 		expectedOutput = "Invalid argument for -f";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(uniqtool.getStatusCode(), 0);
+		assertTrue(uniqtool.getStatusCode() != 0);
     }
 	
 	@Test
@@ -334,6 +334,31 @@ public class UNIQToolTest {
 		expectedOutput = "a\nb\nc";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(uniqtool.getStatusCode(), 0);
+    }
+	
+	@Test
+	public void uniqGetUniqNullTest(){
+    	String[] arguments = null;
+		uniqtool = new UNIQTool(arguments);
+		actualOutput = uniqtool.getUnique(false, null);
+		assertTrue(uniqtool.getStatusCode() != 0);
+    }
+	
+	@Test
+	public void uniqGetUniqSkipNumNullTest(){
+    	String[] arguments = null;
+		uniqtool = new UNIQTool(arguments);
+		actualOutput = uniqtool.getUniqueSkipNum(-1, false, null);
+		assertTrue(uniqtool.getStatusCode() != 0);
+    }
+	
+	@Test
+	public void uniqExecuteNullTest(){
+    	String[] arguments = null;
+		uniqtool = new UNIQTool(arguments);
+		stdin = null;
+		actualOutput = uniqtool.execute(null, stdin);
+		assertTrue(uniqtool.getStatusCode() != 0);
     }
 	
 	

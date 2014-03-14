@@ -473,4 +473,23 @@ public class CommandVerifierTest {
     	expectedResultCode = 1;    	
     	assertEquals(expectedResultCode, actualResultCode);	
     }
+    
+    @Test
+    //Test for pipe command. Bypassed check here
+    //since pipe is checked within pipe tool
+    public void verifyGrep(){
+    	
+    	String cmd = "grep";
+    	String[] args = {"patt","fname"};
+    	
+    	actualResultCode = verifier.verifyCommand(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    	
+    	String[] args2 = {"patt","-"};
+    	actualResultCode = verifier.verifyCommand(cmd, args2);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    	
+    }
 }
