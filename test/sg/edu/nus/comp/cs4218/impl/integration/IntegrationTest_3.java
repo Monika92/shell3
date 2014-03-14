@@ -19,12 +19,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import sg.edu.nus.comp.cs4218.extended2.IUniqTool;
+import sg.edu.nus.comp.cs4218.extended2.IWcTool;
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.UNIQTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.WCTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.CATTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CDTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.COPYTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.DELETETool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.LSTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.MOVETool;
+import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
@@ -57,7 +63,16 @@ public class IntegrationTest_3 {
 	
 	private ILsTool lstool;
 	private LSTool ls;
+
+	private ICatTool cattool;
+	private CATTool cat;
 	
+	private IWcTool wctool;
+	private WCTool wc;
+
+	private IUniqTool uniqtool;
+	private UNIQTool uniq;
+
 
 @Before
 public void before(){
@@ -75,7 +90,7 @@ public void before(){
 	argFolderInsideCopy = new File(WorkingDirectory.workingDirectory+File.separator+"folder1"+ File.separator +"insideFolder1") ;
 	inputFile1Copy = new File(WorkingDirectory.workingDirectory+File.separator+"folder1"+File.separator+"file1.txt");
 	inputFile2Copy = new File("file2.txt");
-	writeToFile(inputFile1Copy, inputCopy);
+	writeToFile(inputFile1Copy, input);
 	writeToFile(inputFile2Copy, "abc");
 	argFolderCopy.mkdirs();
 	inputFile1Copy.getParentFile().mkdirs();
@@ -209,6 +224,21 @@ public void after(){
 	movetool = null;
 	move = null;
 	
+	deletetool = null;
+	delete = null;
+	
+	wctool = null;
+	wc = null;
+	
+	cattool = null;
+	cat = null;
+	
+	lstool = null;
+	ls = null;
+	
+	uniqtool = null;
+	uniq = null;
+	
 	if(inputFile1Copy.exists())
 		deleteFolder(inputFile1Copy);//input_file_1.deleteOnExit();
 	if(inputFile2Copy.exists())
@@ -325,10 +355,90 @@ public void cdLsTest()
 		String [] childFilesArray = WorkingDirectory.workingDirectory.list();
 		for(String child : childFilesArray) {expectedOutput += child + " ";}
 		if(expectedOutput == "") expectedOutput = "The folder is empty";
-		System.out.println(actualOutput+"\n");
-		System.out.println(expectedOutput);
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(lstool.getStatusCode(), 0);
  }
+
+
+/*
+ * This is the test to copy the contents of folder1/file1.txt into folder1/file2.txt
+ * And this is followed by cat(folder1/file2.txt)
+ */
+@Test
+public void copyCatTest()
+{
+	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file2.txt"} ;
+	
+	copytool = new COPYTool(arguments);
+	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
+	expectedOutput = "Copy completed.";
+	String contentFile1 = readFromFile(new File(arguments[0]));
+	
+	//Test to check if "Copy Completed." is returned. The message is returned only when copy is successful
+	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput)); 
+	assertEquals(copytool.getStatusCode(), 0);
+
+	//Also test if contents of file1 are copied exactly into file2. To ensure that copy worked correctly.
+	String contentFile2 = readFromFile(new File(arguments[1]));
+	assertTrue(contentFile1.equalsIgnoreCase(contentFile2));
+	
+	
+	//Check if the contents of file2.txt match the contents of file1.txt using cat
+	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	cattool = new CATTool(arguments);
+	actualOutput = cattool.execute(WorkingDirectory.workingDirectory, stdin);
+	expectedOutput =  "This is \na test \nrun\nCd.";
+	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertEquals(cattool.getStatusCode(), 0);
+
+}
+
+/*
+ * This test case is written in the following order : move wc delete uniq
+ */
+@Test
+public void moveWcDeleteUniqTest()
+{
+	//Start with moving folder1/file.txt to folder1/file2.txt.
+	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file2.txt"} ;
+	String contentFile0 = readFromFile(new File(arguments[0]));
+
+	movetool = new MOVETool(arguments);
+	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
+	expectedOutput = "Move completed.";
+	
+	//Test case to check if success message is printed by the function.
+	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertEquals(movetool.getStatusCode(), 0);
+	
+	
+	//Run WC tool with folder1/file2.txt as input
+	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	wctool = new WCTool(arguments);
+	actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
+	expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "folder1" + File.separator + "file2.txt : -m  17 , -w  6 , -l 4\n";
+	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertEquals(wctool.getStatusCode(), 0);
+	
+	//Delete folder1/file.txt to check if the uniq we implement next returns output accordingly
+	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	assertTrue((new File(arguments[0])).exists());
+	deletetool = new DELETETool(arguments);
+	actualOutput = deletetool.execute(WorkingDirectory.workingDirectory, stdin);
+	assertFalse((new File(arguments[0])).exists());
+	assertEquals(deletetool.getStatusCode(), 0);
+	
+	//Uniq invalid file input test. If this test success it implies that delete has worked successfully 
+	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	uniqtool = new UNIQTool(arguments);
+	actualOutput = uniqtool.execute(WorkingDirectory.workingDirectory, stdin);
+	expectedOutput = "No such file";
+	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertEquals(uniqtool.getStatusCode(), -1);
+
+	
+}
+
+
 
 }
