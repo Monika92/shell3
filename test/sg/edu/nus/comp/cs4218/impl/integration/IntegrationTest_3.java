@@ -72,13 +72,13 @@ public class IntegrationTest_3 {
 
 	private IUniqTool uniqtool;
 	private UNIQTool uniq;
+	String input = "This is \na test \nrun\nCd.";
 
 
 @Before
 public void before(){
 	WorkingDirectory.changeWorkingDirectory(new File(System.getProperty("user.dir")));
 	stdin = null;
-	String input = "This is \na test \nrun\nCd.";
 	if(argFolderCd.mkdirs())
 	{
 		writeToFile(inputFileCd, input);
@@ -367,6 +367,7 @@ public void cdLsTest()
 @Test
 public void copyCatTest()
 {
+	writeToFile(new File("folder1" + File.separator + "file1.txt"), input);
 	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file3.txt"} ;
 	
 	copytool = new COPYTool(arguments);
@@ -401,6 +402,7 @@ public void copyCatTest()
 public void moveWcDeleteUniqTest()
 {
 	//Start with moving folder1/file.txt to folder1/file2.txt.
+	writeToFile(new File("folder1" + File.separator + "file1.txt"), input);
 	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file4.txt"} ;
 	String contentFile0 = readFromFile(new File(arguments[0]));
 
