@@ -91,6 +91,19 @@ public class CommandVerifierTest {
     
     @Test
     /*
+     * Verify Basic Command
+     * Command : pwd
+     */
+    public void verifyPwd(){
+    	ArrayList<String> args = new ArrayList<String>();
+    	String cmd = "pwd";
+    	actualResultCode = verifier.verifyBasic(cmd, args);
+    	expectedResultCode = 1;    	
+    	assertEquals(expectedResultCode, actualResultCode);	
+    }
+    
+    @Test
+    /*
      * Negative: Check that cmd is wrong when args are lesser than req
      */
     public void verifyBasicLesserArgsTest(){

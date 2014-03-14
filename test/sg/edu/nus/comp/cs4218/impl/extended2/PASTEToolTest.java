@@ -118,13 +118,13 @@ public class PASTEToolTest {
 	 * Check for invalid command : "paste" and no stdin
 	 */
 	public void pasteTestInvalidCommands1(){
-		String[] arguments = new String[]{"-help"};
+		String[] arguments = new String[]{};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.execute(workingDirectory, null);
-		expectedOutput = helpOutput;
+		expectedOutput = "";
 
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(pasteTool.getStatusCode(), 0);	
+		assertNotEquals(pasteTool.getStatusCode(), 0);	
 	}
 
 	@Test
@@ -188,8 +188,6 @@ public class PASTEToolTest {
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
-
-
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pasteTool.getStatusCode(), 0);		
 	}

@@ -307,7 +307,12 @@ public class UNIQTool extends ATool implements IUniqTool{
 		String result = "" ; 
 		String input = "";
 		boolean checkCase = true;
-	
+		
+		//Remove "-" from fileList if it exists
+		if(fileList.contains("-")){
+			fileList.remove("-");
+		}
+		
 		//Getting input from stdin or file
 		if (stdin != null){
 			//Check for \n
