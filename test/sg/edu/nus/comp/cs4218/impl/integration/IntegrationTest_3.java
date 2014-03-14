@@ -23,9 +23,11 @@ import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CDTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.COPYTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.DELETETool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.LSTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.MOVETool;
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
+import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
 import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
 import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 
@@ -52,6 +54,9 @@ public class IntegrationTest_3 {
 	
 	private IDeleteTool deletetool;
 	private DELETETool delete;
+	
+	private ILsTool lstool;
+	private LSTool ls;
 	
 
 @Before
@@ -218,6 +223,7 @@ public void after(){
 
 
 /*
+ * Let's begin with the most 'complex' combination. 
  * This test is used to change the state of the shell using cd initially where the working dir is changed to a certain folder1.
  * If the working dir has been successfully change the following copy will work,else it will fail. 
  * Copy is used to copy the contents of folder1/file1.txt into a folder1/file2.txt . file2.txt doesn't already exist, so copy creates it.
@@ -293,5 +299,36 @@ public void cdCopyMoveDeleteTest(){
 
 }
 
+/*
+ * This is the test to change the current directory to folder1 and do ls on the current directory.
+ * The test will succeed if ls displays the contents of folder1
+ */
+@Test
+public void cdLsTest()
+{
+	//Change working directory to folder1.
+		if(argFolderCopy.exists())
+		{
+		String[] arguments = new String[]{"folder1"} ; 
+		cdtool = new CDTool(arguments);
+		actualOutput = cdtool.execute(WorkingDirectory.workingDirectory, stdin);
+		expectedOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cdtool.getStatusCode(), 0);
+		}
+		
+		//Now do ls(current working directory) which is what should happen when arguments list is empty
+		String[] arguments = new String[]{} ;
+		lstool = new LSTool(arguments);
+		actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
+		expectedOutput = "";
+		String [] childFilesArray = WorkingDirectory.workingDirectory.list();
+		for(String child : childFilesArray) {expectedOutput += child + " ";}
+		if(expectedOutput == "") expectedOutput = "The folder is empty";
+		System.out.println(actualOutput+"\n");
+		System.out.println(expectedOutput);
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(lstool.getStatusCode(), 0);
+ }
 
 }
