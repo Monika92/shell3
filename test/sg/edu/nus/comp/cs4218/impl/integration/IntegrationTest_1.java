@@ -241,32 +241,38 @@ public class IntegrationTest_1 {
 	@Test
 	public void testExecuteCommGrep()
 	{
-		
+		//TODO dale
+		String[] args1 = {"Comm", "a.txt", "b.txt","|","grep", "(A|M)"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	@Test
 	public void testExecuteCommGrepInvalidInput()
 	{
-		
+		//TODO dale
 	}
 	@Test
 	public void testExecuteGrepUniq()
 	{
-		
+		//TODO monika
 	}
 	@Test
 	public void testExecuteGrepUniqInvalidInput()
 	{
-		
+		//TODO monika
 	}
 	@Test
 	public void testExecuteGrepPaste()
 	{
-		
+		//TODO dale
 	}
 	@Test
 	public void testExecuteGrepPasteInvalidInput()
 	{
-		
+		//TODO dale
 	}
 	
 }

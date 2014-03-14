@@ -111,7 +111,12 @@ public class CUTTool extends ATool implements ICutTool {
 			return "";	
 		}
 	}
-
+	
+	/**
+	 * This method cuts the specified characters from the input using delimiter
+	 * @param Range of characters to cut, delimiter parameter,input
+	 * @return the cut characters of input
+	 */
 	@Override
 	public String cutSpecifiedCharactersUseDelimiter(String list, String delim,
 			String input) {
@@ -167,13 +172,21 @@ public class CUTTool extends ATool implements ICutTool {
 		}
 	}
 
-	/* Returns help contents*/
+	/**
+	 * This method returns the help output of cut
+	 * @return This method returns the help output
+	 */
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
 		return helpOutput;
 	}
-
+	
+	/**
+	 * This method executes the cut command
+	 * @param Working Directory and standard input
+	 * @return Returns the executed output 
+	 */
 	/*Executes the command given the working directory path*/
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -298,6 +311,12 @@ public class CUTTool extends ATool implements ICutTool {
 		}
 	}
 
+	/**
+	 * This method reads the file and returns its contents
+	 * @param file
+	 * @return contents of the file in String
+	 * @throws Exception
+	 */
 	/*Reads from the file specified and returns the contents of the file*/
 	private String readFile(File file) throws Exception {
 		// TODO Auto-generated method stub
