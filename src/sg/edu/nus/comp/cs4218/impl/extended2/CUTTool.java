@@ -18,18 +18,6 @@ import sg.edu.nus.comp.cs4218.impl.CommandVerifier;
 /**
  * Do not modify this file
  */
-/*
- * 
- * cut : prints a substring that is specified in a certain range
- * 
- * Command Format - cut [OPTIONS] [FILE] FILE - Name of the file, when no file
- * is present (denoted by "-") use standard input OPTIONS -c LIST: Use LIST as
- * the list of characters to cut out. Items within the list may be separated by
- * commas, and ranges of characters can be separated with dashes. For example,
- * list ���1-5,10,12,18-30��� specifies characters 1 through 5, 10,12 and 18
- * through 30. -d DELIM: Use DELIM as the field-separator character instead of
- * the TAB character -help : Brief information about supported options
- */
 public class CUTTool extends ATool implements ICutTool {
 
 	File filename;
@@ -187,7 +175,6 @@ public class CUTTool extends ATool implements ICutTool {
 	 * @param Working Directory and standard input
 	 * @return Returns the executed output 
 	 */
-	/*Executes the command given the working directory path*/
 	@Override
 	public String execute(File workingDir, String stdin) {
 		
