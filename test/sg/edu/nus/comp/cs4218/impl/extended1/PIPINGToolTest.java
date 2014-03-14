@@ -135,7 +135,7 @@ public class PIPINGToolTest {
 	 */
 	@Test
 	public void testPipeStdinCat() {
-		String[] rightToolArgs = {};
+		String[] rightToolArgs = {"-"};
 		ICatTool rightTool = new CATTool(rightToolArgs);
 		String pipeResult = pipingTool.pipe("hello", rightTool);
 		assertTrue("hello".equals(pipeResult));
