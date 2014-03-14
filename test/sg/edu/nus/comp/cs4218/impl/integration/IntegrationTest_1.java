@@ -154,9 +154,8 @@ public class IntegrationTest_1 {
 		String[] args1 = {"grep","(App|Mel|Ora)", "filenotfound.txt", "|", "cut", "-c", "1-2"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
-		actualOutput = pipingTool.execute(workingDir, "");
-		expectedOutput = "";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		pipingTool.execute(workingDir, "");
+		assertEquals(pipingTool.getStatusCode(), -1);
 	}
     
 	@Test
@@ -202,9 +201,8 @@ public class IntegrationTest_1 {
 		String[] args1 = {"grep","(App|Mel|Ora)", "InvalidFile.txt", "|", "wc", "-m"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
-		actualOutput = pipingTool.execute(workingDir, "");
-		expectedOutput = "a.\nMe\nOr\n";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		pipingTool.execute(workingDir, "");
+		assertEquals(pipingTool.getStatusCode(), -1);
 	}
 	@Test
 	public void testExecuteGrepEcho() {
@@ -257,12 +255,22 @@ public class IntegrationTest_1 {
 	@Test
 	public void testExecuteGrepUniq()
 	{
-		//TODO monika
+		String[] args1 = {"grep","(A|M)", "a.txt", "|", "uniq"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "a.txt:Apple\nMelon";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		
 	}
 	@Test
 	public void testExecuteGrepUniqInvalidInput()
 	{
-		//TODO monika
+		String[] args1 = {"grep","(A|M)", "dsa", "|", "uniq"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		pipingTool.execute(workingDir, "");
+		assertEquals(pipingTool.getStatusCode(), -1);
 	}
 	@Test
 	public void testExecuteGrepPaste()

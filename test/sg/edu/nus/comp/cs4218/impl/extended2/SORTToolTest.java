@@ -211,7 +211,10 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
-    
+    /**
+     * Test for sort command with -c option non-existing file input
+     * Checks for status code -1 after execution
+     */
     @Test
     public void testExecuteWithNonExistingFile()
     {
@@ -223,6 +226,10 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), -1);
     }
     
+    /**
+     * Test for sort command with -help option 
+     * Checks for help output after execution
+     */
     @Test
     public void testExecuteHelp()
     {
@@ -234,7 +241,11 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
-    //help prioritized
+    /**
+     * Test for sort command with -help option and std input
+     * help option is prioritized
+     * Checks for help output after execution
+     */
     @Test
     public void testExecuteHelpWithStdin()
     {
