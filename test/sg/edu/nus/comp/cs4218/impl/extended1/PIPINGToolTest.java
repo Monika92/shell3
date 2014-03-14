@@ -397,7 +397,8 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
-	/*
+	//TODO: Madhu
+	/* 
 	 * Valid test case
 	 * command : echo filename | wc -m -l
 	 * wc with no filename args
@@ -408,6 +409,7 @@ public class PIPINGToolTest {
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
 		expectedOutput = workingDir + "\\textFiles\\testC.txt :  -m  15 -l  15\n";
+		System.out.println("AO: \n" + actualOutput);
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
 	
@@ -489,6 +491,7 @@ public class PIPINGToolTest {
 	
 	@Test
 	/*
+	 * Positive case:
 	 * checking cat a.txt | grep (A|M) 
 	 */
 	public void testExecuteFromCatToGrep(){
@@ -496,7 +499,25 @@ public class PIPINGToolTest {
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		System.out.println(actualOutput);
+		String expected = "Apple\nMelon\n";
+		assertEquals(expected, actualOutput);
 		assertEquals(pipingTool.getStatusCode(), 0);
+	}
+	
+	@Test
+	/*
+	 * Negative case
+	 * uniq fname | | grep pattern
+	 * 
+	 */
+	public void testEmptyPipeCommand(){
+		String[] args1 = {"uniq", "a.txt", "|","|","grep","(A|M)"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, null);
+		System.out.println(actualOutput);
+		String expectedOutput = "Empty Pipe!";
+		assertEquals(expectedOutput, actualOutput);
+		assertNotEquals(pipingTool.getStatusCode(), 0);
 	}
 }
