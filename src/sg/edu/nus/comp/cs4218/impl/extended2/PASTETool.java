@@ -276,19 +276,8 @@ public class PASTETool extends ATool implements IPasteTool{
 	}
 
 	/*
-	 * Removes the stdin input from the argument list.
+	 * Helper method to remove "-" from args
 	 */
-	private String[] removeStdinFromArg(String[] args){
-		setStatusCode(0);
-		String[] newArgs = new String[args.length -1];
-
-		for(int i=0 ;i<args.length-1; i++){
-			//System.out.println(args[i]);
-			newArgs[i] = args[i];
-		}
-		return newArgs;
-	}
-
 	private String[] removeHyphenFromArgs(String[] args){
 		ArrayList<String> list = new ArrayList<String>();
 		

@@ -41,26 +41,6 @@ public class COMMTool extends ATool implements ICommTool{
 	public COMMTool(String[] arguments) {	
 		super(arguments);
 	}
-
-	/*
-	 * Helper method to remove "-" from all args if present
-	 */
-	private String[] removeHyphenFromArgs(String[] args){
-		ArrayList<String> list = new ArrayList<String>();
-		
-		for( int i = 0; i < args.length; i++){
-			if(args[i].compareToIgnoreCase("-") != 0){
-				list.add(args[i]);
-			}			
-		}
-		
-		String[] newArgs = new String[list.size()];
-		for(int i = 0; i<list.size(); i++){
-			newArgs[i] = list.get(i);
-		}
-		
-		return newArgs;
-	}
 	
 	/*Executes the "comm" command*/
 	@Override
