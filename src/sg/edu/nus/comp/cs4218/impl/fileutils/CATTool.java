@@ -28,12 +28,19 @@ public class CATTool extends ATool implements ICatTool {
 	@Override
 	public String getStringForFile(File toRead) {
 		// TODO Auto-generated method stub
+		
+		//Check for null input
+		if (toRead == null){
+			setStatusCode(-1);
+			return "";
+		}
+		
 		String output = "";
 		FileReader fr;
 		try{
 			fr = new FileReader(toRead);
 		} catch(FileNotFoundException e){
-			e.printStackTrace();
+			setStatusCode(-1);
 			return "File not found";
 		}
 		BufferedReader br = new BufferedReader(fr);
@@ -47,7 +54,7 @@ public class CATTool extends ATool implements ICatTool {
 				line = br.readLine();
 			}
 		} catch(IOException e){
-			e.printStackTrace();
+			setStatusCode(-1);
 			return "Unable to read file";
 		} finally{
 			try {
@@ -55,7 +62,8 @@ public class CATTool extends ATool implements ICatTool {
 				fr.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				setStatusCode(-1);
+				return "";
 			}
 		}
 		return output;
@@ -67,6 +75,12 @@ public class CATTool extends ATool implements ICatTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 						
+		//Check for null input
+		if (args == null){
+			setStatusCode(-1);
+			return "";
+		}
+		
 		File file, filePath;
 		int argsLength = args.length;
 		String output = "", outputMsg = "", fileName;
@@ -75,14 +89,6 @@ public class CATTool extends ATool implements ICatTool {
 		if(stdin!=null){
 			setStatusCode(0);
 			return stdin;
-		}
-		
-		//Verify command syntax
-		CommandVerifier cv = new CommandVerifier();
-		int validCode = cv.verifyCommand("cat", super.args);
-		if(validCode == -1){
-			setStatusCode(-1);
-			return "";
 		}
 		
 		//Check for valid workingDir
@@ -95,6 +101,15 @@ public class CATTool extends ATool implements ICatTool {
 			setStatusCode(-1);
 			return "";
 		}
+				
+		//Verify command syntax
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("cat", super.args);
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		
 				
 		for(int i = 0; i < argsLength; i++){
 			try{

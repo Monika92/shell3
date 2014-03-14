@@ -23,6 +23,19 @@ public class DELETETool extends ATool implements IDeleteTool{
 	@Override
 	public boolean delete(File toDelete){
 		// TODO Auto-generated method stub
+		
+		//Check for null input for toDelete
+		if(toDelete == null){
+			setStatusCode(-1);
+			return false;
+		}
+		
+		//Check valid file and existence
+		if (!toDelete.exists()){
+			setStatusCode(-1);
+			return false;
+		}
+		
 		return toDelete.delete();	
 	}
 
@@ -51,6 +64,12 @@ public class DELETETool extends ATool implements IDeleteTool{
 			return "";
 		}
 				
+		//Check for null input for args
+		if (args == null){
+			setStatusCode(-1);
+			return "";
+		}
+		
 		File file, filePath;
 		int argsLength = args.length;
 		String output = "", outputMsg = "", fileName;
