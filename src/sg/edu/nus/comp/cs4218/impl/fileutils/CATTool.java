@@ -75,8 +75,20 @@ public class CATTool extends ATool implements ICatTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 						
-		//Check for null input
-		if (args == null){
+		//Verify command syntax
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("cat", super.args);
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+		//Check for valid workingDir
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
 			setStatusCode(-1);
 			return "";
 		}
@@ -90,26 +102,6 @@ public class CATTool extends ATool implements ICatTool {
 			setStatusCode(0);
 			return stdin;
 		}
-		
-		//Check for valid workingDir
-		if(workingDir == null)
-		{
-			setStatusCode(-1);
-			return "";
-		}	
-		if(!workingDir.exists()){
-			setStatusCode(-1);
-			return "";
-		}
-				
-		//Verify command syntax
-		CommandVerifier cv = new CommandVerifier();
-		int validCode = cv.verifyCommand("cat", super.args);
-		if(validCode == -1){
-			setStatusCode(-1);
-			return "";
-		}
-		
 				
 		for(int i = 0; i < argsLength; i++){
 			try{

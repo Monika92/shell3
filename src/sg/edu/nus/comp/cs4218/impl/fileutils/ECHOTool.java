@@ -39,12 +39,6 @@ public class ECHOTool extends ATool implements IEchoTool {
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
-			
-		//Prioritizing stdin over commandline args
-		if(stdin != null){
-			setStatusCode(0);
-			return stdin;
-		}
 		
 		//Verify command syntax
 		CommandVerifier cv = new CommandVerifier();
@@ -64,7 +58,13 @@ public class ECHOTool extends ATool implements IEchoTool {
 			setStatusCode(-1);
 			return "";
 		}
-				
+	
+		//Prioritizing stdin over commandline args
+		if(stdin != null){
+			setStatusCode(0);
+			return stdin;
+		}
+			
 		StringBuilder sb = new StringBuilder();
 		for(String s : args){
 			sb.append(s);

@@ -327,7 +327,7 @@ public class UNIQToolTest {
 	
 	@Test
 	public void uniqStdinWithNewlineExecuteTest(){
-    	String[] arguments = new String[]{} ;
+    	String[] arguments = new String[]{"-"} ;
 		uniqtool = new UNIQTool(arguments);
 		stdin = "a\na\na\nb\nb\nc";
 		actualOutput = uniqtool.execute(workingDirectory, stdin);
