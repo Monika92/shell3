@@ -102,8 +102,12 @@ public class CATTool extends ATool implements ICatTool {
 			setStatusCode(0);
 			return stdin;
 		}
-				
+		
 		for(int i = 0; i < argsLength; i++){
+			if(args[i].equalsIgnoreCase("-")){
+				i++;
+				continue;
+			}
 			try{
 				fileName = args[i];
 				filePath = new File(fileName);

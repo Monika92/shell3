@@ -35,13 +35,33 @@ public class COMMTool extends ATool implements ICommTool{
 	private int checkOrderFlag = 0;
 
 	/*
-	* Constructor for COMMTool - initializes the super class's arguments 
-	* with the passed arguments.
-	*/
+	 * Constructor for COMMTool - initializes the super class's arguments 
+	 * with the passed arguments.
+	 */
 	public COMMTool(String[] arguments) {	
 		super(arguments);
 	}
 
+	/*
+	 * Helper method to remove "-" from all args if present
+	 */
+	private String[] removeHyphenFromArgs(String[] args){
+		ArrayList<String> list = new ArrayList<String>();
+		
+		for( int i = 0; i < args.length; i++){
+			if(args[i].compareToIgnoreCase("-") != 0){
+				list.add(args[i]);
+			}			
+		}
+		
+		String[] newArgs = new String[list.size()];
+		for(int i = 0; i<list.size(); i++){
+			newArgs[i] = list.get(i);
+		}
+		
+		return newArgs;
+	}
+	
 	/*Executes the "comm" command*/
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -64,9 +84,6 @@ public class COMMTool extends ATool implements ICommTool{
 			return "";
 		}
 
-		String fileName1 = "", fileName2 = "";
-		ArgumentObjectParser aop = new ArgumentObjectParser();
-		
 		//Following case shouldn't occur as Cmd Verifier
 		//checks if Args are correct for command.
 		String[] userArgs = super.args;
@@ -74,7 +91,10 @@ public class COMMTool extends ATool implements ICommTool{
 			setStatusCode(-1);
 			return "";
 		}
-		
+
+		String fileName1 = "", fileName2 = "";
+		ArgumentObjectParser aop = new ArgumentObjectParser();
+
 		ArgumentObject ao = aop.parse(userArgs, "comm");
 		if(ao == null || ao.getFileList().size() != 2){
 			setStatusCode(-1);
@@ -90,20 +110,23 @@ public class COMMTool extends ATool implements ICommTool{
 		}
 
 		String result = "";
-		
+
 		String filePath1 = getCorrectPathFromArg(workingDir,fileName1);
 		String filePath2 = getCorrectPathFromArg(workingDir,fileName2);
 
 		if(filePath1 == null && filePath2 == null){
-			return "File 1 and File 2 both don't exist!";
+			setStatusCode(-1);
+			return "";
 		}
 		else if(filePath1 == null){
-			result = "File 1 doesn't exist!";
+			result = "";
+			setStatusCode(-1);
 			return result;
 
 		}
 		else if (filePath2 == null){
-			result = "File 1 doesn't exist!";
+			result = "";
+			setStatusCode(-1);
 			return result;
 		}
 
@@ -123,13 +146,15 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
+
 	/**
 	* Checks whether the input filename is an absolute path
 	* and creates the file with the appropriate path.
 	*/
+
 	private String getCorrectPathFromArg(File workingDir,String fName){
 		String name = null;
-		
+
 		if(!workingDir.exists() || fName == null){
 			setStatusCode(-1);
 			return null;
@@ -142,7 +167,7 @@ public class COMMTool extends ATool implements ICommTool{
 		else{
 			name = workingDir.getAbsolutePath() + File.separator + fName;
 		}
-		
+
 		fTemp = new File(name);
 		if(fTemp.exists() && fTemp.isFile()){
 			return name;
@@ -156,20 +181,20 @@ public class COMMTool extends ATool implements ICommTool{
 	 */
 	@Override
 	public String compareFiles(String input1, String input2) {
-		
+
 		if(input1 == null || input2 == null){
 			setStatusCode(-1);
 			return "";
 		}
-		
+
 		ArrayList<String> fileLines1 = loadFile(input1);
 		ArrayList<String> fileLines2 = loadFile(input2);
-		
+
 		if(fileLines1 == null || fileLines2 == null){
 			setStatusCode(-1);
 			return "";
 		}
-		
+
 		String result = "";
 		boolean unsorted = false;
 
@@ -245,7 +270,7 @@ public class COMMTool extends ATool implements ICommTool{
 		String line;
 
 		File f = new File(fname);
-		
+
 		//handles empty string or special characters case
 		if(!f.exists()){
 			return null;
@@ -262,7 +287,7 @@ public class COMMTool extends ATool implements ICommTool{
 		} catch (FileNotFoundException e) {		
 			setStatusCode(-1);
 			return null;
-			
+
 		} catch (IOException e) {
 			setStatusCode(-1);
 			return null;
@@ -276,12 +301,12 @@ public class COMMTool extends ATool implements ICommTool{
 	@Override
 	public String compareFilesCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 1;
-		
+
 		if(input1 == null || input2 == null){
 			setStatusCode(-1);
 			return "";
 		}
-		
+
 		String result = compareFiles(input1, input2);
 
 		return result;
@@ -293,16 +318,17 @@ public class COMMTool extends ATool implements ICommTool{
 	@Override
 	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
 		checkOrderFlag = 0;
-		
+
 		if(input1 == null || input2 == null){
 			setStatusCode(-1);
 			return "";
 		}
-		
+
 		String result = compareFiles(input1, input2);
 		return result;
 	}
-	
+
+
 	/**
 	 * Returns the help message for the comm command.
 	 */

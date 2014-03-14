@@ -308,6 +308,7 @@ public class PIPINGTool extends ATool implements IPipingTool {
 		toolWithStdin = false;
 		
 		initializeCheckerStructures();
+		cmd = cmd.toLowerCase();
 						
 		if(isFirstTool){
 			isFirstTool = false;			

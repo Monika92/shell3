@@ -43,13 +43,15 @@ public class Shell extends Thread implements IShell {
 			int argsLength;
 
 			ArrayList<String> list = new ArrayList<String>();
-			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
+			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*||").matcher(
 					commandline);
 			while (m.find())
 			{
 				list.add(m.group(1));
-				if(m.group(1).equalsIgnoreCase("|"))
+				if(m.group(1).equalsIgnoreCase("|")){
 					pipeFlag = true;
+					command = "pipe";
+				}
 			}
 
 			if (list.size() >= 1) {

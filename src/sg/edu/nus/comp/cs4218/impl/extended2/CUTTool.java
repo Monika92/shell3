@@ -187,7 +187,7 @@ public class CUTTool extends ATool implements ICutTool {
 		}
 		
 		try{
-			input = "";
+			input = ""; 
 			output = "";
 			ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 			ArgumentObject argumentObject = argumentObjectParser.parse(args,
