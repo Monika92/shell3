@@ -300,7 +300,7 @@ public class CommandVerifier {
 					}
 					
 				}
-				else{
+				else{ 
 					return -1;
 				}
 			}

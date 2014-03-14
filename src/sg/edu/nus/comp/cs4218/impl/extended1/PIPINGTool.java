@@ -94,7 +94,12 @@ public class PIPINGTool extends ATool implements IPipingTool {
 				endIdx = (args.indexOf("|")) - 1;			
 			}
 			
-			String[] toolArguments = getToolArguments(args,begIdx,endIdx);						
+			String[] toolArguments = getToolArguments(args,begIdx,endIdx);		
+			if(toolArguments == null){
+				setStatusCode(-1);
+				return "Empty Pipe!";
+			}
+			
 			if(checkTool(toolArguments, pipeCmd) == false){
 				setStatusCode(-1);
 				return "";
@@ -103,7 +108,7 @@ public class PIPINGTool extends ATool implements IPipingTool {
 				//added for command verifier to pass syntax check for
 				//command when called from within the tool			
 				if(!pipeCmd.equalsIgnoreCase("comm") && !pipeCmd.equalsIgnoreCase("echo")){				
-					toolArguments = appendHyphenToArgs(toolArguments);
+					toolArguments = appendHyphenToArgs(toolArguments);					
 				}
 			}
 			
@@ -165,6 +170,10 @@ public class PIPINGTool extends ATool implements IPipingTool {
 	}
 	
 	public String[] getToolArguments(List<String> list,int beg, int end){
+		if(end - beg + 1 < 0){
+			return null;
+		}
+		
 		String[] args = new String[end - beg + 1];	
 		for( int i = beg,j=0; i<=end; i++,j++){
 			args[j] = list.get(i);

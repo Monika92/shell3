@@ -75,6 +75,17 @@ public class WCToolTest {
 	}
 	
 	@Test
+    public void constructorTest()
+    {
+    	String[] arguments = new String[]{} ;
+		wctool = new WCTool(arguments);
+		actualOutput = wctool.getHelp();
+		expectedOutput = helpOutput ;
+		assertTrue(expectedOutput.equals(actualOutput));
+		assertEquals(wctool.getStatusCode(), 0);
+    }
+
+	@Test
     public void helpTest()
     {
     	String[] arguments = new String[]{"-help"} ;
@@ -318,6 +329,7 @@ public class WCToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
+	
 	
 	@Test
     public void getWordCountTest()
