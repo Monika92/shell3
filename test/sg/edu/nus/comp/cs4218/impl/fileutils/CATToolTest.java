@@ -215,7 +215,7 @@ public class CATToolTest {
     
     @Test
     public void catStdin1Test(){
-    	String[] arguments = new String[]{} ;
+    	String[] arguments = new String[]{"-"} ;
 		cattool = new CATTool(arguments);
 		stdin = "This is a test run.";
 		actualOutput = cattool.execute(workingDirectory, stdin);
@@ -226,7 +226,7 @@ public class CATToolTest {
     
     @Test
     public void catStdin2Test(){
-    	String[] arguments = new String[]{} ;
+    	String[] arguments = new String[]{"-"} ;
 		cattool = new CATTool(arguments);
 		stdin = " ";
 		actualOutput = cattool.execute(workingDirectory, stdin);
