@@ -206,16 +206,73 @@ public class IntegrationTest_1 {
 		expectedOutput = "a.\nMe\nOr\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
-//	@Test
-//	public void testExecuteGrepEcho() {
-//		
-//		String[] args1 = {"grep","", "InvalidFile.txt", "|", "wc", "-m"};
-//		String[] args2 = {};
-//		pipingTool = new PIPINGTool(args1, args2);
-//		actualOutput = pipingTool.execute(workingDir, "");
-//		expectedOutput = "a.\nMe\nOr\n";
-//		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-//	}
+	@Test
+	public void testExecuteGrepEcho() {
+		
+		String[] args1 = {"grep","(A|M)", "a.txt", "|", "echo"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "a.txt:Apple\nMelon\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
 	
+	@Test
+	public void testExecuteGrepEchoInvalidParams() {
+		
+		String[] args1 = {"grep","", "", "|", "echo"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "pipe break at echo";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	
+	@Test
+	public void testExecuteCatGrep() {
+		
+		String[] args1 = {"Cat", "a.txt", "|","grep", "(A|M)"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	@Test
+	public void testExecuteCommGrep()
+	{
+		//TODO dale
+		String[] args1 = {"Comm", "a.txt", "b.txt","|","grep", "(A|M)"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		expectedOutput = "";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	}
+	@Test
+	public void testExecuteCommGrepInvalidInput()
+	{
+		//TODO dale
+	}
+	@Test
+	public void testExecuteGrepUniq()
+	{
+		//TODO monika
+	}
+	@Test
+	public void testExecuteGrepUniqInvalidInput()
+	{
+		//TODO monika
+	}
+	@Test
+	public void testExecuteGrepPaste()
+	{
+		//TODO dale
+	}
+	@Test
+	public void testExecuteGrepPasteInvalidInput()
+	{
+		//TODO dale
+	}
 	
 }
