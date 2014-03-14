@@ -331,10 +331,9 @@ public class PIPINGToolTest {
 		IWcTool wcTool = new WCTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(echoTool, wcTool);
 		expectedOutput = workingDir + "//a.txt : -m  16 , -w  3 , -l 3" + "\n" 
-		+  " : error - Invalid Input. ";
-		System.out.println("OP:" + actualOutput);
+		+  "Stdin : -m 0 , -w 0 , -l 0\n";
 		//assertEquals(expectedOutput, actualOutput);
-		assertNotEquals(pipingTool.getStatusCode(), 0);
+		assertEquals(pipingTool.getStatusCode(), 0);
 	}
 
 	@Test
@@ -408,7 +407,7 @@ public class PIPINGToolTest {
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		expectedOutput = workingDir + "\\textFiles\\testC.txt :  -m  15 -l  15\n";
+		expectedOutput = "Stdin :  -m  19 -l  1\n";
 		System.out.println("AO: \n" + actualOutput);
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
