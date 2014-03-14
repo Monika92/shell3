@@ -486,4 +486,17 @@ public class PIPINGToolTest {
 		actualOutput = pipingTool.execute(workingDir, null);
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
+	
+	@Test
+	/*
+	 * checking cat a.txt | grep (A|M) 
+	 */
+	public void testExecuteFromCatToGrep(){
+		String[] args1 = {"cat", "a.txt", "|","grep","(A|M)"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, null);
+		System.out.println(actualOutput);
+		assertEquals(pipingTool.getStatusCode(), 0);
+	}
 }
