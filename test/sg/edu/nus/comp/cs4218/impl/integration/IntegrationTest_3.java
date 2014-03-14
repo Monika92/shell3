@@ -367,7 +367,7 @@ public void cdLsTest()
 @Test
 public void copyCatTest()
 {
-	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file2.txt"} ;
+	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file3.txt"} ;
 	
 	copytool = new COPYTool(arguments);
 	actualOutput = copytool.execute(WorkingDirectory.workingDirectory, stdin);
@@ -384,7 +384,7 @@ public void copyCatTest()
 	
 	
 	//Check if the contents of file2.txt match the contents of file1.txt using cat
-	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	arguments = new String[]{"folder1" + File.separator + "file3.txt"} ;
 	cattool = new CATTool(arguments);
 	actualOutput = cattool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput =  "This is \na test \nrun\nCd.";
@@ -401,7 +401,7 @@ public void copyCatTest()
 public void moveWcDeleteUniqTest()
 {
 	//Start with moving folder1/file.txt to folder1/file2.txt.
-	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file2.txt"} ;
+	String[] arguments = new String[]{"folder1" + File.separator + "file1.txt", "folder1" + File.separator + "file4.txt"} ;
 	String contentFile0 = readFromFile(new File(arguments[0]));
 
 	movetool = new MOVETool(arguments);
@@ -414,15 +414,15 @@ public void moveWcDeleteUniqTest()
 	
 	
 	//Run WC tool with folder1/file2.txt as input
-	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	arguments = new String[]{"folder1" + File.separator + "file4.txt"} ;
 	wctool = new WCTool(arguments);
 	actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
-	expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "folder1" + File.separator + "file2.txt : -m  17 , -w  6 , -l 4\n";
+	expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "folder1" + File.separator + "file4.txt : -m  17 , -w  6 , -l 4\n";
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(wctool.getStatusCode(), 0);
 	
 	//Delete folder1/file.txt to check if the uniq we implement next returns output accordingly
-	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	arguments = new String[]{"folder1" + File.separator + "file4.txt"} ;
 	assertTrue((new File(arguments[0])).exists());
 	deletetool = new DELETETool(arguments);
 	actualOutput = deletetool.execute(WorkingDirectory.workingDirectory, stdin);
@@ -430,7 +430,7 @@ public void moveWcDeleteUniqTest()
 	assertEquals(deletetool.getStatusCode(), 0);
 	
 	//Uniq invalid file input test. If this test success it implies that delete has worked successfully 
-	arguments = new String[]{"folder1" + File.separator + "file2.txt"} ;
+	arguments = new String[]{"folder1" + File.separator + "file4.txt"} ;
 	uniqtool = new UNIQTool(arguments);
 	actualOutput = uniqtool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "No such file";
