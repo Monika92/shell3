@@ -113,6 +113,11 @@ public class SORTToolTest {
 		return output;
 	}
     
+    /**
+     * Test for sort command with multiple -c options given file input
+     * Only one -c option is considered
+     * Checks for correct output after execution
+     */
     @Test
     public void testExecuteMultipleOptionsC()
     {
@@ -124,6 +129,11 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
+    /**
+     * Test for sort command with multiple files
+     * All the files are sorted
+     * Checks for correct output after execution
+     */
     @Test
     public void testExecuteSortMultipleFiles()
     {
@@ -139,6 +149,11 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
+    /**
+     * Test for sort command with -c and -help option
+     * help is given priority
+     * Checks for help output after execution
+     */
     @Test
     public void testExecuteMultipleOptionsCHelp()
     {
@@ -150,6 +165,11 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
+    /**
+     * Test for sort command with -c and -help option
+     * help is given priority
+     * Checks for help output after execution
+     */
     @Test
     public void testExecuteMultipleOptionsHelpC()
     {
@@ -161,7 +181,10 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
     }
     
-    
+    /**
+     * Test for sort command with invalid option
+     * Checks for status code -1 after execution
+     */
     @Test
     public void testExecuteInvalidOptions()
     {
@@ -170,6 +193,11 @@ public class SORTToolTest {
 		sorttool.execute(workingDirectory, null);
 		assertEquals(sorttool.getStatusCode(), -1);
     }
+    
+    /**
+     * Test for sort command with std input
+     * Checks for correct output after execution
+     */
     @Test
     public void testExecuteWithStdin()
     {
