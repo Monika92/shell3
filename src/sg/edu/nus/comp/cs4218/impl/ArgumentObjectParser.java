@@ -165,7 +165,7 @@ public class ArgumentObjectParser {
 		int argumentSize = argument.length;
 		for(int i = 0 ; i < argumentSize ; )
 		{
-
+			
 			if(argument[i].equalsIgnoreCase("-help") || argument[i].equals("-c") ||
 					argument[i].equalsIgnoreCase("-o") ||argument[i].equalsIgnoreCase("-v"))
 			{
@@ -177,6 +177,7 @@ public class ArgumentObjectParser {
 					argument[i].equalsIgnoreCase("-C"))
 			{
 				argumentObject.options.add(argument[i]);
+				if(i+1 < argumentSize)
 				argumentObject.optionArguments.add(argument[i+1]);
 				i+=2;
 			}
@@ -187,25 +188,25 @@ public class ArgumentObjectParser {
 			}
 			else 
 			{
-				argumentObject.pattern = argument[i];
-
-				i+=1;
-				//the rest are considered as filenames
-				while(i <argumentSize)
-				{
-					if(argument[i].equalsIgnoreCase("-"))
+					argumentObject.pattern = argument[i];
+					
+					i+=1;
+					//the rest are considered as filenames
+					while(i <argumentSize)
 					{
-						//do nothing for stdin
-					}
-					else
+						if(argument[i].equalsIgnoreCase("-"))
+						{
+							//do nothing for stdin
+						}
+						else
 						argumentObject.fileList.add(argument[i]);
-					i++;
-				}
-
+						i++;
+					}
+				
 			}
-		}
+		}		
 
-		return argumentObject;		
+	return argumentObject;		
 	}
 
 	public ArgumentObject parse(String[] argument,String command)
