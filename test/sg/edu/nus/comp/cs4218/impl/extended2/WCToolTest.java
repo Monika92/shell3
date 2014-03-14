@@ -216,24 +216,6 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
-	/*
-	 * Test case to check the behaviour of WC with valid file name and options in Capital case.
-	 * */
-	@Test
-    public void capsOptionsInputTest()
-    {
-    	String[] arguments = new String[]{"-W", "-M", "-L", "input1.txt"} ;
-		wctool = new WCTool(arguments);
-		
-		actualOutput = wctool.execute(WorkingDirectory.workingDirectory, null);
-		expectedOutput =  WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8 -w  4 -l  3\n";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(wctool.getStatusCode(), 0);
-		
-		String incorrectOutput =  "input1.txt : error - Invalid Input. \n";
-		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
-		assertNotEquals(wctool.getStatusCode(), -1);
-    }
 	
 	/*
 	 * Test case to check the behaviour of WC with valid file name which is in absolute path.
