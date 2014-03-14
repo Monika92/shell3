@@ -278,7 +278,26 @@ public class UNIQTool extends ATool implements IUniqTool{
  */
 	@Override
 	public String execute(File workingDir, String stdin) {
-					
+		
+		//Verify command syntax
+		CommandVerifier cv = new CommandVerifier();
+		int validCode = cv.verifyCommand("uniq", super.args);
+		if(validCode == -1){
+			setStatusCode(-1);
+			return "";
+		}
+
+		//Check for valid workingDir
+		if(workingDir == null)
+		{
+			setStatusCode(-1);
+			return "";
+		}	
+		if(!workingDir.exists()){
+			setStatusCode(-1);
+			return "";
+		}
+		
 		ArgumentObjectParser argumentObjectParser = new ArgumentObjectParser();
 		ArgumentObject argumentObject = argumentObjectParser.parse(args, "uniq");
 		ArrayList<String> fileList = argumentObject.getFileList();
@@ -310,25 +329,6 @@ public class UNIQTool extends ATool implements IUniqTool{
 				
 				fileList.add("uniq_temp_input_file.txt");
 			}
-		}
-		
-		//Verify command syntax
-		CommandVerifier cv = new CommandVerifier();
-		int validCode = cv.verifyCommand("uniq", super.args);
-		if(validCode == -1){
-			setStatusCode(-1);
-			return "";
-		}
-		
-		//Check for valid workingDir
-		if(workingDir == null)
-		{
-			setStatusCode(-1);
-			return "";
-		}	
-		if(!workingDir.exists()){
-			setStatusCode(-1);
-			return "";
 		}
 		
 		
@@ -417,6 +417,7 @@ public class UNIQTool extends ATool implements IUniqTool{
 			j++;
 		}
 		
+		//Remvoe uniq_te
 		return result.trim();
 	}
 
