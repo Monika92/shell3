@@ -24,18 +24,18 @@ public class SORTToolTest {
 	String actualOutput,expectedOutput,helpOutput;
 	File workingDirectory;
 	File inputFile1, inputFile2, inputFile3;
-	
+
 	@Before
 	public void before(){
 		workingDirectory = new File(System.getProperty("user.dir"));
-		
+
 		helpOutput = "sort [OPTIONS] [FILE]" + "\n" +
 				"FILE : Name of the file" + "\n" +
 				"OPTIONS : -c : Check whether the given file is already sorted, " +
 				"if it is not all sorted, print a diagnostic containing the first " +
 				"line that is out of order" + "\n" +
 				"-help : Brief information about supported options" ;
-		
+
 		String input1 = "apple\nball\ncat\ndog";
 		String input2 = "hello\nworld\ncoding\nis\nfun";
 		String input3 = "";
@@ -47,10 +47,10 @@ public class SORTToolTest {
 		writeToFile(inputFile3, input3);
 	}
 
-    @After
+	@After
 	public void after(){
 		sorttool = null;
-		
+
 		if(inputFile1.exists())
 			inputFile1.delete();
 		if(inputFile2.exists())
@@ -58,8 +58,8 @@ public class SORTToolTest {
 		if(inputFile3.exists())
 			inputFile3.delete();
 	}
-	
-    public void writeToFile(File file, String input){
+
+	public void writeToFile(File file, String input){
 		try{
 			if(!file.exists())
 				file.createNewFile();
@@ -79,8 +79,8 @@ public class SORTToolTest {
 		} catch (IOException e){
 		}
 	}
-    
-    public String readFromFile(File inputFile){
+
+	public String readFromFile(File inputFile){
 		String output = ""; FileReader fr = null;
 		try{
 			fr = new FileReader(inputFile);
@@ -112,32 +112,32 @@ public class SORTToolTest {
 		}
 		return output;
 	}
-    
-    /**
-     * Test for sort command with multiple -c options given file input
-     * Only one -c option is considered
-     * Checks for correct output after execution
-     */
-    @Test
-    public void testExecuteMultipleOptionsC()
-    {
-    	String[] arguments = new String[]{"-c", "-c" ,"test1.txt"} ;
+
+	/**
+	 * Test for sort command with multiple -c options given file input
+	 * Only one -c option is considered
+	 * Checks for correct output after execution
+	 */
+	@Test
+	public void testExecuteMultipleOptionsC()
+	{
+		String[] arguments = new String[]{"-c", "-c" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);
 		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = "Already sorted";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
-    }
-    
-    /**
-     * Test for sort command with multiple files
-     * All the files are sorted
-     * Checks for correct output after execution
-     */
-    @Test
-    public void testExecuteSortMultipleFiles()
-    {
-    	String[] arguments = new String[]{"test1.txt","test2.txt"} ;
+	}
+
+	/**
+	 * Test for sort command with multiple files
+	 * All the files are sorted
+	 * Checks for correct output after execution
+	 */
+	@Test
+	public void testExecuteSortMultipleFiles()
+	{
+		String[] arguments = new String[]{"test1.txt","test2.txt"} ;
 		sorttool = new SORTTool(arguments);
 		sorttool.execute(workingDirectory, null);
 		String actualOutput1 = readFromFile(inputFile1);
@@ -147,116 +147,117 @@ public class SORTToolTest {
 		assertTrue(expectedOutput1.equalsIgnoreCase(actualOutput1));
 		assertTrue(expectedOutput2.equalsIgnoreCase(actualOutput2));
 		assertEquals(sorttool.getStatusCode(), 0);
-    }
-    
-    /**
-     * Test for sort command with -c and -help option
-     * help is given priority
-     * Checks for help output after execution
-     */
-    @Test
-    public void testExecuteMultipleOptionsCHelp()
-    {
-    	String[] arguments = new String[]{"-c", "-help" ,"test1.txt"} ;
+	}
+
+	/**
+	 * Test for sort command with -c and -help option
+	 * help is given priority
+	 * Checks for help output after execution
+	 */
+	@Test
+	public void testExecuteMultipleOptionsCHelp()
+	{
+		String[] arguments = new String[]{"-c", "-help" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);
 		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
-    }
-    
-    /**
-     * Test for sort command with -c and -help option
-     * help is given priority
-     * Checks for help output after execution
-     */
-    @Test
-    public void testExecuteMultipleOptionsHelpC()
-    {
-    	String[] arguments = new String[]{"-help", "-c" ,"test1.txt"} ;
+	}
+
+	/**
+	 * Test for sort command with -c and -help option
+	 * help is given priority
+	 * Checks for help output after execution
+	 */
+	@Test
+	public void testExecuteMultipleOptionsHelpC()
+	{
+		String[] arguments = new String[]{"-help", "-c" ,"test1.txt"} ;
 		sorttool = new SORTTool(arguments);
 		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
-    }
-    
-    /**
-     * Test for sort command with invalid option
-     * Checks for status code -1 after execution
-     */
-    @Test
-    public void testExecuteInvalidOptions()
-    {
-    	String[] arguments = new String[]{"-t"} ;
+	}
+
+	/**
+	 * Test for sort command with invalid option
+	 * Checks for status code -1 after execution
+	 */
+	@Test
+	public void testExecuteInvalidOptions()
+	{
+		String[] arguments = new String[]{"-t"} ;
 		sorttool = new SORTTool(arguments);
 		sorttool.execute(workingDirectory, null);
 		assertEquals(sorttool.getStatusCode(), -1);
-    }
-    
-    /**
-     * Test for sort command with std input
-     * Checks for correct output after execution
-     */
-    @Test
-    public void testExecuteWithStdin()
-    {
-    	String[] arguments = new String[]{"-"} ;
+	}
+
+	/**
+	 * Test for sort command with std input
+	 * Checks for correct output after execution
+	 */
+	@Test
+	public void testExecuteWithStdin()
+	{
+		String[] arguments = new String[]{"-"} ;
 		sorttool = new SORTTool(arguments);
-		sorttool.execute(workingDirectory, "abcd");
-		actualOutput = readFromFile(new File("stdin.txt"));
+		actualOutput = sorttool.execute(workingDirectory, "abcd");		 
 		expectedOutput = "abcd";
 		actualOutput = actualOutput.replace("\n", "");
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
-    }
-    
-    /**
-     * Test for sort command with -c option non-existing file input
-     * Checks for status code -1 after execution
-     */
-    @Test
-    public void testExecuteWithNonExistingFile()
-    {
-    	String[] arguments = new String[]{"-c", "-c" ,"file.txt"} ;
+	}
+
+	/**
+	 * Test for sort command with -c option non-existing file input
+	 * Checks for status code -1 after execution
+	 */
+	@Test
+	public void testExecuteWithNonExistingFile()
+	{
+		String[] arguments = new String[]{"-c", "-c" ,"file.txt"} ;
 		sorttool = new SORTTool(arguments);
 		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = "File Not Found";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), -1);
-    }
-    
-    /**
-     * Test for sort command with -help option 
-     * Checks for help output after execution
-     */
-    @Test
-    public void testExecuteHelp()
-    {
-    	String[] arguments = new String[]{"-help"} ;
+	}
+
+	/**
+	 * Test for sort command with -help option 
+	 * Checks for help output after execution
+	 */
+	@Test
+	public void testExecuteHelp()
+	{
+		String[] arguments = new String[]{"-help"} ;
 		sorttool = new SORTTool(arguments);
 		actualOutput = sorttool.execute(workingDirectory, null);
 		expectedOutput = helpOutput;
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
-    }
-    
-    /**
-     * Test for sort command with -help option and std input
-     * help option is prioritized
-     * Checks for help output after execution
-     */
-    @Test
-    public void testExecuteHelpWithStdin()
-    {
-    	String[] arguments = new String[]{"-help","-"} ;
+	}
+
+	/**
+	 * Test for sort command with -help option and std input
+	 * Checks for status code -1 after execution
+	 */
+	@Test
+	public void testExecuteHelpWithStdin()
+	{
+		String[] arguments = new String[]{"-help","-"} ;
 		sorttool = new SORTTool(arguments);
-		actualOutput = sorttool.execute(workingDirectory, "abcd");
-		expectedOutput = helpOutput;
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-		assertEquals(sorttool.getStatusCode(), 0);
-    }
-    
+		sorttool.execute(workingDirectory, "abcd");
+		assertEquals(sorttool.getStatusCode(), -1);
+	}
+
+
+	/**
+	 * Test for sort command with std input 
+	 * Checks for help output after execution
+	 */
 	@Test
 	public void testSortFile() 
 	{
@@ -268,7 +269,11 @@ public class SORTToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
-	
+
+	/**
+	 * Test for sort command with no input 
+	 * Checks for empty output after execution
+	 */
 	@Test
 	public void testSortFileNoInput() 
 	{
@@ -280,7 +285,11 @@ public class SORTToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
-	
+
+	/**
+	 * Test for sort method interface with null parameters
+	 * Checks for empty output after execution
+	 */
 	@Test
 	public void testSortFileNullParams() 
 	{
@@ -292,7 +301,11 @@ public class SORTToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
-	
+
+	/**
+	 * Test for check if sorted method interface with null parameters
+	 * Checks for correct output after execution
+	 */
 	@Test
 	public void testCheckIfSortedNullParam()
 	{
@@ -303,6 +316,11 @@ public class SORTToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);	
 	}
+
+	/**
+	 * Test for check if sorted method interface with empty input
+	 * Checks for default output after execution
+	 */
 	@Test
 	public void testCheckIfSortedNoInput()
 	{
@@ -313,25 +331,33 @@ public class SORTToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
-	
+
+	/**
+	 * Test for check if sorted method interface 
+	 * Checks for correct output after execution
+	 */
 	@Test
 	public void testCheckIfSortedGivenUnsortedInput()
 	{
 		String[] arguments = null ;
 		sorttool = new SORTTool(arguments);
-		
+
 		actualOutput = sorttool.checkIfSorted("apple\ncarrot\nbanana\n");
 		expectedOutput = "carrot is out of order";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
-	
+
+	/**
+	 * Test for check if sorted method interface 
+	 * Checks for correct output after execution
+	 */
 	@Test
 	public void testCheckIfSortedGivenSortedInput()
 	{
 		String[] arguments = null ;
 		sorttool = new SORTTool(arguments);
-		
+
 		actualOutput = sorttool.checkIfSorted("apple\nbanana\ncarrot\n");
 		expectedOutput = "Already sorted";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));

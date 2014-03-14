@@ -92,6 +92,8 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput = helpOutput ;
+		String incorrectOutput = "Invalid input. No options given.";
+		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }

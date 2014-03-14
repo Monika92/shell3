@@ -98,7 +98,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		return result;
 	}
 
-	/*
+	/**
 	 * Uses the delimiter provided by the user to separator the output 
 	 * while executing the paste command.
 	 */
@@ -160,7 +160,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		return result;
 	}
 
-	/*
+	/**
 	 * Loads the file given by the filename and returns 
 	 * the file's lines as an array of strings.
 	 */
@@ -198,7 +198,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		return lines;
 	}
 
-	/*
+	/**
 	 * Returns the help message for paste command.
 	 */
 	@Override
@@ -217,7 +217,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		return helpText;
 	}
 
-	/*
+	/**
 	 * Resolving the paths of the filenames - absolute or relative and
 	 * creating the files appropriately.
 	 */
@@ -275,7 +275,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		return names;
 	}
 
-	/*
+	/**
 	 * Removes the stdin input from the argument list.
 	 */
 	private String[] removeStdinFromArg(String[] args){
@@ -306,7 +306,7 @@ public class PASTETool extends ATool implements IPasteTool{
 		return newArgs;
 	}
 	
-	/*
+	/**
 	 * Executes the paste command.
 	 */
 	@Override
