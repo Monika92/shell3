@@ -74,8 +74,11 @@ public class WCToolTest {
 		
 	}
 	
+	/*
+	 * Test case to check the functionality of getHelp function
+	 * */
 	@Test
-    public void constructorTest()
+    public void getHelpTest()
     {
     	String[] arguments = new String[]{} ;
 		wctool = new WCTool(arguments);
@@ -85,6 +88,9 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 
+	/*
+	 * Test case to check the behaviour of WC with only -help option 
+	 * */
 	@Test
     public void helpTest()
     {
@@ -98,6 +104,10 @@ public class WCToolTest {
 		assertEquals(wctool.getStatusCode(), 0);
     }
 	
+	/*
+	 * Test case to check the behaviour of WC with -help option coupled with few oher options.
+	 * The -help option must be given priority and the othr options must not be executed. 
+	 * */
 	@Test
     public void helpPriorityTest()
     {
@@ -105,11 +115,15 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput = helpOutput ;
+		String incorrectOutput = WorkingDirectory.workingDirectory + File.separator + "input1.txt :  -m  8\n";
+		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), 0);
     }
     
-
+	/*
+	 * Test case to check the behaviour of WC with invalid file argument.
+	 * */
 	@Test
     public void invalidFilenameInputTest()
     {
@@ -117,6 +131,8 @@ public class WCToolTest {
 		wctool = new WCTool(arguments);
 		actualOutput = wctool.execute(workingDirectory, null);
 		expectedOutput =  "idontexisthaha.txt : error - Invalid Input. \n";
+		String incorrectOutput = "idontexisthaha.txt :  -m  0 , -w 0 , -l 0\n";
+		assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(wctool.getStatusCode(), -1);
     }
