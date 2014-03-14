@@ -75,6 +75,10 @@ public class DELETETool extends ATool implements IDeleteTool{
 		String output = "", outputMsg = "", fileName;
 		
 		for(int i = 0; i < argsLength; i++){
+			if(args[i].equalsIgnoreCase("-")){
+				i++;
+				continue;
+			}
 			try{
 				fileName = args[i];
 				filePath = new File(fileName);
