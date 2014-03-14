@@ -31,15 +31,19 @@ public class Shell extends Thread implements IShell {
 	String command;
 	String[] argsList, rawArgs;
 
+	/**
+	 * This method takes command line as input and returns the corresponding tool as output
+	 */
 	@Override
 	public ITool parse(String commandline) {
 			
+			commandline = commandline.trim();
 			Boolean pipeFlag = false;
 			command = null;
 			int argsLength;
 
 			ArrayList<String> list = new ArrayList<String>();
-			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*||").matcher(
+			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
 					commandline);
 			while (m.find())
 			{
@@ -223,6 +227,7 @@ public class Shell extends Thread implements IShell {
 		return null;
 	}
 
+	
 	@Override
 	public void stop(Runnable toolExecution) {
 		// TODO Implement

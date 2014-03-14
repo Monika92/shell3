@@ -146,10 +146,12 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
-	/*
-	 * Checks whether the input filename is an absolute path
-	 * and creates the file with the appropriate path.
-	 */
+
+	/**
+	* Checks whether the input filename is an absolute path
+	* and creates the file with the appropriate path.
+	*/
+
 	private String getCorrectPathFromArg(File workingDir,String fName){
 		String name = null;
 
@@ -173,7 +175,7 @@ public class COMMTool extends ATool implements ICommTool{
 		return null;
 	}
 
-	/*
+	/**
 	 * Compares the two given inputs and returns a string with the differences
 	 * between the corresponding lines of the two strings.
 	 */
@@ -258,7 +260,7 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
-	/*
+	/**
 	 * Private function to load file from the given file path and
 	 * return an array of strings containing the line-wise 
 	 * information in the file.
@@ -293,7 +295,7 @@ public class COMMTool extends ATool implements ICommTool{
 		return lines;
 	}
 
-	/*
+	/**
 	 * Compares the files and checks if the information in them is already sorted.
 	 */
 	@Override
@@ -310,7 +312,7 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
-	/*
+	/**
 	 * Compares the files but does not check whether the information is already sorted.
 	 */
 	@Override
@@ -326,7 +328,8 @@ public class COMMTool extends ATool implements ICommTool{
 		return result;
 	}
 
-	/*
+
+	/**
 	 * Returns the help message for the comm command.
 	 */
 	@Override
