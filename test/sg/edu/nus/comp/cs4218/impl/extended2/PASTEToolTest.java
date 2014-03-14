@@ -222,7 +222,7 @@ public class PASTEToolTest {
 		pasteTool = new PASTETool(arguments);		
 		actualOutput = pasteTool.execute(workingDirectory, null);
 
-		expectedOutput = "../../a.txt: No such file or directory!";
+		expectedOutput = "";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));	
 
 	}

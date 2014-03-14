@@ -138,7 +138,7 @@ public class CommandVerifier {
 	}
 
 	public int verifyBasic(String cmd, ArrayList<String> args){
-
+		cmd = cmd.toLowerCase();
 		//if command is from pipe, then either with or w/o args are both valid
 		if(pipeCommand){
 			if(cmd.equalsIgnoreCase("cat") ||cmd.equalsIgnoreCase("echo")){
@@ -152,8 +152,7 @@ public class CommandVerifier {
 			}
 		}
 
-		int numArgs = args.size();
-
+		int numArgs = args.size();		
 		if(cmd.equals("pwd")){
 			return basicCheck(pwdMap, numArgs);
 		}
@@ -233,7 +232,7 @@ public class CommandVerifier {
 	}
 	
 	public int verifyTextUtil(String cmd, ArrayList<String> args){
-
+		cmd = cmd.toLowerCase();
 		if(cmd.equals("cut")){
 			//should contain "-c"
 			if(checkPriorCut(args) == 1){
@@ -246,7 +245,7 @@ public class CommandVerifier {
 		else if(cmd.equals("comm") && args.contains("-") == false){
 			return textUtilCheck(cmd,commMap, args);
 		}
-		else if(cmd.equals("sort") && args.contains("-") == false){
+		else if(cmd.equals("sort")){
 			return textUtilCheck(cmd,sortMap, args);
 		}
 		else if(cmd.equals("wc")){
@@ -409,11 +408,11 @@ public class CommandVerifier {
 			return -1;
 		}
 
-		if(basCmds.contains(cmd)){
+		if(basCmds.contains(cmd.toLowerCase())){
 			resultCode = verifyBasic(cmd, argList);
 			return resultCode;
 		}
-		else if (tuCmds.contains(cmd)){
+		else if (tuCmds.contains(cmd.toLowerCase())){
 			resultCode = verifyTextUtil(cmd, argList);
 			return resultCode;
 		}				
