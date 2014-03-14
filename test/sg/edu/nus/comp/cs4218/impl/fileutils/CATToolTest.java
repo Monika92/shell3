@@ -89,7 +89,7 @@ public class CATToolTest {
 		}
 	}
 	
-	public String readFromFile(File inputFile){
+	/*public String readFromFile(File inputFile){
 		String output = ""; FileReader fr = null;
 		try{
 			fr = new FileReader(inputFile);
@@ -122,7 +122,7 @@ public class CATToolTest {
 		return output;
 	}
 	
-    
+    */
     @Test
     public void catSingleFileTest(){
     	String[] arguments = new String[]{"Test_Output.txt"} ;
