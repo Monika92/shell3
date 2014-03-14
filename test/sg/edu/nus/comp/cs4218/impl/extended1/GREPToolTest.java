@@ -45,23 +45,23 @@ public class GREPToolTest {
 	/**
 	 * Test for grep command on an empty file. Checks for empty result.
 	 */
-	@Test
+	@Test//@Corrected
 	public void testExecuteEmptyFile() {
 		String[] cmdArgs = { "textFiles"+File.separator+"empty.txt" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
-		assertEquals(tool.getStatusCode(), 0);
+		assertEquals(tool.getStatusCode(), -1);
 	}
 
 	/**
 	 * Test for grep command on a binary file. Checks for empty result.
 	 */
-	@Test
+	@Test //@Corrected
 	public void testExecuteBinaryFile() {
 		String[] cmdArgs = { "textFiles"+File.separator+"picture.gif" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
-		assertEquals(tool.getStatusCode(), 0);
+		assertEquals(tool.getStatusCode(), -1);
 	}
 
 	/**
@@ -286,8 +286,6 @@ public class GREPToolTest {
 		String[] cmdArgs = { "-v", " " };
 		String expected = "hello\n";
 		IGrepTool tool = new GREPTool(cmdArgs);
-		assertTrue(expected.equals(tool.execute(workingDir,
-				"hello\ni am here for you\n")));
 		assertTrue(expected.equals(tool.execute(workingDir,"hello\ni am here for you\n")));
 		assertEquals(tool.getStatusCode(), 0);
 	}
