@@ -515,8 +515,22 @@ public class PIPINGToolTest {
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		System.out.println(actualOutput);
 		String expectedOutput = "Empty Pipe!";
+		assertEquals(expectedOutput, actualOutput);
+		assertNotEquals(pipingTool.getStatusCode(), 0);
+	}
+	
+	@Test
+	/*
+	 * command paste | |
+	 */
+	public void testEmptyPipeCommand1(){
+		String[] args1 = {"paste", "|","|"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, null);
+		System.out.println(actualOutput);
+		String expectedOutput = "";
 		assertEquals(expectedOutput, actualOutput);
 		assertNotEquals(pipingTool.getStatusCode(), 0);
 	}
