@@ -375,7 +375,7 @@ public class GREPTool extends ATool implements IGrepTool {
 			}
 			if (stdin != null && !stdin.isEmpty()) {
 				input = stdin + "\n";
-				//prefixString = "Standard Input:";
+				//prefixString = "Standard Input:\n";
 				prefixString = "";
 				if (!options.isEmpty()) {
 					String outputString = executeOptions(options, optionArguments, pattern,

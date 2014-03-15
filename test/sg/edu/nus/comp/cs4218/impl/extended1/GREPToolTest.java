@@ -44,6 +44,7 @@ public class GREPToolTest {
 
 	/**
 	 * Test for grep command on an empty file. Checks for empty result.
+	 * @CORRECTED File.separator instead of / makes it platform independent
 	 */
 	@Test
 	public void testExecuteEmptyFile() {
@@ -55,6 +56,7 @@ public class GREPToolTest {
 
 	/**
 	 * Test for grep command on a binary file. Checks for empty result.
+	 * @CORRECTED File.separator instead of / makes it platform independent
 	 */
 	@Test 
 	public void testExecuteBinaryFile() {
@@ -67,6 +69,7 @@ public class GREPToolTest {
 	/**
 	 * Several tests for invalid arguments in a grep command. Checks for correct
 	 * error exit status after execution.
+	 * @CORRECTED assertTrue(false); is removed 
 	 */
 	@Test
 	public void testExecuteInvalidArguments() {
@@ -112,6 +115,7 @@ public class GREPToolTest {
 	/** Changed : exception not thrown,just error message"
 	/**
 	 * Test for cat. Destructive case where workingDir is not valid. 
+	 * @CORRECTED Exception removed 
 	 */
 	@Test
 	public void testExecuteNullWorkingDir() {
@@ -151,6 +155,7 @@ public class GREPToolTest {
 	/**
 	 * Test for normal grep command with multiple files passed in as arguments.
 	 * Checks for correct output after execution.
+	 * @CORRECTED File.separator instead of / makes it platform independent
 	 */
 	@Test
 	public void testExecuteMultipleFiles() {
@@ -171,6 +176,7 @@ public class GREPToolTest {
 	/**
 	 * Test for grep command with -c option with multiple files passed in as
 	 * arguments. Checks for correct output after execution.
+	 * @CORRECTED File.separator instead of / makes it platform independent
 	 */
 	@Test
 	public void testExecuteCountOptionMultipleFiles() {
@@ -224,6 +230,7 @@ public class GREPToolTest {
 	/**
 	 * Test for grep command with -c option with standard input (denoted by -).
 	 * Checks for correct output after execution.
+	 * @CORRECTED File.separator instead of / makes it platform independent
 	 */
 	@Test
 	public void testExecuteOOptionStdinMultipleFiles() {
@@ -245,6 +252,7 @@ public class GREPToolTest {
 	 * Test for grep command with -o option with multiple files passed in as
 	 * arguments and an empty string passed in as input. Checks for empty result
 	 * after execution.
+	 * @CORRECTED File.separator instead of / makes it platform independent
 	 */
 	@Test
 	public void testExecuteOOptionNoResultMultipleFiles() {
@@ -263,6 +271,7 @@ public class GREPToolTest {
 	/**
 	 * Test for grep command with -v option with multiple files passed in as
 	 * arguments. Checks for correct output after execution.
+	 * @CORRECTED File.separator instead of / makes it platform independent
 	 */
 	@Test
 	public void testExecuteVOptionMultipleFiles() {
@@ -795,6 +804,7 @@ public class GREPToolTest {
 	 * sections of matching lines should be separated with "--".Checks for
 	 * correct output. ASSUMPTION: grep -C prints around the context and does
 	 * not combine different sections that are close to each other.
+	 * @CORRECTED duplicate c are removed 
 	 */
 	@Test
 	public void testMatchingLinesOutputContextWithRegex() {
