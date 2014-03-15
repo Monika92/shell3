@@ -273,12 +273,13 @@ public class PIPINGToolTest {
 	 */
 	@Test
 	public void testPipeWcFromPasteTo() {
-		String[] leftToolArgs = {"-m", "-l", "textFiles/testA.txt"};
+		
+		String[] leftToolArgs = {"-m", "-l", "textFiles"+File.separator+"testA.txt"};
 		String[] rightToolArgs = {"-s","-"};
 		IWcTool wcTool = new WCTool(leftToolArgs);
 		IPasteTool pasteTool = new PASTETool(rightToolArgs);
 		String actualOutput = pipingTool.pipe(wcTool, pasteTool);
-		String expectedOutput = workingDir + "\\textFiles\\testA.txt :  -m  37 -l  5\n";
+		String expectedOutput = workingDir +File.separator+ "textFiles"+File.separator+ "testA.txt :  -m  37 -l  5\n";
 		assertTrue(actualOutput.equals(expectedOutput));
 	}
 	
