@@ -339,7 +339,6 @@ public class PIPINGToolTest {
 		actualOutput = pipingTool.pipe(echoTool, wcTool);
 		expectedOutput = workingDir + "\\a.txt : -m  16 , -w  3 , -l 3" + "\n" 
 		+  "Stdin : -m 0 , -w 0 , -l 0\n";
-		expectedOutput = "C:\\Users\\monika92\\workspace\\shell3\\a.txt : -m  16 , -w  3 , -l 3\nStdin : -m  0 , -w  0 , -l 0\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pipingTool.getStatusCode(), 0);
 	}
