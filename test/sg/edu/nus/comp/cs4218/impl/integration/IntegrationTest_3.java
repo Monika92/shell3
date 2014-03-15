@@ -389,7 +389,6 @@ public void copyCatTest()
 	cattool = new CATTool(arguments);
 	actualOutput = cattool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput =  "This is \na test \nrun\nCd.";
-	System.out.println(actualOutput);
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cattool.getStatusCode(), 0);
 

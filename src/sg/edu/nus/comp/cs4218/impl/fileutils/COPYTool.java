@@ -104,7 +104,6 @@ public class COPYTool extends ATool implements ICopyTool{
 			if((arg0.isFile()) && (arg1.isDirectory()==true))
 			{
 				//Copy a file to directory
-				//arg1 = copyFileToDir( 0 , 1);
 				arg1 = new File(args[1] + File.separator + arg0.getName());
 				if (copy(arg0,arg1))
 				{
