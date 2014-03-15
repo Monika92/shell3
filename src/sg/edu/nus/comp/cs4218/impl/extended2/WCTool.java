@@ -192,7 +192,7 @@ public class WCTool extends ATool implements IWcTool{
 			{
 				if(outputString == "")
 				{
-					outputString += "No standard input given.";
+					outputString += "No standard input given. \n";
 					setStatusCode(-1);
 				}
 			}

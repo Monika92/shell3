@@ -19,6 +19,14 @@ import sg.edu.nus.comp.cs4218.impl.extended2.WCTool;
 
 public class WCToolTest {
 
+	/*
+	 * Implementation of wc
+	 * 1. wc file1 : shows -m , -l and -w in the file1
+	 * 2. wc -m -l -w : or any other combination of options, display respective numbers for the file
+	 * 3. wc -m -l -w file1 file2 : shows the respective numbers for the valid files in the argument list
+	 * 4. wc -m - -l file1 : ignores the - in the middle and executes normally
+	 * 5. wc -m -l -w file1 - : executes numbers for file1 and takes stdin
+	 */
 
 	/*
 	 * Few assumptions :
@@ -26,8 +34,18 @@ public class WCToolTest {
 	 * is given to the result of the filename input arguments. 
 	 * 2. No options in the arguments implies the results of all options are displayed
 	 * 3. For a command wc -m -w -l input1.txt, the output format is as follows : 
-	 *    "<input1.txt's absolute pathname> :  -m  8 -w  4 -l  3\n"
-	 * 4. If the arguments contain multiple options with -help as one of them, all other options are disregarded
+	 *    "<input1.txt's absolute pathname> :  -m  8  -w  4  -l  3\n" 
+	 * 4. For a command wc input1.txt, ie with no options the output format is as follows : 
+	 *    "<input1.txt's absolute pathname> :  -m  8 , -w  4 , -l  3\n"    
+	 * 5. For a command wc input1.txt, ie with no options the output format is as follows : 
+	 *    "<input1.txt's absolute pathname> :  -m  8 , -w  4 , -l  3\n"    
+	 * 6. If any file name is inocrrect the ouput format is as follows :
+	 * 	  "<input filename> :  : error - Invalid Input. \n"   
+	 * 7. If Stdin input is not null but blank th output format is as follows :
+	 * 	  "No standard input given."
+	 * 8. If it is valid stdin the output format is as follows :
+	 * 		"Stdin :  -m  8 , -w  4 , -l  3\n"
+	 * 5. If the arguments contain multiple options with -help as one of them, all other options are disregarded
 	 * 	  and helpOutput string is returned.
 	 */
 	

@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -21,7 +22,37 @@ import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
 import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 
 public class MOVEToolTest {
-
+	
+	/*
+	 * Implementation of Move
+	 * Possible Executions
+	 * 1. move file1 file2 - moves contents of file1 to file2. if file2 doesn't already exist, it gets created then moving happens
+	 * 2. move file dir - moves the file into the directory
+	 * 3. move dir1 dir2 - moves contents of one directory into the second
+	 * 4. move file1 file2 file3.. dir - moves all the valid files into dir. The invalid ones are not copied 
+	 */
+	
+	/*
+	 * Few Assumptions 
+	 * 1. The following combinations of arguments give a success message which is "Mov Completed."
+	 *    valid filename , valid filename
+	 *    valid filename , invalid filename (new file is created with the latter's name)
+	 *    valid filename , valid directory
+	 *    valid filename , invalid directory (new file is created with the latter's name)
+	 *    valid directory , valid directory (contents of former moved to latter)
+	 *    valid directory , invalid directory (new dir with latter's name is created and contents of former moved to latter)
+	 *    multiple valid filenames  valid directory (move all files into the dir)
+	 *    Other combinations of inputs lead to errors
+	 * 2. Output formats when there are 2 arguments
+	 *    Successful Copying : "Move Completed."
+	 *    Unsuccessful : "Error - Invalid input."
+	 * 3. Output formats when there are > 2 arguments ie copy file1,file2,..,fileN,dir  
+	 * 	  Successful Copying : <filename> + "'s move completed. \n" (for each file copied)
+	 *    Unsuccessful if filename is invalid : <filename> + " is invalid input.\n"
+	 *    Unsucessful if directory name is invalid : <dir name> + " is invalid input."
+	 *    
+	 * */
+	
 	private IMoveTool movetool;
 	private MOVETool move;
 	String actualOutput,expectedOutput="";
@@ -166,6 +197,9 @@ public String ifFileExists(File f)
 		return "no";
 }
 
+/*
+ * Test to check the behaviour of Move Tool when 2 valid file names are given as arguments in relative path names.
+*/
 @Test
 public void existingFileToExistingFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "file2.txt"} ;
@@ -187,6 +221,9 @@ public void existingFileToExistingFileArgumentTest(){
 	assertTrue(result.equalsIgnoreCase("no"));
 }
 
+/*
+ * Test to check the behaviour of Move Tool when 2 valid file names are given as arguments in absolute path names.
+*/
 @Test
 public void nonExistingFileToExistingFileArgumentTest(){
 	String[] arguments = new String[]{"fileNew.txt", "file1.txt"} ;
@@ -197,7 +234,11 @@ public void nonExistingFileToExistingFileArgumentTest(){
 	assertEquals(movetool.getStatusCode(), -1);
 }
 
-
+/*
+ * Test to check the behaviour of Move Tool when we have a valid filename and a valid directory name in the arguments. 
+ * The Move tool needs to move the file to that directory.
+ * If there is a file with the same name already in the directory, the older version gets replaced.
+*/
 @Test
 public void fileToDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folder1"} ;
@@ -218,6 +259,9 @@ public void fileToDirectoryFileArgumentTest(){
 
 }
 
+/*
+ * Test to check the behaviour of Move Tool when 2 valid file names are given as arguments in absolute path names.
+*/
 @Test
 public void existingFileToExistingFileAbsoluteArgumentTest(){
 	String[] arguments = new String[]{WorkingDirectory.workingDirectory + File.separator + "file1.txt", WorkingDirectory.workingDirectory + File.separator + "file2.txt"} ;
@@ -237,6 +281,10 @@ public void existingFileToExistingFileAbsoluteArgumentTest(){
 	assertTrue(result.equalsIgnoreCase("no"));
 }
 
+/*
+ * Test to check the behaviour of Move Tool when we have 1 valid and one invalid filename argument in that order. 
+ * The Move tool needs to create a file with the invalid file's name and move the contents of the first file into it. 
+*/
 @Test
 public void existingFileToNonExistingFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "fileNew.txt"} ;
@@ -246,6 +294,7 @@ public void existingFileToNonExistingFileArgumentTest(){
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Move completed.";
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertFalse(("Error - Invalid input.").equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);
 	
 	String contentFile1 = readFromFile(new File(arguments[1]));
@@ -259,6 +308,11 @@ public void existingFileToNonExistingFileArgumentTest(){
 	deletable.delete();
 }
 
+/*
+ * Test to check the behaviour of Move Tool when we have a valid filename and a valid directory name in the arguments. 
+ * The Move tool needs to move the file to that directory.
+ * If there is a file with the same name already in the directory, the older version gets replaced.
+*/
 @Test
 public void fileToDirectoryFileRelativeArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folder1" + File.separator + "insidefolder1"} ;
@@ -278,6 +332,11 @@ public void fileToDirectoryFileRelativeArgumentTest(){
 	assertTrue(result.equalsIgnoreCase("no"));
 }
 
+/*
+ * Test to check the behaviour of Move Tool when we have a valid asolute path filename and a valid directory name in the arguments. 
+ * The Move tool needs to move the file into that directory.
+ * If there is a file with the same name already in the directory, the older version gets replaced.
+*/
 @Test
 public void fileToDirectoryFileAbsoluteArgumentTest(){
 	String[] arguments = new String[]{WorkingDirectory.workingDirectory + File.separator + "file1.txt", WorkingDirectory.workingDirectory + File.separator + "folder1" + File.separator + "insidefolder1"} ;
@@ -297,7 +356,11 @@ public void fileToDirectoryFileAbsoluteArgumentTest(){
 	assertTrue(result.equalsIgnoreCase("no"));
 }
 
-
+/*
+ * Test to check the behaviour of Move Tool when we have a valid filename and a invalid directory name in the arguments. 
+ * The Move tool must create a file with the same name in the working directory(This is how the terminal behves).
+ * The Move tool needs to move contents of the first file to the second.
+*/
 @Test
 public void fileToNonExistentDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "folderIdontexisthaha"} ;
@@ -307,6 +370,7 @@ public void fileToNonExistentDirectoryFileArgumentTest(){
 	actualOutput = movetool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Move completed.";
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertFalse(("folderIdontexisthaha is an invalid directory.").equalsIgnoreCase(actualOutput));
 	assertEquals(movetool.getStatusCode(), 0);	
 
 	//check if file1.txt has been removed
@@ -317,6 +381,10 @@ public void fileToNonExistentDirectoryFileArgumentTest(){
 	deletable.delete();
 }
 
+/*
+ * Test to check the behaviour of Move Tool when we have 2 valid directory names in the arguments. 
+ * The Move tool must move the contents of first directory to the second.
+*/
 @Test
 public void directoryToDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"folder1", "folder2"} ;
@@ -336,6 +404,10 @@ public void directoryToDirectoryFileArgumentTest(){
 	assertTrue(result.equalsIgnoreCase("no"));
 }
 
+/*
+ * Test to check the behaviour of Move Tool when we have 2 directory names one invalid and one valid in the arguments. 
+ * The Move tool must return an error message.
+*/
 @Test
 public void invalidDirectoryToDirectoryFileArgumentTest(){
 	String[] arguments = new String[]{"folderIdontexisthahaha", "folder2"} ;
@@ -346,6 +418,11 @@ public void invalidDirectoryToDirectoryFileArgumentTest(){
 	assertEquals(movetool.getStatusCode(), -1);	
 }
 
+/*
+ * Test to check the behaviour of Move Tool when we have several filenames followed by a directory name in 
+ * the arguments. 
+ * The Move tool must move the files to the directory.
+*/
 @Test
 public void multipleFilesToDirectoryArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "file2.txt","folder1"} ;
@@ -371,6 +448,11 @@ public void multipleFilesToDirectoryArgumentTest(){
 	assertTrue(result.equalsIgnoreCase("no"));
 }
 
+/*
+ * Test to check the behaviour of Move Tool when we have several filenames(one of which is invalid) 
+ * followed by a directory name in the arguments. 
+ * The Move tool must move the valid files to the directory and return an error message for the invalid file.
+*/
 @Test
 public void multipleFilesOneInvalidToDirectoryArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "fileIdontexisthaha.txt","folder1"} ;
@@ -393,7 +475,11 @@ public void multipleFilesOneInvalidToDirectoryArgumentTest(){
 		
 }
 
-
+/*
+ * Test to check the behaviour of Move Tool when we have several filenames 
+ * followed by a invalid directory name in the arguments. 
+ * The Move tool must return an error message.
+*/
 @Test
 public void multipleFilesToInvalidDirectoryArgumentTest(){
 	String[] arguments = new String[]{"file1.txt", "file2.txt","folderIdontexisthaha"} ;

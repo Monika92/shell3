@@ -22,6 +22,23 @@ import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 
 public class CDToolTest {
 	
+	/*
+	 * The way Cd works :
+	 * Possible Executions
+	 *1. cd (no arguments) - changes working dir to your home directory
+	 *2. cd . - keeps your working directory the same
+	 *3. cd .. - working directory goes one folder up.
+	 *4. cd Directory - Directory can be relatibe or absolute. If its a valid directory path, working dir is changed to that. If invalid, no change.
+	 */
+	/*
+	 * Few Assumptions :
+	 * 1. This is what the output looks like when the working directory has been changed successfully :
+	 * "Changed current working directory to "+<absolute path of new working dir folder>
+	 * 2. In case the input is incorrected, this is the error message :
+	 * <file argument entered> + " is not a valid directory. The working directory has not changed."
+	 * 
+	 * */
+	
 	private ICdTool cdtool;
 	private CDTool cd;
 	String actualOutput,expectedOutput;
@@ -52,7 +69,9 @@ public void after(){
 		
 }
 
-
+/*
+ * Test to check the behaviour of chnageDirectory() function
+ * */
 @Test
 public void changeDirectoryTest()
 {
@@ -60,6 +79,10 @@ public void changeDirectoryTest()
 	cdtool = new CDTool(arguments);
 	assertNull(cdtool.changeDirectory("new directory"));
 }
+
+/*
+ * Test to chcck behaviour of CD Tool with empty argument list.
+ * */
 @Test
 public void cdNoArgumentTest(){
 	String[] arguments = new String[]{} ;
@@ -70,6 +93,9 @@ public void cdNoArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), 0);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with file name as an argument.
+ * */
 @Test
 public void cdFileArgumentTest(){
 	String[] arguments = new String[]{"Test_Output.txt"} ;
@@ -80,6 +106,10 @@ public void cdFileArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), -1);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with ~ argument.
+ * Cd ~ has to change working directory to home directory.
+ * */
 @Test
 public void cdTildeArgumentTest(){
 	String[] arguments = new String[]{"~"} ;
@@ -88,8 +118,17 @@ public void cdTildeArgumentTest(){
 	expectedOutput = "Changed current working directory to " + (System.getProperty("user.home"));
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), 0);
+	
+	String incorrectOutput = "~ is not a valid directory. The working directory has not changed.";
+	assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
+	assertNotEquals(cdtool.getStatusCode(), -1);
+	
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with "~   " argument.
+ * Cd ~ has to change working directory to home directory after trimming the argument.
+ * */
 @Test
 public void cdTildeSpaceArgumentTest(){
 	String[] arguments = new String[]{"~   "} ;
@@ -100,6 +139,10 @@ public void cdTildeSpaceArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), 0);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with . argument.
+ * Cd . has to keep  the working directory as it is.
+ * */
 @Test
 public void cdDotArgumentTest(){
 	String[] arguments = new String[]{"."} ;
@@ -110,6 +153,10 @@ public void cdDotArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), 0);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with "   ." argument.
+ * Cd . has to keep  the working directory as it is after trimming the argument.
+ * */
 @Test
 public void cdDotSpaceArgumentTest(){
 	String[] arguments = new String[]{"  ."} ;
@@ -120,6 +167,10 @@ public void cdDotSpaceArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), 0);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with ".." argument.
+ * Cd . has to make  the working directory go one folder up.
+ * */
 @Test
 public void cdDotDotArgumentTest(){
 	String[] arguments = new String[]{".."} ;
@@ -130,6 +181,10 @@ public void cdDotDotArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), 0);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with " .. " argument.
+ * Cd . has to make  the working directory go one folder up after trimming the input.
+ * */
 @Test
 public void cdDotDotSpaceArgumentTest(){
 	String[] arguments = new String[]{" .. "} ;
@@ -140,6 +195,10 @@ public void cdDotDotSpaceArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), 0);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with "...." argument.
+ * Cd .... is invalid input. The OS creates a new folder .... by default but we need to avoid that.
+ * */
 @Test
 public void cdFourDotsArgumentTest(){
 	String[] arguments = new String[]{"...."} ;
@@ -148,8 +207,16 @@ public void cdFourDotsArgumentTest(){
 	expectedOutput = ".... is not a valid directory. The working directory has not changed.";
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	assertEquals(cdtool.getStatusCode(), -1);
+	
+	String incorrectOutput = "Changed current working directory to " + WorkingDirectory.workingDirectory;
+	assertFalse(incorrectOutput.equalsIgnoreCase(actualOutput));
+	assertNotEquals(cdtool.getStatusCode(), 0);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with invalid folder name as argument.
+ * Cd Tool has to return error message.
+ * */
 @Test
 public void cdWrongArgumentTest(){
 	String[] arguments = new String[]{"blahblah"} ; //assuming a folder called blahblah doesn't exist in your working directory
@@ -160,6 +227,10 @@ public void cdWrongArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), -1);
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with valid folder name as argument with a relative pathname.
+ * Cd Tool has to make that folder the working directory.
+ * */
 @Test
 public void cdValidDirectoryArgumentTest(){
 	if(argFolder.exists())
@@ -173,6 +244,10 @@ public void cdValidDirectoryArgumentTest(){
 	}
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with valid folder name as argument with an absolute pathname.
+ * Cd Tool has to make that folder the working directory.
+ * */
 @Test
 public void cdValidAbsoluteDirectoryArgumentTest(){
 	if(argFolder.exists())
@@ -186,6 +261,10 @@ public void cdValidAbsoluteDirectoryArgumentTest(){
 	}
 }
 
+/*
+ * Test to chcck behaviour of CD Tool with invalid folder name as argument.
+ * Cd Tool has to return error message.
+ * */
 @Test
 public void cdInvalidDirectoryArgumentTest(){
 	String[] arguments = new String[]{"argumentFolder123z"} ; //assuming a folder called argumentFolder123z doesn't exist in your working directory
@@ -196,6 +275,10 @@ public void cdInvalidDirectoryArgumentTest(){
 	assertEquals(cdtool.getStatusCode(), -1);
 }
 
+/*
+ * Test to check the behaviour of getDirectoryPath function. It check whether th folder given in its
+ * parameter list is absolute or relative and return the absolute path of the folder parameter.
+ * */
 @Test
 public void cdGetDirectoryPathFunctionTest(){
 	String[] arguments = new String[]{};
