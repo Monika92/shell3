@@ -1,6 +1,9 @@
 package sg.edu.nus.comp.cs4218.impl.extended2;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -32,6 +35,46 @@ public class WCTool extends ATool implements IWcTool{
 		command = "wc";
 	}
 
+	/*
+	 * Reads the lines in the file passed as argument and returns the information as a string
+	 */
+		public String readFromFile(File toRead){
+			FileReader fr;
+			String output = "";
+			
+			try{
+				fr = new FileReader(toRead);
+			} catch(FileNotFoundException e){
+				e.printStackTrace();
+				//System.out.println("File not found");
+				return "File not found";
+			}
+			BufferedReader br = new BufferedReader(fr);
+			try{
+				String line = br.readLine();
+				while(line != null){
+					//System.out.println(line);
+					if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
+						output+="\n";
+					else
+						output += line + "\n";
+					line = br.readLine();
+				}
+			} catch(IOException e){
+				e.printStackTrace();
+				//System.out.println("Unable to read file");
+				return "Unable to read file";
+			} finally{
+				try {
+					br.close();
+					fr.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return output;
+		}
 	/*
 	 * Find number of characters in a string
 	 */
@@ -76,7 +119,7 @@ public class WCTool extends ATool implements IWcTool{
 	/*
 	 * reading contents of the string
 	 */
-	static String readFile(String path, Charset encoding)
+	/*static String readFile(String path, Charset encoding)
 	{
 		//"The character count of " + input + " is " + 
 		byte[] encoded = null;
@@ -88,7 +131,7 @@ public class WCTool extends ATool implements IWcTool{
 	    }
 	    return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	
-	}
+	}*/
 		
 	/*
 	 * Implementation of wc
@@ -179,7 +222,8 @@ public class WCTool extends ATool implements IWcTool{
 				File filePath = new File(getFilePath(fileList.get(i) , workingDir));
 				if(filePath.isFile())
 				{
-					outputString += implementWC(filePath.getAbsolutePath(),readFile(filePath.getAbsolutePath(), StandardCharsets.UTF_8),options);
+					//outputString += implementWC(filePath.getAbsolutePath(),readFile(filePath.getAbsolutePath(), StandardCharsets.UTF_8),options);
+					outputString += implementWC(filePath.getAbsolutePath(),readFromFile(new File(filePath.toString())),options);
 				}
 				else
 				{
