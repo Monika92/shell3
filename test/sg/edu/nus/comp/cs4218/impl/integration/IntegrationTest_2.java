@@ -96,7 +96,7 @@ public class IntegrationTest_2 {
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		expectedOutput = "Melon\r\nOrange\r\na.txt:Apple";
+		expectedOutput = "Melon\nOrange\na.txt:Apple";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
@@ -152,7 +152,7 @@ public class IntegrationTest_2 {
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, "");
-		expectedOutput = "Apple\r\nMelon\r\nOrange";
+		expectedOutput = "Apple\nMelon\nOrange";
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 		assertTrue(pipingTool.getStatusCode() == 0);
 	}

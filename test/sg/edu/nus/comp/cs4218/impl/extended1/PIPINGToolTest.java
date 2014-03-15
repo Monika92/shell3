@@ -165,11 +165,9 @@ public class PIPINGToolTest {
 		ICatTool leftTool = new CATTool(leftToolArgs);
 		IGrepTool rightTool = new GREPTool(rightToolArgs);
 		String pipeResult = pipingTool.pipe(leftTool, rightTool);
-		String expected = "Standard input: \nBismillah, no! We will not let you go."
-				+ "\nBismillah, no! We will not let you go."
-				+ "\ntextFiles/bohemian.txt:"
-				+ "\nBismillah, no! We will not let you go."
-				+ "\nBismillah, no! We will not let you go.\n";
+		String expected = "Bismillah, no! We will not let you go.\nBismillah, no!"
+				+ " We will not let you go.\ntextFiles/bohemian.txt:Bismillah, no! "
+				+ "We will not let you go.\nBismillah, no! We will not let you go.\n";
 		System.out.println("\nOP:\n" + pipeResult);
 		assertTrue(expected.equals(pipeResult));
 	}
