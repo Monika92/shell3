@@ -337,7 +337,7 @@ public class PIPINGToolTest {
 		IEchoTool echoTool = new ECHOTool(leftToolArgs);
 		IWcTool wcTool = new WCTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(echoTool, wcTool);
-		expectedOutput = workingDir + "\\a.txt : -m  16 , -w  3 , -l 3" + "\n" 
+		expectedOutput = workingDir + File.separator + "a.txt : -m  16 , -w  3 , -l 3" + "\n" 
 		+  "Stdin : -m  0 , -w  0 , -l 0\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pipingTool.getStatusCode(), 0);
