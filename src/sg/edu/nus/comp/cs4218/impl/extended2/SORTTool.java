@@ -251,7 +251,7 @@ public class SORTTool extends ATool implements ISortTool{
 				}
 			}
 
-
+			output = output.replace("\r", "");
 			return output.trim();
 		}
 		catch(Exception e)
