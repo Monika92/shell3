@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -22,6 +23,29 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.LSTool;
 import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 
 public class LSToolTest {
+	
+	/* 
+	 * Implementation of Ls
+	 * Possible Executions
+	 * 1. Ls ie no arguments : just displays all files and folders in present workingdir
+	 * 2. Ls Directory : Directory could be absolute or relative. Displays the files and folders inside it
+	 * 3. Ls file : File could be absolute or replative. Displays whether the file exits or not
+	 * 4. ls *.txt : or any other extension. Displays list of .txt (or any other file extension) files in current working dir.
+	 */
+	
+	/*
+	 * Few Assumptions :
+	 * The output format when
+	 * 1. The folder in the argument list is empty :
+	 *    "The folder is empty"
+	 * 2. The filename in the argument list exists :
+	 *    "File Exists"
+	 * 3. When files of a particular filetype in the argument list do not exist :
+	 *    "No files of type ." + <fileType>
+	 * 4. When we have files/folders in the folder listed in the argument list :
+	 *    <filename1> <filename2> <folder1> <filename3>...(and so on)   
+	 * */
+	
 	
 	private ILsTool lstool;
 	private LSTool ls;
@@ -111,6 +135,10 @@ public void after(){
 		argFolderEmpty.delete();
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with no arguments.
+ * It needs to return the list of files and folders within the working dir.
+ * */
 @Test
 public void lsNoArgumentTest(){
 	String[] arguments = new String[]{} ;
@@ -123,6 +151,10 @@ public void lsNoArgumentTest(){
 	assertEquals(lstool.getStatusCode(), 0);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with valid relative pathname folder as argument.
+ * It needs to return the list of files and folders within the folder.
+ * */
 @Test
 public void lsRelativeDirectoryArgumentTest(){
 	String[] arguments = new String[]{"argumentFolder1"} ;
@@ -133,6 +165,10 @@ public void lsRelativeDirectoryArgumentTest(){
 	assertEquals(lstool.getStatusCode(), 0);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with valid absolute pathname folder as argument.
+ * It needs to return the list of files and folders within the folder.
+ * */
 @Test
 public void lsAbsoluteDirectoryArgumentTest(){
 	String[] arguments = new String[]{WorkingDirectory.workingDirectory + File.separator +"argumentFolder1"} ;
@@ -143,6 +179,10 @@ public void lsAbsoluteDirectoryArgumentTest(){
 	assertEquals(lstool.getStatusCode(), 0);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with valid folder as argument.
+ * It needs to return the list of files and folders within the folder.
+ * */
 @Test
 public void lsEmptyDirectoryArgumentTest(){
 	String[] arguments = new String[]{"argumentFolderEmpty"} ;
@@ -150,9 +190,14 @@ public void lsEmptyDirectoryArgumentTest(){
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "The folder is empty";
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertFalse(("Invalid input").equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with invalid folder as argument.
+ * It needs to return the list of files and folders within the folder.
+ * */
 @Test
 public void lsInvalidDirectoryArgumentTest(){
 	String[] arguments = new String[]{"argumentFolderIDontExist"} ;
@@ -163,6 +208,10 @@ public void lsInvalidDirectoryArgumentTest(){
 	assertEquals(lstool.getStatusCode(), -1);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with valid file path as argument.
+ * It needs to return a message stating that the file exists.
+ * */
 @Test
 public void lsValidFileArgumentTest(){
 	String[] arguments = new String[]{"argumentFolder1"+File.separator+"Test_Output.txt"} ;
@@ -170,9 +219,14 @@ public void lsValidFileArgumentTest(){
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "File Exists";
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertFalse(("Invalid input").equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), 0);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with valid file path as argument.
+ * It needs to return a message stating that the file doesn't exist.
+ * */
 @Test
 public void lsInvalidFileArgumentTest(){
 	String[] arguments = new String[]{"argumentFolder1"+File.separator+"Test_Output_IDontExist.txt"} ;
@@ -180,9 +234,14 @@ public void lsInvalidFileArgumentTest(){
 	actualOutput = lstool.execute(WorkingDirectory.workingDirectory, stdin);
 	expectedOutput = "Invalid. Doesn't exist";
 	assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+	assertFalse(("File Exists").equalsIgnoreCase(actualOutput));
 	assertEquals(lstool.getStatusCode(), -1);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with valid file type as argument.
+ * It needs to return all files of that file type in the working dir.
+ * */
 @Test
 public void lsValidFiletypeArgumentTest(){
 	String[] arguments = new String[]{"argumentFolder1"+File.separator+"*.txt"} ;
@@ -193,6 +252,9 @@ public void lsValidFiletypeArgumentTest(){
 	assertEquals(lstool.getStatusCode(), 0);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with invalid argument.
+ * */
 @Test
 public void lsStarArgumentTest(){
 	String[] arguments = new String[]{"*"} ;
@@ -203,6 +265,10 @@ public void lsStarArgumentTest(){
 	assertEquals(lstool.getStatusCode(), -1);
 }
 
+/*
+ * Test to check the behaviour of Ls Tool with invalid file type as argument.
+ * It needs to return an appropriate error message.
+ * */
 @Test
 public void lsNonExistentFiletypeArgumentTest(){
 	String[] arguments = new String[]{"argumentFolder1"+File.separator+"*.txz"} ;
