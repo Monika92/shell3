@@ -95,6 +95,11 @@ public class COPYTool extends ATool implements ICopyTool{
 		{
 			File arg0 = new File(args[0]);
 			File arg1 = new File(args[1]);
+			if(!arg0.isAbsolute()) 
+			{arg0 = new File(workingDir.toString()+File.separator+args[0]);}
+			if(!arg1.isAbsolute()) 
+			{arg1 = new File(workingDir.toString()+File.separator+args[1]);}
+			
 			
 			if((arg0.isFile()) && (arg1.isDirectory()==true))
 			{
@@ -151,6 +156,9 @@ public class COPYTool extends ATool implements ICopyTool{
 				for(int i=0; i<(numArgs-1); i++)
 				{
 					File argI = new File(args[i]);
+					if(!argI.isAbsolute()) 
+					{argI = new File(workingDir.toString()+File.separator+args[i]);}
+					
 					
 					if(argI.isFile())
 					{				
