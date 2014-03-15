@@ -382,7 +382,7 @@ public class PASTEToolTest {
 	/*
 	 * case where numDelim < n - 1 and many files
 	 */
-	public void pasteUseDelimiterManyFilesTest2_1(){
+	public void pasteUseDelimiterManyFilesNoOfDelimLessThanMaximumTest(){
 		String[] arguments = new String[]{"a.txt","b.txt","c.txt","d.txt"};
 		pasteTool = new PASTETool(arguments);
 		actualOutput = pasteTool.pasteUseDelimiter(":&", arguments);

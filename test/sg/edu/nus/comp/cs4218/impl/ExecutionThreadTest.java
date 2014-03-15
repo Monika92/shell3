@@ -13,13 +13,13 @@ public class ExecutionThreadTest {
 	File file;
 	
 	@Before
-	public void Before()
+	public void before()
 	{
 		executionThread = new ExecutionThread(new ECHOTool(new String[]{"hello"}), null, new String[]{"hello"}) ;
 	}
 	
 	@After
-	public void After()
+	public void after()
 	{
 		
 	}
