@@ -33,6 +33,10 @@ public class ECHOToolTest {
 		echotool = null;
 	}
     
+    /*
+     * Basic test case for echo
+     * Command: echo string_input
+     */
     @Test
     public void echoBasicTest(){
     	String[] arguments = new String[]{"This is a test run."} ;
@@ -43,6 +47,10 @@ public class ECHOToolTest {
 		assertEquals(echotool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case for echo with empty input
+     * Command: echo 
+     */
     @Test
     public void echoEmptyStringTest(){
     	String[] arguments = new String[]{""} ;
@@ -53,6 +61,10 @@ public class ECHOToolTest {
 		assertEquals(echotool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case for echo to check removal of quotes from input
+     * Command: echo "This is \n\"a test' \nr\"un."
+     */
     @Test
     public void echoQuotesTest(){
     	String[] arguments = new String[]{"This is \n\"a test' \nr\"un."} ;
@@ -63,6 +75,10 @@ public class ECHOToolTest {
 		assertEquals(echotool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case 1 for echo with special characters in input string
+     * Command; echo "This is \n$a te:*()/\\;s[]\t \nrun."
+     */
     @Test
     public void echoSpecialChars1Test(){
     	String[] arguments = new String[]{"This is \n$a te:*()/\\;s[]\t \nrun."} ;
@@ -73,6 +89,10 @@ public class ECHOToolTest {
 		assertEquals(echotool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case 2 for echo with special characters in input string
+     * Command; echo "This is \na t%#@~`'^\"&est \nrun."
+     */
     @Test
     public void echoSpecialChars2Test(){
     	String[] arguments = new String[]{"This is \na t%#@~`'^\"&est \nrun."} ;
@@ -83,6 +103,10 @@ public class ECHOToolTest {
 		assertEquals(echotool.getStatusCode(), 0);
     }
     
+    /*
+     * Null test case for echo interface method
+     * Constructor for echotool initialised with null arguments
+     */
     @Test
     public void echoNullTest(){
     	String[] arguments = null ;
@@ -91,6 +115,10 @@ public class ECHOToolTest {
 		assertTrue(echotool.getStatusCode() != 0);
     }
     
+    /*
+     * Null test case for execute interface method
+     * Constructor for echotool initialised with null arguments as well as workingDir and stdin
+     */
     @Test
     public void echoExecuteNullTest(){
     	String[] arguments = null ;

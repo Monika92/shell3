@@ -136,6 +136,10 @@ public class UNIQToolTest {
 		return output;
 	}
 
+	/*
+	 * Basic test for interface method getUnique() with single file
+	 * Command: uniq filename
+	 */
 	@Test
 	public void uniqSingleFileGetUniqTest(){
 		String[] arguments = new String[]{} ;
@@ -146,6 +150,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Basic test for interface method execute with single file
+	 * Command: uniq filename
+	 */
 	@Test 
 	public void uniqSingleFileExecuteTest(){
 		String[] arguments = new String[]{"Test_Output.txt"} ;
@@ -156,6 +164,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test for interface method execute with multiple files
+	 * Command: uniq filename1 filename2 filename3
+	 */
 	@Test 
 	public void uniqMultipleFileExecuteTest(){
 		String[] arguments = new String[]{"Test_Output.txt", "Test_Output_2.txt", "Test_Output_3.txt"} ;
@@ -166,6 +178,11 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Negative test for interface method execute
+	 * Command: uniq filename
+	 * Error: Non-existent file
+	 */
 	@Test 
 	public void uniqInvalidFileExecuteTest(){
 		String[] arguments = new String[]{"Invalid.txt"} ;
@@ -176,6 +193,11 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), -1);
 	}
 
+	/*
+	 * Positive + Negative test case for interface method execute with multiple files
+	 * Command: uniq filename1 filename2
+	 * Error: filename1 is invalid 
+	 */
 	@Test 
 	public void uniqInvalidValidFileExecuteTest(){
 		String[] arguments = new String[]{"Invalid.txt", "Test_Output.txt"} ;
@@ -186,6 +208,11 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), -1);
 	}
 
+	/*
+	 * Positive + Negative test case for interface method execute with multiple files
+	 * Command: uniq filename1 filename2
+	 * Error: filename2 is invalid 
+	 */
 	@Test 
 	public void uniqValidInvalidFileExecuteTest(){
 		String[] arguments = new String[]{"Test_Output.txt", "Invalid.txt"} ;
@@ -196,6 +223,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), -1);
 	}
 
+	/*
+	 * Test case for getUnique() with -i option
+	 * Command: uniq -i filename
+	 */
 	@Test
 	public void uniqMinusIGetUniqTest(){
 		String[] arguments = new String[]{"-i", "Test_Output_4.txt"} ;
@@ -206,6 +237,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case for execute() with -i option
+	 * Command: uniq -i filename
+	 */
 	@Test
 	public void uniqMinusIExecuteTest(){
 		String[] arguments = new String[]{"-i", "Test_Output_4.txt"} ;
@@ -216,6 +251,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case for getUnique() with -f option
+	 * Command: uniq -f 1 filename
+	 */
 	@Test
 	public void uniqMinusFGetUniqTest(){
 		String[] arguments = new String[]{"-f", "1", "Test_Output_4.txt"} ;
@@ -226,6 +265,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case for execute() with -f option
+	 * Command: uniq -f 1 filename
+	 */
 	@Test
 	public void uniqMinusFExecuteTest(){
 		String[] arguments = new String[]{"-f", "1", "Test_Output_4.txt"} ;
@@ -236,6 +279,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case for getUnique() with -i and -f options
+	 * Command: uniq -i -f 1 filename
+	 */
 	@Test
 	public void uniqMinusIMinusFExecuteTest(){
 		String[] arguments = new String[]{"-i", "-f", "1", "Test_Output_4.txt"} ;
@@ -246,6 +293,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case for execute() with -f and -i options
+	 * Command: uniq -f 1 -i filename
+	 */
 	@Test
 	public void uniqMinusFMinusIExecuteTest(){
 		String[] arguments = new String[]{"-f", "1", "-i", "Test_Output_4.txt"} ;
@@ -256,6 +307,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case for execute() with multiple -f options and multiple filenames
+	 * Command: uniq -f 0 -f 1 -f 2 filename1 filename2
+	 */
 	@Test
 	public void uniqMultipleMinusFMultipleFileExecuteTest(){
 		String[] arguments = new String[]{"-f", "0", "-f", "1", "-f", "2", "Test_Output.txt", "Test_Output_2.txt"} ;// 
@@ -266,6 +321,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case for execute() with multiple -i options and multiple filenames
+	 * Command: uniq -i -i filename1 filename2
+	 */
 	@Test
 	public void uniqMultipleMinusIMultipleFileExecuteTest(){
 		String[] arguments = new String[]{"-i", "-i", "Test_Output.txt", "Test_Output_2.txt"} ;// 
@@ -276,6 +335,10 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Test case to test getHelp() interface method
+	 * Command: uniq -i -f 1 -help filename1 filename2
+	 */
 	@Test
 	public void uniqHelpExecuteTest(){
 		String[] arguments = new String[]{"-i", "-f", "1", "-help", "Test_Output.txt", "Test_Output_2.txt"} ;// 
@@ -285,6 +348,11 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Negative test case for -f option
+	 * Command: uniq -f abc filename
+	 * Error: string argument for -f
+	 */
 	@Test
 	public void uniqMinusFStringArgExecuteTest(){
 		String[] arguments = new String[]{"-f", "abc", "Test_Output_4.txt"} ;
@@ -295,6 +363,11 @@ public class UNIQToolTest {
 		assertTrue(uniqtool.getStatusCode() != 0);
 	}
 
+	/*
+	 * Positive + Negative test case for -f option
+	 * Command:  uniq -f 0 -f 1.55 filename
+	 * Error: the second -f option is a decimal
+	 */
 	@Test
 	public void uniqMinusFDecimalArgExecuteTest(){
 		String[] arguments = new String[]{"-f", "0", "-f", "1.55", "Test_Output.txt"} ;
@@ -305,16 +378,24 @@ public class UNIQToolTest {
 		assertTrue(uniqtool.getStatusCode() != 0);
 	}
 
+	/*
+	 * Negative test case for -f option
+	 * Command: uniq -f -1 filename
+	 * Erro: negative integer argument for -f
+	 */
 	@Test
 	public void uniqMinusFNegArgExecuteTest(){
 		String[] arguments = new String[]{"-f", "-1", "Test_Output.txt"} ;
 		uniqtool = new UNIQTool(arguments);
 		actualOutput = uniqtool.execute(workingDirectory, stdin);
-		//expectedOutput = "Invalid argument for -f";
-		//assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertTrue(uniqtool.getStatusCode() != 0);
 	}
 
+	/*
+	 * Negative test case for -f option
+	 * Command: uniq -f MAX_INT filename
+	 * Error: Too large an integer argument for -f
+	 */
 	@Test
 	public void uniqMinusFMaxIntArgExecuteTest(){
 		String[] arguments = new String[]{"-f", ""+(Integer.MAX_VALUE+1), "Test_Output.txt"} ;
@@ -325,6 +406,12 @@ public class UNIQToolTest {
 		assertTrue(uniqtool.getStatusCode() != 0);
 	}
 
+	/*
+	 * Test case for stdin containing escape sequence \n with uniq
+	 * Command: uniq -
+	 * Stdin: "a\na\na\nb\nb\nc"
+	 * Expected behaviour: Treat each \n as newline and apply uniq to the sequence of lines
+	 */
 	@Test
 	public void uniqStdinWithNewlineExecuteTest(){
 		String[] arguments = new String[]{"-"} ;
@@ -336,6 +423,11 @@ public class UNIQToolTest {
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Null test case for getUnique()
+	 * Command: uniq
+	 * Constructor initialised with null arguments as well as workingDir and stdin
+	 */
 	@Test
 	public void uniqGetUniqNullTest(){
 		String[] arguments = null;
@@ -344,6 +436,11 @@ public class UNIQToolTest {
 		assertTrue(uniqtool.getStatusCode() != 0);
 	}
 
+	/*
+	 * Null test case for getUniqueSkipNum
+	 * Command: uniq 
+	 * Constructor initialised with null arguments as well as input
+	 */
 	@Test
 	public void uniqGetUniqSkipNumNullTest(){
 		String[] arguments = null;
@@ -352,6 +449,11 @@ public class UNIQToolTest {
 		assertTrue(uniqtool.getStatusCode() != 0);
 	}
 
+	/*
+	 * Null test case for execute()
+	 * Command: uniq
+	 * Constructor initialised with null arguments as well as workingDir and stdin
+	 */
 	@Test
 	public void uniqExecuteNullTest(){
 		String[] arguments = null;

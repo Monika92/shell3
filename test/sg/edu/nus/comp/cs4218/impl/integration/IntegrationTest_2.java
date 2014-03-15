@@ -86,7 +86,10 @@ public class IntegrationTest_2 {
 
 	}
 	
-	
+	/*
+	 * Positive Complex Scenario: 1
+	 * Command: grep (Appl|Mel|Ora) a.txt | sort | echo
+	 */
 	@Test
 	public void testPipeExecuteGrepSortEcho() {
 		String[] args1 = {"grep","(App|Mel|Ora)", "a.txt", "|", "sort", "|", "echo"};
@@ -97,6 +100,10 @@ public class IntegrationTest_2 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
+	/*
+	 * Positive Complex Scenario: 2
+	 * Command: wc a.txt | cat a.txt b.txt | echo
+	 */
 	@Test
 	public void testPipeExecuteWcCatEcho() {
 		String[] args1 = {"wc", "a.txt", "|", "cat", "a.txt", "b.txt", "|", "echo"};
@@ -107,6 +114,10 @@ public class IntegrationTest_2 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
+	/*
+	 * Positive Complex Scenario: 3
+	 * Command: echo a.txt | cat | cat
+	 */
 	@Test
 	public void testPipeExecuteEchoCatCat() {
 		String[] args1 = {"echo", "a.txt", "|", "cat", "|", "cat"};
@@ -117,6 +128,10 @@ public class IntegrationTest_2 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
+	/*
+	 * Positive Complex Scenario: 4
+	 * Command: comm a.txt b.txt | cut -c 1-3 | paste
+	 */
 	@Test
 	public void testPipeExecuteCommCutPaste() {
 		String[] args1 = {"comm", "a.txt", "b.txt", "|", "cut", "-c", "1-3", "|", "paste"};
@@ -127,6 +142,10 @@ public class IntegrationTest_2 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 
+	/*
+	 * Positive Complex Scenario: 5
+	 * Command: uniq a.txt - | cat | sort
+	 */
 	@Test
 	public void testFnHyphenPipeExecuteUniqCatSort() {
 		String[] args1 = {"uniq", "a.txt", "-", "|", "cat", "|", "sort"};
@@ -138,6 +157,10 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 	
+	/*
+	 * Positive Complex Scenario: 6
+	 * Command: paste - a.txt - | uniq | echo
+	 */
 	@Test
 	public void testHyphenFnHyphenPipeExecutePasteUniqEcho() {
 		String[] args1 = {"paste", "-", "a.txt", "-", "|", "uniq", "|", "echo"};
@@ -149,6 +172,10 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 	
+	/*
+	 * Positive Complex Scenario: 7
+	 * Command: comm c.txt d.txt | cat a.txt - b.txt | cut -c 1-3
+	 */
 	@Test
 	public void testFnHyphenFnPipeExecuteCatCommCut() {
 		String[] args1 = {"comm", "c.txt", "d.txt", "|", "cat", "a.txt", "-", "b.txt", "|", "cut", "-c", "1-3"};
@@ -161,35 +188,9 @@ public class IntegrationTest_2 {
 	}
 	
 	/*
-	 * Negative complex scenarios
+	 * Positive Complex Scenario: 8
+	 * Command: cut -c 1-5 - | wc | cat
 	 */
-	@Test
-	public void testInsuffArgsErrPipeExecuteCutCommEcho() {
-		String[] args1 = {"cut", "-c", "1-5", "a.txt", "|", "comm", "|", "echo"};
-		String[] args2 = {};
-		pipingTool = new PIPINGTool(args1, args2);
-		actualOutput = pipingTool.execute(workingDir, "");
-		assertTrue(pipingTool.getStatusCode() != 0);
-	}
-	
-	@Test
-	public void testInsuffArgsErrPipeExecuteCommCutEcho() {
-		String[] args1 = {"comm", "a.txt", "|", "cut", "-c", "1-5", "|", "echo"};
-		String[] args2 = {};
-		pipingTool = new PIPINGTool(args1, args2);
-		actualOutput = pipingTool.execute(workingDir, "");
-		assertTrue(pipingTool.getStatusCode() != 0);
-	}
-
-	@Test
-	public void testNoArgsErrPipeExecuteCatSortUniq() {
-		String[] args1 = {"cat", "|", "sort", "a.txt", "|", "uniq"};
-		String[] args2 = {};
-		pipingTool = new PIPINGTool(args1, args2);
-		actualOutput = pipingTool.execute(workingDir, "");
-		assertTrue(pipingTool.getStatusCode() != 0);
-	}
-	
 	@Test
 	public void testHypenErrPipeExecuteCutWcCat() {
 		String[] args1 = {"cut", "-c", "1-5", "-", "|", "wc", "|", "cat"};
@@ -201,6 +202,53 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() == 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 1
+	 * Command: cut -c 1-5 a.txt | comm | echo
+	 * Error: No args for comm
+	 */
+	@Test
+	public void testInsuffArgsErrPipeExecuteCutCommEcho() {
+		String[] args1 = {"cut", "-c", "1-5", "a.txt", "|", "comm", "|", "echo"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		assertTrue(pipingTool.getStatusCode() != 0);
+	}
+	
+	/*
+	 * Negative Complex Scenario: 2
+	 * Command: comm a.txt } cut -c 1-5 | echo
+	 * Error: Insufficient args for comm
+	 */
+	@Test
+	public void testInsuffArgsErrPipeExecuteCommCutEcho() {
+		String[] args1 = {"comm", "a.txt", "|", "cut", "-c", "1-5", "|", "echo"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		assertTrue(pipingTool.getStatusCode() != 0);
+	}
+
+	/*
+	 * Negative Complex Scenario: 3
+	 * Command: cat | sot a.txt | uniq
+	 * Error: No args for cat even though subsequent small programs are correct
+	 */
+	@Test
+	public void testNoArgsErrPipeExecuteCatSortUniq() {
+		String[] args1 = {"cat", "|", "sort", "a.txt", "|", "uniq"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		assertTrue(pipingTool.getStatusCode() != 0);
+	}
+	
+	/*
+	 * Negative Complex Scenario: 4
+	 * Command: cut a.txt -c 1-2 | cat | paste
+	 * Error: Options are before arguments for cut
+	 */
 	@Test
 	public void testFnBeforeOptionsErrPipeExecuteCutCatPaste() {
 		String[] args1 = {"cut", "a.txt", "-c", "1-2", "|", "cat", "|", "paste"};
@@ -210,6 +258,11 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 5
+	 * Command; uniq a.txt | | cat | sort
+	 * Error: No program between pipes
+	 */
 	@Test
 	public void testPipeSyntaxErr1PipeExecuteUniqCatSort() {
 		String[] args1 = {"uniq", "a.txt", "|", "|", "cat", "|", "sort"};
@@ -219,6 +272,11 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 6
+	 * Command: uniq a.txt - | cat | sort |
+	 * Error: No program after pipe
+	 */
 	@Test
 	public void testPipeSyntaxErr2PipeExecuteUniqCatEcho() {
 		String[] args1 = {"uniq", "a.txt", "-", "|", "cat", "|", "sort" , "|"};
@@ -228,6 +286,11 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 7
+	 * Command: uniq a.txt | cd ../ | echo
+	 * Error: cd command not allowed in pipe
+	 */
 	@Test
 	public void testCdErrPipeExecuteUniqCdEcho() {
 		String[] args1 = {"uniq", "a.txt", "|", "cd", "../", "|", "echo"};
@@ -237,6 +300,11 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 8
+	 * Command: uniq a.txt | copy b.txt ../ | echo
+	 * Error: copy command not allowed in pipe
+	 */
 	@Test
 	public void testCopyErrPipeExecuteUniqCdEcho() {
 		String[] args1 = {"uniq", "a.txt", "|", "copy", "b.txt", "../", "|", "echo"};
@@ -246,6 +314,11 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 7
+	 * Command: uniq a.txt | echo | move d.txt ../
+	 * Error: move command not allowed in pipe
+	 */
 	@Test
 	public void testMoveErrPipeExecuteUniqCdEcho() {
 		String[] args1 = {"uniq", "a.txt", "|", "echo", "|", "move", "d.txt", "../"};
@@ -255,6 +328,11 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 8
+	 * Command: delete a.txt | echo a.txt | sort
+	 * Error: delete command not allowed in pipe
+	 */
 	@Test
 	public void testDeleteErrPipeExecuteUniqCdEcho() {
 		String[] args1 = {"delete", "a.txt", "|", "echo", "a.txt", "|", "sort"};
@@ -264,6 +342,11 @@ public class IntegrationTest_2 {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
+	/*
+	 * Negative Complex Scenario: 9
+	 * Command: cut null | comm a.txt b.txt | paste
+	 * Error: null arguments for cat
+	 */
 	@Test
 	public void testNullArgErrPipeExecuteCatCommPaste() {
 		String[] args1 = {"cat", "null", "|", "comm", "a.txt", "b.txt", "|", "paste"};
