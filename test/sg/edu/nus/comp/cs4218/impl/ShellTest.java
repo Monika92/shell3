@@ -106,7 +106,7 @@ public class ShellTest {
 		assertEquals("",shell.parse(commandline).getClass().getSimpleName());
 	}
 	
-	//@Test
+	@Test
 	public void parseInvalidCommandTest()
 	{
 		String commandline = "nslookup hello";

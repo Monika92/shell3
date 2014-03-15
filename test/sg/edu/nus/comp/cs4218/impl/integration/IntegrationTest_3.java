@@ -160,30 +160,30 @@ public String readFromFile(File inputFile){
 	}
 	return output;
 }
-
-public List<File> getFiles(File directory) {
-	
-	// TODO Auto-generated method stu
-    String[] childFiles = directory.list();
-    List<File> childFilesList = new ArrayList();  
-    
-    for(String child: childFiles)
-    {
-    	File childFile = new File(child);
-    	childFilesList.add(childFile);
-    }
-	return childFilesList;		
-}
-
-public String getStringForFiles(List<File> files) {
-	// TODO Auto-generated method stub
-	String outputString = "";
-	for(File child: files)
-	{
-	 outputString += child.toString() + " ";
-	}
-	return outputString;
-}
+//
+//public List<File> getFiles(File directory) {
+//	
+//	// TODO Auto-generated method stu
+//    String[] childFiles = directory.list();
+//    List<File> childFilesList = new ArrayList();  
+//    
+//    for(String child: childFiles)
+//    {
+//    	File childFile = new File(child);
+//    	childFilesList.add(childFile);
+//    }
+//	return childFilesList;		
+//}
+//
+//public String getStringForFiles(List<File> files) {
+//	// TODO Auto-generated method stub
+//	String outputString = "";
+//	for(File child: files)
+//	{
+//	 outputString += child.toString() + " ";
+//	}
+//	return outputString;
+//}
 
 public static void deleteFolder(File folder) {
     File[] files = folder.listFiles();
