@@ -168,7 +168,7 @@ public class PIPINGToolTest {
 		String expected = "Bismillah, no! We will not let you go.\nBismillah, no!"
 				+ " We will not let you go.\ntextFiles/bohemian.txt:Bismillah, no! "
 				+ "We will not let you go.\nBismillah, no! We will not let you go.\n";
-		System.out.println("\nOP:\n" + pipeResult);
+		//System.out.println("\nOP:\n" + pipeResult);
 		assertTrue(expected.equals(pipeResult));
 	}
 
@@ -299,7 +299,7 @@ public class PIPINGToolTest {
 				testDash + testTab + "B" + testNewLine +
 				testDash + testTab + testDash + testNewLine +
 				testDash + testTab + testDash + testNewLine;
-		System.out.println("op:\n" + actualOutput);
+		//System.out.println("op:\n" + actualOutput);
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
 	
@@ -415,7 +415,7 @@ public class PIPINGToolTest {
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
 		expectedOutput = "Stdin :  -m  19 -l  1\n";
-		System.out.println("AO: \n" + actualOutput);
+		//System.out.println("AO: \n" + actualOutput);
 		assertTrue(actualOutput.equalsIgnoreCase(expectedOutput));
 	}
 	
@@ -534,7 +534,7 @@ public class PIPINGToolTest {
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		System.out.println(actualOutput);
+		//System.out.println(actualOutput);
 		String expectedOutput = "";
 		assertEquals(expectedOutput, actualOutput);
 		assertNotEquals(pipingTool.getStatusCode(), 0);

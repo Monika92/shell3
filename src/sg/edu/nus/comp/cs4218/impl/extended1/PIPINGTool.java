@@ -162,10 +162,10 @@ public class PIPINGTool extends ATool implements IPipingTool {
 	
 	public void printAll(String cmd, String[] args){
 		
-		System.out.println("Command: " +  cmd);
-		System.out.print("Args: ");
+		//System.out.println("Command: " +  cmd);
+		//System.out.print("Args: ");
 		for(int i = 0; i<args.length; i++){
-			System.out.print(args[i] + "\t");
+			//System.out.print(args[i] + "\t");
 		}
 	}
 	

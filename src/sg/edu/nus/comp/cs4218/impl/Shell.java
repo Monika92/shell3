@@ -3,6 +3,7 @@ package sg.edu.nus.comp.cs4218.impl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,23 +38,61 @@ public class Shell extends Thread implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 			
+		ArrayList<String> commandNamesList = new ArrayList<String>();
+		commandNamesList.add("grep");
+		commandNamesList.add("comm");
+		commandNamesList.add("cut");
+		commandNamesList.add("paste");
+		commandNamesList.add("sort");
+		commandNamesList.add("uniq");
+		commandNamesList.add("wc");
+		commandNamesList.add("cut");
+		commandNamesList.add("cd");
+		commandNamesList.add("copy");
+		commandNamesList.add("delete");
+		commandNamesList.add("echo");
+		commandNamesList.add("ls");
+		commandNamesList.add("move");
+		commandNamesList.add("pwd");
+				
+		if(commandline!=null)
+		{
 			commandline = commandline.trim();
 			Boolean pipeFlag = false;
 			command = null;
 			int argsLength;
 
 			ArrayList<String> list = new ArrayList<String>();
-			Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
-					commandline);
-			while (m.find())
+			String[] commands = commandline.split("\\|");
+			
+			for(int i =0;i<commands.length;i++) 
 			{
-				list.add(m.group(1));
-				if(m.group(1).equalsIgnoreCase("|")){
-					pipeFlag = true;
-					command = "pipe";
+				Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(
+					commands[i].trim());
+				while (m.find())
+				{
+					list.add(m.group(1));
+				}
+				list.add("|");
+			}
+			list.remove(list.size()-1);
+			
+			for(int i=0;i<list.size();i++)
+			{
+				if(list.get(i)=="|")
+				if(i+1 <list.size())
+				{
+					if(!commandNamesList.contains(list.get(i+1)))
+					{
+						String a = list.get(i-1)+ list.get(i) + list.get(i+1);
+						list.set(i-1, a);
+						list.remove(i);
+						list.remove(i);
+					}
+					else
+						pipeFlag = true;
 				}
 			}
-
 			if (list.size() >= 1) {
 				String[] cmdWords = new String[list.size()];
 				cmdWords = list.toArray(cmdWords);
@@ -85,6 +124,7 @@ public class Shell extends Thread implements IShell {
 					}
 					else
 					{
+						command = "pipe";
 						for (int i = 0; i < cmdWords.length; i++) {
 							argsList[i] = cmdWords[i];
 							rawArgs[i] = cmdWords[i];
@@ -154,6 +194,7 @@ public class Shell extends Thread implements IShell {
 					}
 				}
 			}
+		}
 			System.err.println("Command Syntax InCorrect!");
 			return null;
 		}
@@ -182,7 +223,8 @@ public class Shell extends Thread implements IShell {
 					&& !command.equalsIgnoreCase("pwd")
 					&& !command.equalsIgnoreCase("move")
 					&& !command.equalsIgnoreCase("copy")
-					&& !command.equalsIgnoreCase("delete")) {
+					&& !command.equalsIgnoreCase("delete")
+					&& !command.equalsIgnoreCase("pipe")) {
 
 				//Gets standard input from console
 				System.out.println("Enter stdin: ");
