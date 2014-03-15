@@ -252,7 +252,7 @@ public class SORTTool extends ATool implements ISortTool{
 			}
 
 
-			return output;
+			return output.trim();
 		}
 		catch(Exception e)
 		{

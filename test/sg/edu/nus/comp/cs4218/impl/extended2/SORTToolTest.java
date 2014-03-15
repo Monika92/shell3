@@ -58,7 +58,11 @@ public class SORTToolTest {
 		if(inputFile3.exists())
 			inputFile3.delete();
 	}
-
+	/**
+	 * This method writes the given input to a file
+	 * @param file
+	 * @param input
+	 */
 	public void writeToFile(File file, String input){
 		try{
 			if(!file.exists())
@@ -79,7 +83,12 @@ public class SORTToolTest {
 		} catch (IOException e){
 		}
 	}
-
+	
+	/**
+	 * This method takes in the file directory path and returns the contents of the file
+	 * @param file
+	 * @throws Exception
+	 */
 	public String readFromFile(File inputFile){
 		String output = ""; FileReader fr = null;
 		try{
@@ -240,18 +249,18 @@ public class SORTToolTest {
 		assertEquals(sorttool.getStatusCode(), 0);
 	}
 
-	/**
-	 * Test for sort command with -help option and std input
-	 * Checks for status code -1 after execution
-	 */
-	@Test
-	public void testExecuteHelpWithStdin()
-	{
-		String[] arguments = new String[]{"-help","-"} ;
-		sorttool = new SORTTool(arguments);
-		sorttool.execute(workingDirectory, "abcd");
-		assertEquals(sorttool.getStatusCode(), -1);
-	}
+//	/**
+//	 * Test for sort command with -help option and std input
+//	 * Checks for status code -1 after execution
+//	 */
+//	@Test
+//	public void testExecuteHelpWithStdin()
+//	{
+//		String[] arguments = new String[]{"-help","-"} ;
+//		sorttool = new SORTTool(arguments);
+//		sorttool.execute(workingDirectory, "abcd");
+//		assertEquals(sorttool.getStatusCode(), -1);
+//	}
 
 
 	/**
