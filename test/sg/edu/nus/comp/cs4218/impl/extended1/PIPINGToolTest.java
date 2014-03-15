@@ -273,12 +273,13 @@ public class PIPINGToolTest {
 	 */
 	@Test
 	public void testPipeWcFromPasteTo() {
-		String[] leftToolArgs = {"-m", "-l", "textFiles/testA.txt"};
+		
+		String[] leftToolArgs = {"-m", "-l", "textFiles"+File.separator+"testA.txt"};
 		String[] rightToolArgs = {"-s","-"};
 		IWcTool wcTool = new WCTool(leftToolArgs);
 		IPasteTool pasteTool = new PASTETool(rightToolArgs);
 		String actualOutput = pipingTool.pipe(wcTool, pasteTool);
-		String expectedOutput = workingDir + "\\textFiles\\testA.txt :  -m  37 -l  5\n";
+		String expectedOutput = workingDir +File.separator+ "textFiles"+File.separator+ "testA.txt :  -m  37 -l  5\n";
 		assertTrue(actualOutput.equals(expectedOutput));
 	}
 	
@@ -335,7 +336,7 @@ public class PIPINGToolTest {
 		IEchoTool echoTool = new ECHOTool(leftToolArgs);
 		IWcTool wcTool = new WCTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(echoTool, wcTool);
-		expectedOutput = workingDir + "\\a.txt : -m  16 , -w  3 , -l 3" + "\n" 
+		expectedOutput = workingDir + File.separator+"a.txt : -m  16 , -w  3 , -l 3" + "\n" 
 		+  "Stdin : -m  0 , -w  0 , -l 0\n";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pipingTool.getStatusCode(), 0);
