@@ -82,6 +82,10 @@ public class DELETEToolTest {
 			relativeFile.delete();
 	}
     
+    /*
+     * Basic test case for delete with single file
+     * Command: delete filename
+     */
     @Test
     public void deleteSingleFileTest(){
     	String[] arguments = new String[]{"Test_Output.txt"} ;
@@ -91,6 +95,10 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case for delete with multiple filenames
+     * Command: delete filename1 filename2 filename3
+     */
     @Test
     public void deleteMultipleFileTest(){
     	String[] arguments = new String[]{"Test_Output.txt", "Test_Output_2.txt", "Test_Output_3.txt"} ;
@@ -102,6 +110,11 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), 0);
     }
     
+    /*
+     * Negative test case for delete
+     * Command: delete filename
+     * Error: Non-existent file
+     */
     @Test
     public void deleteInvalidFileTest(){
     	String[] arguments = new String[]{"Invalid_File.txt"} ;
@@ -112,6 +125,11 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), -1);
     }
     
+    /*
+     * Negative test case for delete
+     * Command: delete filename1 filename2
+     * Error: filename1 is invalid
+     */
     @Test
     public void deleteInvalidValidFileTest(){
     	String[] arguments = new String[]{"Test_Output.txt", "Invalid_File.txt", "InvalidFile.txt"} ;
@@ -123,6 +141,11 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), -1);
     }
     
+    /*
+     * Positive + Negative test case for delete
+     * Command: delete filename1 filename2
+     * Error: filename2 is invalid
+     */
     @Test
     public void deleteValidInvalidFileTest(){
     	String[] arguments = new String[]{"Invalid_File.txt", "Test_Output.txt"} ;
@@ -134,6 +157,10 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), -1);
     }
     
+    /*
+     * Test case 1 for delete with absolute path of filename
+     * Command: delete filename_abs_path
+     */
     @Test
     public void deleteAbsoluteFile1Test(){
     	String[] arguments = new String[]{workingDirectory + "\\" + "Test_Output_4.txt"} ;
@@ -143,6 +170,10 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case 2 for delete with absolute path of filename
+     * Command: delete filename_abs_path
+     */
     @Test
     public void deleteAbsoluteFile2Test(){
     	String[] arguments = new String[]{System.getProperty("home.dir") + "Test_Output_5.txt"} ;
@@ -152,6 +183,10 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case for delete with relative path of filename
+     * Command: delete filename_relative_path
+     */
     @Test
     public void deleteRelativeFileTest(){
     	String[] arguments = new String[]{"./../Test_Output_6.txt",} ;
@@ -161,6 +196,10 @@ public class DELETEToolTest {
 		assertEquals(deletetool.getStatusCode(), 0);
     }
 
+    /*
+     * Test case for delete interface method with invalid file
+     * Command: delete invalid_filename
+     */
     @Test
     public void deleteInterfaceInvalidFileTest(){
     	String[] arguments = new String[]{"InvalidFile.txt",} ;
@@ -170,6 +209,10 @@ public class DELETEToolTest {
 		assertTrue(deletetool.getStatusCode() != 0);
     }
     
+    /*
+     * Null test case for delete interface method
+     * Constructor for deletetool is initialised with null arguments 
+     */
     @Test
     public void deleteNullTest(){
     	String[] arguments = null ;
@@ -178,6 +221,10 @@ public class DELETEToolTest {
 		assertTrue(deletetool.getStatusCode() != 0);
     }
     
+    /*
+     * Null test case for execute interface method
+     * Constructor for deletetool initialised with null arguments
+     */
     @Test
     public void deleteExecuteNullTest(){
     	String[] arguments = null ;

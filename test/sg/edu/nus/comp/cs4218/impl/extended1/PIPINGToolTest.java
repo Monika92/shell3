@@ -270,6 +270,8 @@ public class PIPINGToolTest {
 
 	/*
 	 * Tests for interface method pipe(ITool from, ITool to)
+	 * from = wc -m -l filename
+	 * to = paste -s -
 	 */
 	@Test
 	public void testPipeWcFromPasteTo() {
@@ -282,6 +284,11 @@ public class PIPINGToolTest {
 		assertTrue(actualOutput.equals(expectedOutput));
 	}
 	
+	/*
+	 * Tests for interface method pipe(ITool from, ITool to)
+	 * from = comm filename1 filename2
+	 * to = cut -c 1-3 -
+	 */
 	@Test
 	public void testPipeCommFromCutTo() {
 		String[] leftToolArgs = {"a.txt","b.txt"};
@@ -330,12 +337,18 @@ public class PIPINGToolTest {
 		IEchoTool echoTool = new ECHOTool(leftToolArgs);
 		IWcTool wcTool = new WCTool(rightToolArgs);
 		actualOutput = pipingTool.pipe(echoTool, wcTool);
-		expectedOutput = workingDir + "//a.txt : -m  16 , -w  3 , -l 3" + "\n" 
+		expectedOutput = workingDir + "\\a.txt : -m  16 , -w  3 , -l 3" + "\n" 
 		+  "Stdin : -m 0 , -w 0 , -l 0\n";
-		//assertEquals(expectedOutput, actualOutput);
+		expectedOutput = "C:\\Users\\monika92\\workspace\\shell3\\a.txt : -m  16 , -w  3 , -l 3\nStdin : -m  0 , -w  0 , -l 0\n";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 		assertEquals(pipingTool.getStatusCode(), 0);
 	}
 
+	/*
+	 * Tests for interface method pipe(string stdout, ITool to)
+	 * stdout = cat filename 
+	 * to = uniq 
+	 */
 	@Test
 	public void testPipeCatStdoutUniqTo() {
 		String[] catToolArgs = {"textFiles/testC.txt"};
@@ -348,12 +361,12 @@ public class PIPINGToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 
-	
-	@Test
 	/*
-	 * Valid Test case
-	 * command: cat a.txt | echo
+	 * Tests for interface method pipe(string stdout, ITool to)
+	 * stdout = cat filename
+	 * to = echo
 	 */
+	@Test
 	public void testPipeCatStdoutEchoTo() {
 		String[] catToolArgs = {"a.txt"};
 		String[] rightToolArgs = {};
@@ -365,13 +378,11 @@ public class PIPINGToolTest {
 		assertTrue(actualOutput.equals(expectedOutput));
 	}
 	
-	@Test
 	/*
-	 * Valid test case
-	 * Testing 2 pipes
+	 * Test for interface method execute with 2 pipes
 	 * command: cat filename | cut -c 1-4 | paste
-	 * 
 	 */
+	@Test
 	public void testExecuteCatCutPaste() {
 		String[] args1 = {"cat", "a.txt", "|", "cut", "-c", "1-4", "|", "paste"};
 		String[] args2 = {};
@@ -381,11 +392,11 @@ public class PIPINGToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 		
-	@Test
-	/* Valid testcase
-	 * Testing 2 pipes
+	/*
+	 * Test for interface method execute with 2 pipes
 	 * command: uniq filename | cat | paste
 	 */
+	@Test
 	public void testExecuteWcUniqCat() {
 		String[] args1 = {"uniq", "textFiles/testC.txt", "|", "cat", "|", "paste"};
 		String[] args2 = {};
@@ -395,13 +406,11 @@ public class PIPINGToolTest {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
-	@Test
-	//TODO: Madhu
-	/* 
-	 * Valid test case
-	 * command : echo filename | wc -m -l
-	 * wc with no filename args
+	/*
+	 * Test for interface method execute with 2 pipes
+	 * command: echo filename | wc -m -l
 	 */
+	@Test
 	public void testExecuteEchoWc() {
 		String[] args1 = {"echo", "textFiles/testC.txt", "|", "wc", "-m", "-l"};
 		String[] args2 = {};
@@ -413,9 +422,9 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
-	/* Negative
-	 * Invalid case for comm:
-	 * No args given for comm
+	/* Negative test case for interface method execute
+	 * command: wc filename | comm
+	 * Error: No args given for comm
 	 */
 	public void testExecuteWcComm() {
 		String[] args1 = {"wc", "textFiles/testC.txt", "|", "comm"};
@@ -425,12 +434,12 @@ public class PIPINGToolTest {
 		assertNotEquals(pipingTool.getStatusCode(),0);
 	}
 	
-	@Test
 	/*
-	 * Positive case: Valid command
-	 * Command: echo hello | comm a.txt b.txt
+	 * Test for interface method execute with 2 pipes
+	 * command: echo string | comm filename1 filename2
 	 * To show that comm works when both args are present
 	 */
+	@Test
 	public void testExecuteEchoCommWithArgs() {
 		String[] args1 = {"echo", "hello", "|", "comm", "a.txt", "b.txt"};
 		String[] args2 = {};
@@ -445,10 +454,9 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
-	/*
-	 * Negative case: invalid command
-	 * Command: echo hello | comm a.txt
-	 * To show that comm doesnt work when both args arent present
+	/* Negative test case for interface method execute
+	 * command: echo string | comm filename
+	 * Error: insufficient args given for comm
 	 */
 	public void testExecuteEchoCommWithInvalidArgs() {
 		String[] args1 = {"echo", "hello", "|", "comm", "a.txt"};
@@ -460,11 +468,11 @@ public class PIPINGToolTest {
 		assertNotEquals(pipingTool.getStatusCode(), 0);
 	}
 	
-	@Test
 	/*
-	 * Positive case: Valid command
-	 * command: "cat a.txt | echo hello"
+	 * Test for interface method execute
+	 * command: cat filename | echo string
 	 */
+	@Test
 	public void testExecuteCatEchoWithArgs() {
 		String[] args1 = {"cat", "a.txt", "|", "echo", "hello"};
 		String[] args2 = {};
@@ -476,9 +484,9 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
-	/*
-	 * Negative case: Invalid command:
-	 * command: echo hello |
+	/* Negative test case for interface method execute
+	 * command: echo string | 
+	 * Syntax error in pipe
 	 */
 	public void testExecuteEchoWithArgsEndingWithPipe() {
 		String[] args1 = {"echo", "hello", "|"};
@@ -488,11 +496,11 @@ public class PIPINGToolTest {
 		assertTrue(pipingTool.getStatusCode() != 0);
 	}
 	
-	@Test
 	/*
-	 * Positive case:
-	 * checking cat a.txt | grep (A|M) 
+	 * Test for interface method execute
+	 * command: cat filename | grep pattern
 	 */
+	@Test
 	public void testExecuteFromCatToGrep(){
 		String[] args1 = {"cat", "a.txt", "|","grep","(A|M)"};
 		String[] args2 = {};
@@ -504,10 +512,9 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
-	/*
-	 * Negative case
-	 * uniq fname | | grep pattern
-	 * 
+	/* Negative test case for interface method execute
+	 * command: uniq filename | | grep pattern
+	 * Syntax error in pipe - no program between two pipes
 	 */
 	public void testEmptyPipeCommand(){
 		String[] args1 = {"uniq", "a.txt", "|","|","grep","(A|M)"};
@@ -520,8 +527,9 @@ public class PIPINGToolTest {
 	}
 	
 	@Test
-	/*
-	 * command paste | |
+	/* Negative test case for interface method execute
+	 * command: paste | |
+	 * Insufficient args for paste and Syntax error in pipe
 	 */
 	public void testEmptyPipeCommand1(){
 		String[] args1 = {"paste", "|","|"};

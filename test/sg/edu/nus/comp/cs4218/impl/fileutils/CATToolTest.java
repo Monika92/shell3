@@ -89,40 +89,10 @@ public class CATToolTest {
 		}
 	}
 	
-	/*public String readFromFile(File inputFile){
-		String output = ""; FileReader fr = null;
-		try{
-			fr = new FileReader(inputFile);
-		} catch(FileNotFoundException e){
-			e.printStackTrace();
-			return "File not found";
-		}
-		BufferedReader br = new BufferedReader(fr);
-		try{
-			String line = br.readLine();
-			while(line != null){
-				if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
-					output+="\n";
-				else
-					output += line + "\n";
-				line = br.readLine();
-			}
-		} catch(IOException e){
-			e.printStackTrace();
-			return "Unable to read file";
-		} finally{
-			try {
-				br.close();
-				fr.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return output;
-	}
-	
-    */
+	/*
+	 * Basic test case for cat with single file
+	 * Command: cat filename
+	 */
     @Test
     public void catSingleFileTest(){
     	String[] arguments = new String[]{"Test_Output.txt"} ;
@@ -133,6 +103,10 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case for cat with multiple files
+     * Command: cat filename1 filename2
+     */
     @Test
     public void catMultipleFileTest(){
     	String[] arguments = new String[]{"Test_Output.txt", "Test_Output_2.txt", "Test_Output_3.txt"} ;
@@ -143,6 +117,11 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    /*
+     * Negative test case for cat
+     * Command: cat filename
+     * Error: Non-existent file
+     */
     @Test
     public void catInvalidFileTest(){
     	String[] arguments = new String[]{"Invalid_File.txt"} ;
@@ -153,6 +132,11 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), -1);
     }
     
+    /*
+     * Negative test case for cat
+     * Command: cat filename1 filename2
+     * Error: filename1 is invalid
+     */
     @Test
     public void catInvalidValidFileTest(){
     	String[] arguments = new String[]{"Test_Output.txt", "Invalid_File.txt", "InvalidFile.txt"} ;
@@ -163,6 +147,11 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), -1);
     }
     
+    /*
+     * Positive + Negative test case for cat
+     * Command: cat filename1 filename2
+     * Error: filename2 is invalid
+     */
     @Test
     public void catValidInvalidFileTest(){
     	String[] arguments = new String[]{"Invalid_File.txt", "Test_Output.txt"} ;
@@ -173,6 +162,10 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), -1);
     }
 
+    /*
+     * Test case 1 for cat with absolute path of filename
+     * Command: cat filename_abs_path
+     */
     @Test
     public void catAbsoluteFile1Test(){
     	String[] arguments = new String[]{workingDirectory + "\\" + "Test_Output_4.txt"} ;
@@ -183,6 +176,10 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case 1 for cat with absolute path of filename
+     * Command: cat filename_abs_path
+     */
     @Test
     public void catAbsoluteFile2Test(){
     	String[] arguments = new String[]{System.getProperty("home.dir")+ "Test_Output_5.txt"} ;
@@ -193,6 +190,10 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case for cat with relative path of filename
+     * Command: cat filename_relative_path
+     */
     @Test
     public void catRelativeFileTest(){
     	String[] arguments = new String[]{"./../Test_Output_6.txt",} ;
@@ -203,6 +204,10 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
 
+    /*
+     * Test case for cat with empty file
+     * Command: cat empty_filename
+     */
     @Test
     public void catEmptyFileTest(){
     	String[] arguments = new String[]{"Test_Output_7.txt",} ;
@@ -213,6 +218,11 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case 1 for cat with stdin
+     * Command: cat -
+     * Stdin: "This is a test run."
+     */
     @Test
     public void catStdin1Test(){
     	String[] arguments = new String[]{"-"} ;
@@ -224,6 +234,11 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    /*
+     * Test case 2 for cat with stdin
+     * Command: cat -
+     * Stdin: ""
+     */
     @Test
     public void catStdin2Test(){
     	String[] arguments = new String[]{"-"} ;
@@ -235,6 +250,10 @@ public class CATToolTest {
 		assertEquals(cattool.getStatusCode(), 0);
     }
     
+    /*
+     * Null test case for getStringForFile()
+     * Constructor for cattool initialised with null arguments
+     */
     @Test
     public void catGetStringForFileNullTest(){
     	String[] arguments = null ;
@@ -243,6 +262,10 @@ public class CATToolTest {
 		assertTrue(cattool.getStatusCode() != 0);
     }
     
+    /*
+     * Null test case for execute()
+     * Constructor for cattool initialised with null arguments
+     */
     @Test
     public void catExecuteNullTest(){
     	String[] arguments = null ;
