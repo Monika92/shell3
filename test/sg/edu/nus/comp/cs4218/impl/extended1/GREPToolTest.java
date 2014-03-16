@@ -51,7 +51,7 @@ public class GREPToolTest {
 		String[] cmdArgs = { "textFiles"+File.separator+"empty.txt" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
-		assertEquals(tool.getStatusCode(), 0);
+		assertEquals(tool.getStatusCode(), -1);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class GREPToolTest {
 		String[] cmdArgs = { "textFiles"+File.separator+"picture.gif" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
-		assertEquals(tool.getStatusCode(), 0);
+		assertEquals(tool.getStatusCode(), -1);
 	}
 
 	/**
