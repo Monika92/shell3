@@ -1217,5 +1217,40 @@ public class GREPToolTest {
 				+ "xxx~*...like dis if u cry evry time...~*xxx\n";
 		assertTrue(expected.equals(matchingLines));
 	}
+	
+	/**
+	 * ADDED NEW : BOUNDARY CASE
+	 * Test for grep tool where argument list consists of multiple options one of which is -help.
+	 * The tool must return the help output.
+	 */
+	@Test
+	public void testGrepHelpAndOtherOptions() {
+		String[] cmdArgs = { "-c", "-help", "(t|T)", "textFiles"+File.separator+"testA.txt",
+				"textFiles"+File.separator+"testB.txt" };
+		IGrepTool tool = new GREPTool(cmdArgs);
+		String expected = "textFiles"+File.separator+"testA.txt:"+"Usage: grep [OPTIONS] PATTERN [FILE]\n"
+				+ "Search for PATTERN in each FILE or standard input.\n"
+				+ "PATTERN - This specifies a regular expression pattern that describes a set of strings.\n"
+				+ "FILE - Name of the file, when no file is present (denoted by \"-\") uses standard input.\n"
+				+ "OPTIONS\n"
+				+ "	-A NUM : Print NUM lines of trailing context after matching lines\n"
+				+ "	-B NUM : Print NUM lines of leading context before matching lines\n"
+				+ "	-C NUM : Print NUM lines of output context\n"
+				+ "	-c : Suppress normal output. Instead print a count of matching lines for each input file\n"
+				+ "	-v : Select non-matching (instead of matching) lines\n";
+		expected += "textFiles"+File.separator+"testB.txt:"+"Usage: grep [OPTIONS] PATTERN [FILE]\n"
+				+ "Search for PATTERN in each FILE or standard input.\n"
+				+ "PATTERN - This specifies a regular expression pattern that describes a set of strings.\n"
+				+ "FILE - Name of the file, when no file is present (denoted by \"-\") uses standard input.\n"
+				+ "OPTIONS\n"
+				+ "	-A NUM : Print NUM lines of trailing context after matching lines\n"
+				+ "	-B NUM : Print NUM lines of leading context before matching lines\n"
+				+ "	-C NUM : Print NUM lines of output context\n"
+				+ "	-c : Suppress normal output. Instead print a count of matching lines for each input file\n"
+				+ "	-v : Select non-matching (instead of matching) lines\n";
+		System.out.println(tool.execute(workingDir, ""));
+		assertTrue(expected.equals(tool.execute(workingDir, "")));
+		assertEquals(grepTool.getStatusCode(), 0);
+	}
 
 }
