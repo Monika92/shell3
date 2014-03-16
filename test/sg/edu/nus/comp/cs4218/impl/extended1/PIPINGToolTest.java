@@ -534,7 +534,6 @@ public class PIPINGToolTest {
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);
 		actualOutput = pipingTool.execute(workingDir, null);
-		//System.out.println(actualOutput);
 		String expectedOutput = "";
 		assertEquals(expectedOutput, actualOutput);
 		assertNotEquals(pipingTool.getStatusCode(), 0);

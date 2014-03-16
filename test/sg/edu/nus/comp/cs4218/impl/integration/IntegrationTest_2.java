@@ -16,6 +16,11 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PIPINGTool;
 
+/**
+ * This test class covers the second requirement of integration testing
+ * Chains of interactions ( at least 10 complex scenarios with at least two
+ * pipes and different utilities).
+ */
 public class IntegrationTest_2 {
 
 	private IPipingTool pipingTool;

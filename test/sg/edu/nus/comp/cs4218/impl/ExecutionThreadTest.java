@@ -15,7 +15,7 @@ public class ExecutionThreadTest {
 	@Before
 	public void before()
 	{
-		executionThread = new ExecutionThread(new ECHOTool(new String[]{"hello"}), null, new String[]{"hello"}) ;
+		executionThread = new ExecutionThread(new ECHOTool(new String[]{"hello"}), null, new String[]{"hello",">","output.txt"}) ;
 	}
 	
 	@After

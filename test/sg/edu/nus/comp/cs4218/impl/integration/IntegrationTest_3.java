@@ -37,6 +37,11 @@ import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
 import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
 import sg.edu.nus.comp.cs4218.impl.WorkingDirectory;
 
+/**
+ * The test class covers the third requirement of integration testing
+ * State of the Shell is changed with cd, copy, move, delete (at least 4
+ * complex scenarios)
+ */
 public class IntegrationTest_3 {
 	
 	private ICdTool cdtool;

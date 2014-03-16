@@ -172,8 +172,8 @@ public class SORTTool extends ATool implements ISortTool{
 				fileList.add(fileName);
 				if (fileList.contains("-"))
 					fileList.remove("-");
-
 			}
+			
 			if(workingDir == null)
 			{
 				setStatusCode(-1);

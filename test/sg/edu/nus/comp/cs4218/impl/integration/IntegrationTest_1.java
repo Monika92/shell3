@@ -19,7 +19,11 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PIPINGTool;
 
-
+/**
+ * This Test class covers the first requirement of integration testing
+ * EF1 and EF2 integration (minimum of 8 scenarios: grep with each utility, at
+ * least one with echo and  at least one with cat).
+ */
 public class IntegrationTest_1 {
 	private IPipingTool pipingTool;
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
