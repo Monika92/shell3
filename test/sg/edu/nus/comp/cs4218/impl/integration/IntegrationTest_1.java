@@ -212,6 +212,7 @@ public class IntegrationTest_1 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	/*
+	 * Integrate Grep with Sort 
 	 * Positive Case
 	 * command : grep A|M|O a.txt | sort -c
 	 */
@@ -225,6 +226,7 @@ public class IntegrationTest_1 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	/*
+	 * Integrate Grep with WC
 	 * Positive Case
 	 * command : grep (App|Mel|Ora) a.txt | wc -m
 	 */
@@ -239,6 +241,7 @@ public class IntegrationTest_1 {
 	}
 	
 	/*
+	 * Integrate Grep with WC
 	 * Negative Case
 	 * command : grep (App|Mel|Ora) InvalidFile.txt | wc -m
 	 */
@@ -252,6 +255,7 @@ public class IntegrationTest_1 {
 	}
 	
 	/*
+	 * Integrate Grep with echo
 	 * Positive Case
 	 * command : grep (A|M) a.txt | echo
 	 */
@@ -268,6 +272,7 @@ public class IntegrationTest_1 {
 
 	@Test
 	/*
+	 * Integrate Grep with echo
 	 * Negative Case
 	 * command : grep invalid arguments | echo
 	 */
@@ -282,6 +287,7 @@ public class IntegrationTest_1 {
 
 	@Test
 	/*
+	 * Integrate Grep with cat
 	 * Positive Case
 	 * command : cat a.txt| grep (A|M)
 	 */
@@ -297,6 +303,22 @@ public class IntegrationTest_1 {
 	
 	@Test
 	/*
+	 * Integrate Grep with cat
+	 * Negative Case
+	 * command : cat a.txt| grep (A|M)
+	 */
+	public void testExecuteCatGrepInvalidParams() {
+
+		String[] args1 = {"Cat", "Invalid.txt", "|","grep", "(A|M)"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);
+		actualOutput = pipingTool.execute(workingDir, "");
+		assertTrue(pipingTool.getStatusCode() != 0);
+	}
+	
+	@Test
+	/*
+	 * Integrate Grep with comm
 	 * Positive case
 	 * command: comm a.txt b.txt | grep (A|M)
 	 */
@@ -311,6 +333,7 @@ public class IntegrationTest_1 {
 	}
 
 	/*
+	 * Integrate Grep with comm
 	 * Negative case
 	 * command: comm a.txt invalidFile | grep patt 
 	 */
@@ -356,6 +379,7 @@ public class IntegrationTest_1 {
 
 	@Test
 	/*
+	 * Integrate Grep with paste
 	 * Positive command
 	 * command: grep pattern filename | paste
 	 */
@@ -372,6 +396,7 @@ public class IntegrationTest_1 {
 
 	@Test
 	/* 
+	 * Integrate Grep with paste
 	 * Positive case
 	 * command: grep patt filename | paste file1 file2 file3
 	 */
@@ -390,6 +415,7 @@ public class IntegrationTest_1 {
 
 	@Test
 	/*
+	 * Integrate Grep with paste
 	 * Negative case
 	 * grep pattern invalidFile | paste
 	 * 

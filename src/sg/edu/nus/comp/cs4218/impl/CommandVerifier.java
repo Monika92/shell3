@@ -405,6 +405,8 @@ public class CommandVerifier {
 			}
 		
 		}
+		else if(cmd == "pwd")
+			return 1;
 		else{
 			return -1;
 		}
