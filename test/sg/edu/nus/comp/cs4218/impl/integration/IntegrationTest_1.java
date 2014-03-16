@@ -359,7 +359,7 @@ public class IntegrationTest_1 {
 	 * Positive command
 	 * command: grep pattern filename | paste
 	 */
-	public void testExecuteGrepPaste1()
+	public void testExecuteGrepPasteSingle()
 	{
 		String[] args1 = {"grep", "(A|M)", "a.txt","|","paste"};
 		String[] args2 = {};
@@ -375,7 +375,7 @@ public class IntegrationTest_1 {
 	 * Positive case
 	 * command: grep patt filename | paste file1 file2 file3
 	 */
-	public void testExecuteGrepPaste2(){
+	public void testExecuteGrepPasteMultiple(){
 		String[] args1 = {"grep", "(A|M)", "a.txt","|","paste","a.txt","b.txt","c.txt"};
 		String[] args2 = {};
 		pipingTool = new PIPINGTool(args1, args2);

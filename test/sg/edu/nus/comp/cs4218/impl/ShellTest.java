@@ -65,6 +65,9 @@ public class ShellTest {
 			inputFile1.delete();
 	}
 	
+	/**
+	 * This test checks for null command, output is null
+	 */
 	@Test
 	public void parseNullCommandTest()
 	{
@@ -72,6 +75,9 @@ public class ShellTest {
 		assertNull(shell.parse(commandline));		
 	}
 	
+	/**
+	 * This test parses cut command and checks if cut tool is returned
+	 */
 	@Test
 	public void parseCutCommandTest()
 	{
@@ -80,6 +86,9 @@ public class ShellTest {
 		assertEquals("CUTTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());		
 	}
+	/**
+	 * This test parses cd command and checks if cd tool is returned
+	 */
 	@Test
 	public void parseCdCommandTest()
 	{
@@ -88,6 +97,9 @@ public class ShellTest {
 		assertEquals("CDTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());		
 	}
+	/**
+	 * This test parses echo command and checks if echo tool is returned
+	 */
 	@Test
 	public void parseEchoCommandTest()
 	{
@@ -96,7 +108,9 @@ public class ShellTest {
 		assertEquals("ECHOTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
-	
+	/**
+	 * This test parses cat command and checks if cat tool is returned
+	 */
 	@Test
 	public void parseCatCommandTest()
 	{
@@ -105,6 +119,9 @@ public class ShellTest {
 		assertEquals("CATTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
+	/**
+	 * This test parses pipe command and checks if pipe tool is returned
+	 */
 	@Test
 	public void parsePipeCommandWithSpacesTest()
 	{
@@ -113,6 +130,9 @@ public class ShellTest {
 		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
+	/**
+	 * This test parses pipe command and checks if pipe tool is returned
+	 */
 	@Test
 	public void parsePipeCommandWithoutSpacesTest()
 	{
@@ -121,6 +141,9 @@ public class ShellTest {
 		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
+	/**
+	 * This test parses grep command and checks if grep tool is returned
+	 */
 	@Test
 	public void parseGrepCommandTest()
 	{
@@ -129,6 +152,9 @@ public class ShellTest {
 		assertEquals("GREPTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
+	/**
+	 * This test parses pipe command and checks if pipe tool is returned,works without spaces
+	 */
 	@Test
 	public void parseGrepPipeEchoCommandTest()
 	{
@@ -137,6 +163,9 @@ public class ShellTest {
 		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
+	/**
+	 * This test parses pipe command and checks if pipe tool is returned, extra pipe in the end is ignored
+	 */
 	@Test
 	public void parseGrepPipeEchoCommandExtraPipeAtEndTest()
 	{
@@ -145,7 +174,17 @@ public class ShellTest {
 		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
-	
+	/**
+	 * This test parses pipe command and checks if pipe tool is returned
+	 */
+//	@Test
+//	public void parsePipeCommand()
+//	{
+//		String commandline = "|";
+//		String[] expectedArgsList = {"echo", "hello","|","grep", "(h|o)", "test.txt"};
+//		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
+//		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
+//	}
 	
 	@Test
 	public void parseGrepPipeSortCommand()
@@ -230,5 +269,5 @@ public class ShellTest {
 	public void overallShellTest() {
 		//fail("Not yet implemented");
 	}
-
+	
 }
