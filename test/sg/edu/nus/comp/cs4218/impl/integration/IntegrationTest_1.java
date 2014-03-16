@@ -196,21 +196,21 @@ public class IntegrationTest_1 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
-	@Test
-	/*
-	 * Integrate Grep with Sort
-	 * Negative Case
-	 * grep | sort
-	 */
-	public void testExecuteGrepSortNullParams() {
-		String[] args1 = {"grep","|","sort"};
-		String[] args2 = {};
-		pipingTool = new PIPINGTool(args1, args2);
-		pipingTool.execute(workingDir, "");
-		actualOutput = readFromFile(new File("stdin.txt"));
-		expectedOutput = "";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	}
+//	@Test
+//	/*
+//	 * Integrate Grep with Sort
+//	 * Negative Case
+//	 * grep | sort
+//	 */
+//	public void testExecuteGrepSortNullParams() {
+//		String[] args1 = {"grep","|","sort"};
+//		String[] args2 = {};
+//		pipingTool = new PIPINGTool(args1, args2);
+//		pipingTool.execute(workingDir, "");
+//		actualOutput = readFromFile(new File("stdin.txt"));
+//		expectedOutput = "";
+//		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+//	}
 	/*
 	 * Integrate Grep with Sort 
 	 * Positive Case
