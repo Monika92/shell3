@@ -408,7 +408,7 @@ public class IntegrationTest_1 {
 		expectedOutput = "Apple\tBanana\tBatman" + "\n" + 
 		"Melon\tMelon\tSpiderman" + "\n" + 
 				"Orange\tOrange" +"\tSuperman";
-		System.out.println("AO:\n" + actualOutput);
+		//System.out.println("AO:\n" + actualOutput);
 		assertEquals(expectedOutput, actualOutput);
 		assertEquals(pipingTool.getStatusCode(),0);
 	}

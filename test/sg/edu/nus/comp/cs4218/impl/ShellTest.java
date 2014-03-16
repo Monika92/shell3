@@ -177,14 +177,12 @@ public class ShellTest {
 	/**
 	 * This test parses pipe command and checks if pipe tool is returned
 	 */
-//	@Test
-//	public void parsePipeCommand()
-//	{
-//		String commandline = "|";
-//		String[] expectedArgsList = {"echo", "hello","|","grep", "(h|o)", "test.txt"};
-//		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
-//		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
-//	}
+	@Test
+	public void parsePipeCommand()
+	{
+		String commandline = "|";
+		assertNull(shell.parse(commandline));		
+	}
 	
 	@Test
 	public void parseGrepPipeSortCommand()
