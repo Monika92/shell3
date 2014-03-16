@@ -75,7 +75,8 @@ public class Shell extends Thread implements IShell {
 				}
 				list.add("|");
 			}
-			list.remove(list.size()-1);
+			if(list.size() > 0)
+				list.remove(list.size()-1);
 			
 			for(int i=0;i<list.size();i++)
 			{
