@@ -66,6 +66,13 @@ public class ShellTest {
 	}
 	
 	@Test
+	public void parseNullCommandTest()
+	{
+		String commandline = null;
+		assertNull(shell.parse(commandline));		
+	}
+	
+	@Test
 	public void parseCutCommandTest()
 	{
 		String commandline = "cut -c 1-2 -";
@@ -98,7 +105,56 @@ public class ShellTest {
 		assertEquals("CATTool",shell.parse(commandline).getClass().getSimpleName());
 		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
 	}
+	@Test
+	public void parsePipeCommandWithSpacesTest()
+	{
+		String commandline = "echo hello | cut -c 1-2";
+		String[] expectedArgsList = {"echo", "hello", "|", "cut", "-c", "1-2"};
+		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
+	}
+	@Test
+	public void parsePipeCommandWithoutSpacesTest()
+	{
+		String commandline = "echo hello|cut -c 1-2";
+		String[] expectedArgsList = {"echo", "hello", "|", "cut", "-c", "1-2"};
+		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
+	}
+	@Test
+	public void parseGrepCommandTest()
+	{
+		String commandline = "grep (A|B) -";
+		String[] expectedArgsList = {"(A|B)","-"};
+		assertEquals("GREPTool",shell.parse(commandline).getClass().getSimpleName());
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
+	}
+	@Test
+	public void parseGrepPipeEchoCommandTest()
+	{
+		String commandline = "echo hello|grep (h|o) test.txt";
+		String[] expectedArgsList = {"echo", "hello","|","grep", "(h|o)", "test.txt"};
+		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
+	}
+	@Test
+	public void parseGrepPipeEchoCommandExtraPipeAtEndTest()
+	{
+		String commandline = "echo hello|grep (h|o) test.txt|";
+		String[] expectedArgsList = {"echo", "hello","|","grep", "(h|o)", "test.txt"};
+		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
+	}
 	
+	
+	@Test
+	public void parseGrepPipeSortCommand()
+	{
+		String commandline = "grep | sort";
+		String[] expectedArgsList = {"grep","|","sort"};
+		assertEquals("PIPINGTool",shell.parse(commandline).getClass().getSimpleName());
+		assertArrayEquals(expectedArgsList,shell.getArgumentList());	
+	}
 	@Test
 	public void parseCtrlZCommandTest()
 	{
@@ -106,7 +162,7 @@ public class ShellTest {
 		assertEquals("",shell.parse(commandline).getClass().getSimpleName());
 	}
 	
-	//@Test
+	@Test
 	public void parseInvalidCommandTest()
 	{
 		String commandline = "nslookup hello";

@@ -90,38 +90,38 @@ public void writeToFile(File file, String input){
 	}
 }
 
-public String readFromFile(File inputFile){
-	String output = ""; FileReader fr = null;
-	try{
-		fr = new FileReader(inputFile);
-	} catch(FileNotFoundException e){
-		e.printStackTrace();
-		return "File not found";
-	}
-	BufferedReader br = new BufferedReader(fr);
-	try{
-		String line = br.readLine();
-		while(line != null){
-			if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
-				output+="\n";
-			else
-				output += line + "\n";
-			line = br.readLine();
-		}
-	} catch(IOException e){
-		e.printStackTrace();
-		return "Unable to read file";
-	} finally{
-		try {
-			br.close();
-			fr.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	return output;
-}
+//public String readFromFile(File inputFile){
+//	String output = ""; FileReader fr = null;
+//	try{
+//		fr = new FileReader(inputFile);
+//	} catch(FileNotFoundException e){
+//		e.printStackTrace();
+//		return "File not found";
+//	}
+//	BufferedReader br = new BufferedReader(fr);
+//	try{
+//		String line = br.readLine();
+//		while(line != null){
+//			if(line.equalsIgnoreCase("\n")||line.equalsIgnoreCase(""))
+//				output+="\n";
+//			else
+//				output += line + "\n";
+//			line = br.readLine();
+//		}
+//	} catch(IOException e){
+//		e.printStackTrace();
+//		return "Unable to read file";
+//	} finally{
+//		try {
+//			br.close();
+//			fr.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+//	return output;
+//}
 
 @After
 public void after(){
