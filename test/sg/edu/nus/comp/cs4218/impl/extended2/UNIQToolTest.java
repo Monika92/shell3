@@ -464,4 +464,43 @@ public class UNIQToolTest {
 	}
 
 
+	@Test 
+	public void hkuniqInvalidFileExecuteTest(){
+		String[] arguments = new String[]{"-fi", "Invalid.txt"} ;
+		uniqtool = new UNIQTool(arguments);
+		actualOutput = uniqtool.execute(workingDirectory, stdin);
+		expectedOutput = "No such file";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(uniqtool.getStatusCode(), -1);
+	}
+	
+	@Test 
+	public void hkuniqInvalidFileExecuteTest2(){
+		String[] arguments = new String[]{"-f", "1", "-help", "-i", "Invalid.txt"} ;
+		uniqtool = new UNIQTool(arguments);
+		actualOutput = uniqtool.execute(workingDirectory, stdin);
+		expectedOutput = "No such file";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(uniqtool.getStatusCode(), -1);
+	}
+	
+	private static final String[][] VALID_TWO_INPUT = {
+		{ "-i", "testFile0.txt" },
+		{ "-if1", "testFile0.txt" },
+		{ "-f1", "testFile0.txt" },
+		{ "-f 1", "testFile0.txt" },
+		{ "-if 1", "testFile0.txt" },
+		{ "-f", "1" },
+		{ "-if", "1" },
+		{ "-help", "testFile0.txt" },
+		{ "-f1", "-help" }, { "testFile0.txt", "testFile6.txt" }
+		};
+	
+	@Test
+	public void validIOptionInputTest() {
+	uniqtool = new UNIQTool(VALID_TWO_INPUT[0]);
+	String result = uniqtool.execute(workingDirectory, "\n");
+	System.out.println(result);
+	}
+	
 }
