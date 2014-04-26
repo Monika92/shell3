@@ -196,21 +196,6 @@ public class IntegrationTest_1 {
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
 	
-	@Test
-	/*
-	 * Integrate Grep with Sort
-	 * Negative Case
-	 * grep | sort
-	 */
-	public void testExecuteGrepSortNullParams() {
-		String[] args1 = {"grep","|","sort"};
-		String[] args2 = {};
-		pipingTool = new PIPINGTool(args1, args2);
-		pipingTool.execute(workingDir, "");
-		actualOutput = readFromFile(new File("stdin.txt"));
-		expectedOutput = "";
-		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
-	}
 	/*
 	 * Integrate Grep with Sort 
 	 * Positive Case
@@ -225,6 +210,20 @@ public class IntegrationTest_1 {
 		expectedOutput = "a.txt:Apple is out of order";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
+	
+	@Test
+	/*
+	 * Integrate Grep with Sort
+	 * Negative Case
+	 */
+	public void testExecuteGrepSortInvalidFile() {
+		String[] args1 = {"grep","(App|Mel|Ora)", "invalidfile.txt","|","sort"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);		
+		pipingTool.execute(workingDir, "");
+		assertEquals(pipingTool.getStatusCode(), -1);
+	}
+	
 	/*
 	 * Integrate Grep with WC
 	 * Positive Case
@@ -408,7 +407,7 @@ public class IntegrationTest_1 {
 		expectedOutput = "Apple\tBanana\tBatman" + "\n" + 
 		"Melon\tMelon\tSpiderman" + "\n" + 
 				"Orange\tOrange" +"\tSuperman";
-		System.out.println("AO:\n" + actualOutput);
+		//System.out.println("AO:\n" + actualOutput);
 		assertEquals(expectedOutput, actualOutput);
 		assertEquals(pipingTool.getStatusCode(),0);
 	}

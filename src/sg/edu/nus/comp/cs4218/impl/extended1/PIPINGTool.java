@@ -258,8 +258,9 @@ public class PIPINGTool extends ATool implements IPipingTool {
 	@Override
 	public String pipe(String stdout, ITool to) {
 		
+		String stdoutNew = stdout;
 		if(toolWithStdin == false){
-			stdout = null;
+			stdoutNew = null;
 		}
 			
 		super.setStatusCode(0);		
@@ -270,7 +271,7 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			return result;
 		}
 		
-		result = to.execute(workingDir, stdout);	
+		result = to.execute(workingDir, stdoutNew);	
 		if(to.getStatusCode() != 0){
 			setStatusCode(-1);
 			return result;
@@ -308,16 +309,16 @@ public class PIPINGTool extends ATool implements IPipingTool {
 		toolWithStdin = false;
 		
 		initializeCheckerStructures();
-		cmd = cmd.toLowerCase();
+		String cmdNew = cmd.toLowerCase();
 						
 		if(isFirstTool){
 			isFirstTool = false;			
-			if(!validFirstTools.contains(cmd) && !validTools.contains(cmd)){
+			if(!validFirstTools.contains(cmdNew) && !validTools.contains(cmdNew)){
 				return false;
 			}
 			
 			CommandVerifier cv = new CommandVerifier();			
-			int validCode = cv.verifyCommand(cmd, args);
+			int validCode = cv.verifyCommand(cmdNew, args);
 			
 			if(validCode == -1){
 				valid = false;
@@ -329,14 +330,14 @@ public class PIPINGTool extends ATool implements IPipingTool {
 		else{
 			
 			//these tools cannot be anything but the first tool in the pipe
-			if(validFirstTools.contains(cmd)){
+			if(validFirstTools.contains(cmdNew)){
 				valid = false;
 			}
 			//or if these dont belong to valid pipe tools
-			else if(!validTools.contains(cmd)){
+			else if(!validTools.contains(cmdNew)){
 				valid = false;
 			}
-			else if(cmd.equalsIgnoreCase("comm")){
+			else if(cmdNew.equalsIgnoreCase("comm")){
 				CommandVerifier cv = new CommandVerifier();			
 				int validCode = cv.verifyCommand("comm", args);
 				
@@ -350,7 +351,7 @@ public class PIPINGTool extends ATool implements IPipingTool {
 			else{
 				//this command verifier is invoked for pipe tool checking
 				CommandVerifier cv = new CommandVerifier(true);			
-				int validCode = cv.verifyCommand(cmd, args);
+				int validCode = cv.verifyCommand(cmdNew, args);
 				
 				if(validCode == -1){
 					valid = false;

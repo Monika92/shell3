@@ -132,7 +132,7 @@ public class CommandVerifier {
 		grepMap.put("-o",0);
 		grepMap.put("-v",0);
 		grepMap.put("-help",0);
-		grepMap.put("defMin",0); //include 1 pattern and atleast 1 (file or "-")
+		grepMap.put("defMin",2); //include 1 pattern and atleast 1 (file or "-")
 		grepMap.put("defMax",INF);
 
 	}

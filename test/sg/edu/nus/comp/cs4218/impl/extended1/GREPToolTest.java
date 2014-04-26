@@ -51,7 +51,7 @@ public class GREPToolTest {
 		String[] cmdArgs = { "textFiles"+File.separator+"empty.txt" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
-		assertEquals(tool.getStatusCode(), 0);
+		assertEquals(tool.getStatusCode(), -1);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class GREPToolTest {
 		String[] cmdArgs = { "textFiles"+File.separator+"picture.gif" };
 		IGrepTool tool = new GREPTool(cmdArgs);
 		assertTrue("".equals(tool.execute(workingDir, "")));
-		assertEquals(tool.getStatusCode(), 0);
+		assertEquals(tool.getStatusCode(), -1);
 	}
 
 	/**
@@ -1248,7 +1248,7 @@ public class GREPToolTest {
 				+ "	-C NUM : Print NUM lines of output context\n"
 				+ "	-c : Suppress normal output. Instead print a count of matching lines for each input file\n"
 				+ "	-v : Select non-matching (instead of matching) lines\n";
-		System.out.println(tool.execute(workingDir, ""));
+		//System.out.println(tool.execute(workingDir, ""));
 		assertTrue(expected.equals(tool.execute(workingDir, "")));
 		assertEquals(grepTool.getStatusCode(), 0);
 	}
