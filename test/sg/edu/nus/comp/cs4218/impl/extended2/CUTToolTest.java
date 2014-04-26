@@ -322,6 +322,7 @@ public class CUTToolTest {
 	 * Test for cut command with -c and -d option given standard input
 	 * -c option is given priority
 	 * Checks for correct output after execution
+	 * Checks for status code 0
 	 */
 	@Test
 	public void testExecuteCDOption()
@@ -372,6 +373,7 @@ public class CUTToolTest {
 		assertEquals(cuttool.getStatusCode(), 0);
 	}
 
+	
 	/**
 	 * Test for cut command with -help option given standard input
 	 * all options are executed

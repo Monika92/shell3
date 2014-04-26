@@ -210,6 +210,20 @@ public class IntegrationTest_1 {
 		expectedOutput = "a.txt:Apple is out of order";
 		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
 	}
+	
+	@Test
+	/*
+	 * Integrate Grep with Sort
+	 * Negative Case
+	 */
+	public void testExecuteGrepSortInvalidFile() {
+		String[] args1 = {"grep","(App|Mel|Ora)", "invalidfile.txt","|","sort"};
+		String[] args2 = {};
+		pipingTool = new PIPINGTool(args1, args2);		
+		pipingTool.execute(workingDir, "");
+		assertEquals(pipingTool.getStatusCode(), -1);
+	}
+	
 	/*
 	 * Integrate Grep with WC
 	 * Positive Case
