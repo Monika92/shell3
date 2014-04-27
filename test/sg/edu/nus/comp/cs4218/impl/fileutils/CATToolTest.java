@@ -274,4 +274,23 @@ public class CATToolTest {
 		assertTrue(cattool.getStatusCode() != 0);
     }
     
+    /*
+	 * Input : 3 valid file names
+	 * Bug : New line not appended at end of file correctly
+	 * 
+	 * BUG_ID : CAT.5
+	 * Fix in Source Code:
+	 * CATTool.java Line Number : 99
+	 * Class Name : CATTool
+	 */
+    @Test
+    public void catNewLineBugFixTest(){
+    	String[] arguments = new String[]{"Bug_Fix_1.txt", "Bug_Fix_2.txt", "Bug_Fix_3.txt"} ;
+		cattool = new CATTool(arguments);
+		actualOutput = cattool.execute(workingDirectory, stdin);
+		expectedOutput = "abc\ndef\ncontains no new line" + "abc\n def ghi\ncontains new line\n" + "hello";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(cattool.getStatusCode(), 0);
+    }
+    
 }

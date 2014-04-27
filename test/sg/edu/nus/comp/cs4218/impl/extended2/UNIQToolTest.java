@@ -463,7 +463,31 @@ public class UNIQToolTest {
 		assertTrue(uniqtool.getStatusCode() != 0);
 	}
 
-
+	/*
+	 * This test case is commented because working directory is specific to author's systemm
+	 * 
+	 * Input given as stdin
+	 * Bug : Temporary file not created in workingDir
+	 * 
+	 * BUG_ID : UNIQ.5
+	 * Fix in Source Code:
+	 * UNIQTool.java Line Number : 328
+	 * Class Name : UNIQTool
+	 */
+	
+	/*
+	 * @Test
+	 public void uniqStdinTempFileDirExecuteTest(){
+		String[] arguments = new String[]{"-"} ;
+		uniqtool = new UNIQTool(arguments);
+		stdin = "a\na\na\nb\nb\nc";
+		actualOutput = uniqtool.execute(new File("C:\\Users\\monika92\\workspace2"), stdin);
+		expectedOutput = "a\nb\nc";
+		assertTrue(expectedOutput.equalsIgnoreCase(actualOutput));
+		assertEquals(uniqtool.getStatusCode(), 0);
+	}
+	*/
+	
 	@Test 
 	public void hkuniqInvalidFileExecuteTest(){
 		String[] arguments = new String[]{"-fi", "Invalid.txt"} ;

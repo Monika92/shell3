@@ -29,26 +29,35 @@ public class CATTool extends ATool implements ICatTool {
 	 */
 	public boolean checkLastCharOfFile(File toRead){
 
-		  InputStreamReader streamReader =
-		  new InputStreamReader(new FileInputStream(toRead));
-		  
-		  BufferedReader br = new BufferedReader(streamReader);
-		  String line = null;
-		  try {
-			while (br.ready()) {
-				 line = br.readLine();
-			}
-		} catch (IOException e) {
+		if(!toRead.exists())
+			return false;
+		
+		FileInputStream fileInput = null;
+		try {
+			fileInput = new FileInputStream(toRead);
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if(line == null)
-			return false;
-		if (line.charAt(line.length() - 1) == '\n')
+		if(fileInput == null)
 			return true;
-		else
-			return false;
+		int r; char c = '\0';
+		try {
+			while ((r = fileInput.read()) != -1) {
+			   c = (char) r;
+			}
+			fileInput.close();
+			//c - last character of file
+			if(c == '\0' || c == '\n')
+				return true;
+			else 
+				return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return true;
+		} 
+		
 	}
 	
 /*
@@ -87,7 +96,7 @@ public class CATTool extends ATool implements ICatTool {
 			return "Unable to read file";
 		} finally{
 			try {
-				if(checkLastCharOfFile(toRead))
+				if(!checkLastCharOfFile(toRead))
 					output = output.trim();
 				br.close();
 				fr.close();
