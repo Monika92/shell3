@@ -2,9 +2,11 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -22,6 +24,33 @@ public class CATTool extends ATool implements ICatTool {
 		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * Check last character of file is newline or not
+	 */
+	public boolean checkLastCharOfFile(File toRead){
+
+		  InputStreamReader streamReader =
+		  new InputStreamReader(new FileInputStream(toRead));
+		  
+		  BufferedReader br = new BufferedReader(streamReader);
+		  String line = null;
+		  try {
+			while (br.ready()) {
+				 line = br.readLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(line == null)
+			return false;
+		if (line.charAt(line.length() - 1) == '\n')
+			return true;
+		else
+			return false;
+	}
+	
 /*
  * Reads the information in the input file and returns it as a string
  */
@@ -58,6 +87,8 @@ public class CATTool extends ATool implements ICatTool {
 			return "Unable to read file";
 		} finally{
 			try {
+				if(checkLastCharOfFile(toRead))
+					output = output.trim();
 				br.close();
 				fr.close();
 			} catch (IOException e) {

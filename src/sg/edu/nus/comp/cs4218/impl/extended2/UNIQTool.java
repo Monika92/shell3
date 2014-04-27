@@ -325,14 +325,14 @@ public class UNIQTool extends ATool implements IUniqTool{
 				}
 			}
 			else{
-				File uniq_input_file = new File("uniq_temp_input_file.txt");
+				File uniq_input_file = new File(workingDir.toString()+File.separator+"uniq_temp_input_file.txt");
 				writeOutputToFile(uniq_input_file, stdin);
-				String[] temp_args = {"uniq_temp_input_file.txt"};
+				String[] temp_args = {workingDir.toString()+File.separator+"uniq_temp_input_file.txt"};
 				super.args = temp_args;
 				if (fileList.contains("-"))
 					fileList.remove("-");
 				
-				fileList.add("uniq_temp_input_file.txt");
+				fileList.add(workingDir.toString()+File.separator+"uniq_temp_input_file.txt");
 			}
 		}
 		
